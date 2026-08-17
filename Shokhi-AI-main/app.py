@@ -137,6 +137,23 @@ def get_chat_messages(chat_id):
         return jsonify(history[chat_id].get("messages", []))
     return jsonify([])
 
+@app.route('/api/delete_chat_session/<chat_id>', methods=['DELETE', 'POST'])
+def delete_chat_session(chat_id):
+    history = load_all_history()
+    deleted = False
+    if isinstance(history, dict) and chat_id in history:
+        del history[chat_id]
+        save_all_history(history)
+        deleted = True
+        
+    try:
+        ChatLog.query.filter_by(chat_id=chat_id).delete()
+        db.session.commit()
+    except Exception as e:
+        print("Database delete error:", e)
+
+    return jsonify({"success": deleted, "chat_id": chat_id})
+
 @app.route('/api/ask_prova_chat', methods=['POST'])
 def ask_prova_chat():
     data = request.json or {}

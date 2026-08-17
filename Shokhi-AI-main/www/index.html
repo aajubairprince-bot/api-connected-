@@ -20,15 +20,12 @@
             --primary-dark: #be185d;
             --primary-deep: #831843;
             --accent: #ec4899;
-            --accent-glow: rgba(236, 72, 153, 0.35);
             --bg-gradient: radial-gradient(at 0% 0%, #fdf2f8 0px, transparent 50%), radial-gradient(at 100% 0%, #fce7f3 0px, transparent 50%), radial-gradient(at 50% 100%, #fed7aa 0px, transparent 50%), #fdf4ff;
             --glass-bg: rgba(255, 255, 255, 0.78);
-            --glass-bg-subtle: rgba(255, 255, 255, 0.6);
             --glass-border: rgba(255, 255, 255, 0.85);
             --glass-shadow: 0 10px 30px -5px rgba(219, 39, 119, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
             --text-main: #3b0764;
             --text-muted: #701a75;
-            --text-light: #86198f;
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 10px;
@@ -194,9 +191,6 @@
             box-shadow: 0 12px 28px rgba(219, 39, 119, 0.4);
             opacity: 0.96;
         }
-        .btn-start:active, .auth-btn:active {
-            transform: translateY(0);
-        }
 
         /* Auth Form Card */
         .auth-card {
@@ -348,6 +342,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            user-select: none;
         }
         .history-item:hover {
             background: #ffffff;
@@ -362,6 +357,46 @@
             border-color: var(--primary);
             border-left: 4px solid var(--primary);
             box-shadow: 0 3px 10px rgba(219, 39, 119, 0.1);
+        }
+
+        /* Context Menu for Right Click Delete */
+        .context-menu {
+            position: fixed;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid #fbcfe8;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(219, 39, 119, 0.18), 0 2px 8px rgba(0, 0, 0, 0.04);
+            padding: 6px;
+            min-width: 160px;
+            display: none;
+            animation: menuFadeIn 0.15s ease-out;
+        }
+
+        @keyframes menuFadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .context-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ef4444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .context-menu-item:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            transform: translateX(2px);
         }
 
         /* 2. CENTER CHAT SECTION */
@@ -498,8 +533,6 @@
             box-shadow: 0 4px 16px rgba(219, 39, 119, 0.07);
             word-wrap: break-word;
         }
-        .bot-msg p { margin-bottom: 8px; }
-        .bot-msg p:last-child { margin-bottom: 0; }
 
         .tts-btn {
             background: #ffffff;
@@ -822,6 +855,14 @@
     <div class="bg-orb bg-orb-2"></div>
     <div class="bg-orb bg-orb-3"></div>
 
+    <!-- Custom Right Click Context Menu -->
+    <div id="chatContextMenu" class="context-menu">
+        <div class="context-menu-item" onclick="deleteTargetChat()">
+            <i class="fa-solid fa-trash-can"></i>
+            <span id="ctxDeleteText">Delete Chat</span>
+        </div>
+    </div>
+
     <!-- 1. WELCOME SCREEN -->
     <div id="page-welcome">
         <div class="glass-card">
@@ -1049,6 +1090,7 @@
     <script>
         let currentLang = 'bn';
         let currentChatId = null;
+        let targetContextMenuChatId = null;
         
         let recognition = null;
         let speechSynth = window.speechSynthesis;
@@ -1080,7 +1122,7 @@
                 t_mood: "মূড ট্র্যাকার", m_good: "😊 Good", m_tired: "😴 Tired", symptom_nausea: "🤮 Nausea", t_doc: "ডাক্তার অ্যাপয়েন্টমেন্ট",
                 docNameInput: "ডাক্তারের নাম", t_saveDocBtn: "সেভ করুন", t_vitals: "বিপি ও ওজন", t_saveVitalBtn: "সেভ করুন", t_reminder: "রিমাইন্ডার",
                 t_waterTxt: "💧 পানি খাওয়ার রিমাইন্ডার:", t_kickTxt: "👶 বেবি কিক কাউন্টার:", t_hospBtn: "কাছের হাসপাতাল খুঁজুন", t_babyName: "পছন্দের বাচ্চার নাম",
-                babyNameInput: "নাম লিখুন...", t_addNameBtn: "যোগ করুন"
+                babyNameInput: "নাম লিখুন...", t_addNameBtn: "যোগ করুন", deleteChat: "চ্যাট মুছুন"
             },
             en: {
                 welcomeTitle: "Welcome", welcomeDesc: "Your loving pregnancy & maternity companion", selectLangTxt: "Select Language", startBtnText: "Start Now",
@@ -1093,7 +1135,7 @@
                 t_mood: "Mood Tracker", m_good: "😊 Good", m_tired: "😴 Tired", symptom_nausea: "🤮 Nausea", t_doc: "Doctor Appointment",
                 docNameInput: "Doctor's Name", t_saveDocBtn: "Save", t_vitals: "BP & Weight", t_saveVitalBtn: "Save", t_reminder: "Reminders",
                 t_waterTxt: "💧 Water Intake Reminder:", t_kickTxt: "👶 Baby Kick Counter:", t_hospBtn: "Find Nearby Hospitals", t_babyName: "Favorite Baby Names",
-                babyNameInput: "Type name...", t_addNameBtn: "Add Name"
+                babyNameInput: "Type name...", t_addNameBtn: "Add Name", deleteChat: "Delete Chat"
             }
         };
 
@@ -1140,6 +1182,9 @@
             if (sideTitle) sideTitle.innerText = t.sideTitle;
             let newChatBtnTxt = document.getElementById('newChatBtnTxt');
             if (newChatBtnTxt) newChatBtnTxt.innerText = t.newChatBtnTxt;
+
+            let ctxDeleteText = document.getElementById('ctxDeleteText');
+            if (ctxDeleteText) ctxDeleteText.innerText = t.deleteChat;
 
             let t_inspiration = document.getElementById('t_inspiration');
             if (t_inspiration) t_inspiration.innerText = t.t_inspiration;
@@ -1237,6 +1282,66 @@
                 firstItem.click();
             } else {
                 createNewChat();
+            }
+        }
+
+        /* Context Menu Handlers */
+        function showContextMenu(e, chatId) {
+            e.preventDefault();
+            e.stopPropagation();
+            targetContextMenuChatId = chatId;
+            let menu = document.getElementById("chatContextMenu");
+            let deleteText = document.getElementById("ctxDeleteText");
+            if (deleteText) {
+                deleteText.innerText = currentLang === 'en' ? "Delete Chat" : "চ্যাট মুছুন";
+            }
+            
+            let x = e.clientX;
+            let y = e.clientY;
+            let menuWidth = 170;
+            let menuHeight = 50;
+            if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 10;
+            if (y + menuHeight > window.innerHeight) y = window.innerHeight - menuHeight - 10;
+            
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+            menu.style.display = 'block';
+        }
+
+        function hideContextMenu() {
+            let menu = document.getElementById("chatContextMenu");
+            if (menu) menu.style.display = 'none';
+        }
+
+        window.addEventListener('click', hideContextMenu);
+        window.addEventListener('contextmenu', (e) => {
+            if (!e.target.closest('.history-item')) {
+                hideContextMenu();
+            }
+        });
+
+        async function deleteTargetChat() {
+            if (!targetContextMenuChatId) return;
+            let chatIdToDelete = targetContextMenuChatId;
+            hideContextMenu();
+            
+            try {
+                await fetch(`/api/delete_chat_session/${chatIdToDelete}`, { method: 'DELETE' });
+                
+                if (currentChatId === chatIdToDelete) {
+                    currentChatId = null;
+                    await refreshSidebar();
+                    let firstItem = document.querySelector('.history-item');
+                    if (firstItem) {
+                        firstItem.click();
+                    } else {
+                        createNewChat();
+                    }
+                } else {
+                    await refreshSidebar();
+                }
+            } catch (err) {
+                console.error("Error deleting chat:", err);
             }
         }
 
@@ -1537,12 +1642,18 @@
                     if (session.chat_id === currentChatId) item.className += " active";
                     item.innerHTML = `<i class="fa-regular fa-message" style="font-size: 11px; opacity: 0.7;"></i> <span>${session.title}</span>`;
                     item.setAttribute("data-id", session.chat_id);
+                    
                     item.onclick = async function() {
                         document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
                         item.classList.add('active');
                         currentChatId = session.chat_id;
                         await loadChatMessages(currentChatId);
                     };
+
+                    item.oncontextmenu = function(e) {
+                        showContextMenu(e, session.chat_id);
+                    };
+
                     historyList.appendChild(item);
                 });
             } catch (e) { console.error("Error fetching sessions:", e); }
@@ -1588,6 +1699,11 @@
                 currentChatId = item.getAttribute("data-id");
                 loadChatMessages(currentChatId);
             };
+
+            item.oncontextmenu = function(e) {
+                showContextMenu(e, currentChatId);
+            };
+
             if (historyList) historyList.insertBefore(item, historyList.firstChild);
         }
 
