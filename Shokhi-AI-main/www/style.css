@@ -1,0 +1,226 @@
+/* ==========================================
+   🌸 প্রিমিয়াম পিঙ্ক ও ব্রাইট গ্র্যাডিয়েন্ট থিম
+   ========================================== */
+body {
+    background: linear-gradient(135deg, #d946ef 0%, #ec4899 50%, #f97316 100%) !important;
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Segoe UI', sans-serif;
+    color: #4a044e;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.main-wrapper {
+    background: transparent !important;
+    min-height: 100vh;
+}
+
+/* ==========================================
+   ⭕ ওভাল রিং অ্যানিমেশন (Soft Pink & White Glow)
+   ========================================== */
+.ring-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    border: 3px dashed #ffffff !important;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.2) !important;
+}
+
+.circle-outer {
+    width: 220px;
+    height: 220px;
+    border-color: #ffffff !important;
+    animation: spin-clockwise 8s linear infinite;
+}
+
+.circle-middle {
+    width: 190px;
+    height: 190px;
+    top: 15px;
+    left: 15px;
+    border-color: #fbcfe8 !important; /* সফট পিঙ্ক */
+    border-style: dotted !important;
+    animation: spin-counter 6s linear infinite;
+}
+
+.circle-inner {
+    width: 160px;
+    height: 160px;
+    top: 15px;
+    left: 15px;
+    border-color: #f472b6 !important;
+    border-style: double !important;
+    animation: spin-clockwise 4s linear infinite;
+}
+
+@keyframes spin-clockwise {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-counter {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.text-inside-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+}
+
+.brand-name {
+    font-weight: 800;
+    color: #ffffff !important;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(190, 24, 93, 0.5) !important;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* ==========================================
+   🌊 সিরিওয়েভ ও টেক্সট (হাই-কন্ট্রাস্ট ক্লিয়ার কালার)
+   ========================================== */
+#siri-container {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(0,0,0,0) 70%) !important;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-block;
+}
+
+.siri-hello-text {
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    font-weight: 700;
+}
+
+.siri-message {
+    color: #fdf2f8 !important; /* সফট হোয়াইট টেক্সট */
+    font-weight: 500;
+    font-size: 1.15rem;
+}
+
+/* ==========================================
+   ⚡ ইনপুট বক্স ও গ্লোয়িং বাটন (White & Magenta Theme)
+   ========================================== */
+.input-group {
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+    margin: 15px auto;
+}
+
+.input-field {
+    flex: 1;
+    background-color: #ffffff !important;
+    border: 2px solid #fbcfe8 !important;
+    border-radius: 25px 0 0 25px !important;
+    padding: 12px 20px !important;
+    color: #831843 !important;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    background-color: #ffffff !important;
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.4) !important;
+    border-color: #db2777 !important;
+    color: #831843 !important;
+    outline: none !important;
+}
+
+/* 🎤 মাইক্রোফোন বাটন */
+.custom-btn {
+    background-color: #ffffff !important;
+    color: #db2777 !important; /* ক্লিয়ার পিঙ্ক আইকন */
+    border: 2px solid #fbcfe8 !important;
+    border-left: none !important;
+    padding: 12px 20px !important;
+    font-size: 1.1rem;
+    border-radius: 0 !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+    color: #ffffff !important;
+    background-color: #db2777 !important;
+    border-color: #db2777 !important;
+}
+
+/* 🔍 সার্চ/সেন্ড বাটন (ম্যাজেন্টা-পার্পল গ্লো) */
+.glow-btn {
+    background: linear-gradient(135deg, #db2777 0%, #e11d48 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    padding: 12px 25px !important;
+    font-size: 1.1rem;
+    border-radius: 0 25px 25px 0 !important;
+    box-shadow: 0 4px 15px rgba(219, 39, 119, 0.4) !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.glow-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(225, 29, 72, 0.6) !important;
+    opacity: 0.95;
+}
+
+/* ==========================================
+   🔐 অথেন্টিকেশন ও এডমিন কার্ডস
+   ========================================== */
+.auth-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 35px 30px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin: 20px auto;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0 18px 0;
+    border: 1px solid #fbcfe8;
+    background-color: #fdf2f8;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    color: #831843;
+}
+
+.auth-btn {
+    width: 100%;
+    background: linear-gradient(to right, #db2777, #e11d48);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সখী AI - প্রভা নিবেদিত</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background: linear-gradient(135deg, #d946ef 0%, #ec4899 50%, #f97316 100%) !important;
+            font-family: 'Segoe UI', 'Hind Siliguri', sans-serif;
+            color: #4a044e;
+            min-height: 100vh;
+        }
+
+        #page-welcome, #page-login { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        #page-login, #page-main { display: none; }
+
+        .app-logo { width: 80px; height: 80px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .app-logo i { font-size: 40px; color: #db2777; }
+        .welcome-title { font-size: 26px; font-weight: bold; color: #fff; margin-bottom: 5px; }
+        .welcome-desc { font-size: 15px; color: #fdf2f8; margin-bottom: 25px; text-align: center; }
+
+        .lang-switch-box {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 4px;
+            border-radius: 30px;
+            display: flex;
+            margin-bottom: 20px;
+            width: 260px;
+        }
+        .lang-btn {
+            flex: 1;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-btn.active {
+            background: #fff;
+            color: #be185d;
+        }
+
+        .btn-start, .auth-btn { background: #fff; color: #be185d; border: none; padding: 12px 40px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        .auth-card { background: #fff; border-radius: 20px; padding: 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .auth-card h2 { color: #be185d; margin-bottom: 5px; }
+        .auth-input { width: 100%; padding: 10px 15px; border: 1px solid #fbcfe8; background: #fdf2f8; border-radius: 10px; margin: 8px 0 15px; outline: none; }
+        .auth-btn { background: linear-gradient(to right, #db2777, #e11d48); color: #fff; width: 100%; border-radius: 10px; }
+
+        .app-container { display: flex; height: 100vh; overflow: hidden; }
+
+        .sidebar { width: 260px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-right: 1px solid rgba(255,255,255,0.3); display: flex; flex-direction: column; padding: 15px; color: #fff; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .new-chat-btn { background: #fff; color: #be185d; border: none; padding: 10px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .history-list { flex: 1; overflow-y: auto; }
+        .history-item { padding: 10px 12px; background: rgba(255, 255, 255, 0.15); border-radius: 8px; margin-bottom: 8px; cursor: pointer; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: 0.2s; }
+        .history-item:hover, .history-item.active { background: #fff; color: #be185d; font-weight: bold; }
+
+        .chat-section { flex: 1; display: flex; flex-direction: column; height: 100vh; background: rgba(255, 255, 255, 0.1); }
+        .chat-header { padding: 15px; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; color: #fff; }
+        .lang-toggle-header { display: flex; gap: 4px; background: rgba(255, 255, 255, 0.25); padding: 3px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); }
+        .header-lang-btn { background: transparent; color: #fff; border: none; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .header-lang-btn.active { background: #fff; color: #be185d; }
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        
+        .user-msg { align-self: flex-end; background: #ffffff; color: #be185d; padding: 10px 16px; border-radius: 18px 18px 2px 18px; max-width: 75%; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .bot-msg-box { align-self: flex-start; max-width: 80%; }
+        .bot-msg { background: rgba(255, 255, 255, 0.95); color: #831843; padding: 12px 16px; border-radius: 18px 18px 18px 2px; font-size: 14px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .tts-btn { background: #db2777; color: white; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; cursor: pointer; margin-top: 5px; }
+
+        .chat-input-wrapper { background: rgba(255,255,255,0.2); padding: 12px 15px 6px 15px; display: flex; flex-direction: column; align-items: center; }
+        .chat-input-area { display: flex; gap: 8px; align-items: center; width: 100%; }
+        .chat-input { flex: 1; padding: 12px 18px; border-radius: 25px; border: none; outline: none; font-size: 14px; }
+        .icon-btn { background: #fff; color: #db2777; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .send-btn { background: #db2777; color: #fff; }
+
+        .ai-disclaimer { font-size: 11px; color: rgba(255, 255, 255, 0.85); margin-top: 6px; text-align: center; font-weight: 400; }
+
+        .tools-section { width: 340px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); border-left: 1px solid rgba(255,255,255,0.3); padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .tool-card { background: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .tool-card h3 { font-size: 14px; color: #be185d; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        
+        .checklist-container label { display: block; font-size: 12px; margin-bottom: 6px; cursor: pointer; }
+        .diet-tabs { display: flex; gap: 5px; margin-bottom: 8px; }
+        .diet-tab-btn { flex: 1; padding: 5px; font-size: 11px; border: none; background: #fbcfe8; border-radius: 5px; cursor: pointer; }
+        .diet-tab-btn.active { background: #db2777; color: white; font-weight: bold; }
+        .diet-content { font-size: 12px; color: #4a044e; line-height: 1.4; }
+        .log-box { max-height: 100px; overflow-y: auto; font-size: 11px; margin-top: 8px; }
+        .log-item { background: #fdf2f8; padding: 6px; border-left: 3px solid #ec4899; margin-bottom: 4px; border-radius: 3px; display: flex; justify-content: space-between; }
+        .small-input { width: 100%; padding: 6px; font-size: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 6px; }
+        .small-btn { background: #db2777; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; width: 100%; }
+        .chat-img { max-width: 150px; border-radius: 8px; margin-top: 5px; }
+        .loading-msg { font-size: 12px; color: #fff; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <!-- WELCOME SCREEN -->
+    <div id="page-welcome">
+        <div class="app-logo"><i class="fa-solid fa-dove"></i></div>
+        <h1 class="welcome-title" id="welcomeTitle">স্বাগতম</h1>
+        <p class="welcome-desc" id="welcomeDesc">আপনার যাত্রা শুরু হোক ভালোবাসায়</p>
+        
+        <p style="color: #fff; font-size: 12px; margin-bottom: 8px;" id="selectLangTxt">ভাষা নির্বাচন করুন</p>
+        <div class="lang-switch-box">
+            <button class="lang-btn active" id="langBnBtn" onclick="setAppLanguage('bn')">বাংলা</button>
+            <button class="lang-btn" id="langEnBtn" onclick="setAppLanguage('en')">English</button>
+        </div>
+
+        <button class="btn-start" id="startBtnText" onclick="goToPage('page-login')">শুরু করুন</button>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div id="page-login">
+        <div class="auth-card">
+            <h2 id="loginTitle">স্বাগতম</h2>
+            <p id="loginSub" style="font-size: 12px; color: #831843; margin-bottom: 15px;">আপনার অ্যাকাউন্টে প্রবেশ করুন</p>
+            <form onsubmit="handleLogin(event)">
+                <input type="email" class="auth-input" id="emailPlaceholder" placeholder="ইমেইল অ্যাড্রেস" required>
+                <input type="password" class="auth-input" id="passPlaceholder" placeholder="পাসওয়ার্ড" required>
+                <button type="submit" class="auth-btn" id="loginBtnText">লগইন করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="page-main">
+        <div class="app-container">
+            
+            <!-- LEFT SIDEBAR -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3><i class="fa-solid fa-heart"></i> <span id="sideTitle">সখী AI</span></h3>
+                    <i class="fa-solid fa-right-from-bracket" style="cursor:pointer;" onclick="goToPage('page-welcome')" title="লগআউট"></i>
+                </div>
+                <button class="new-chat-btn" onclick="createNewChat()"><i class="fa-solid fa-plus"></i> <span id="newChatBtnTxt">New Chat</span></button>
+                <div class="history-list" id="historyList"></div>
+            </div>
+
+            <!-- CENTER: CHAT -->
+            <div class="chat-section">
+                <div class="chat-header">
+                    <div><strong id="assistantTitle">সখী সহকারী</strong> <small>(Online)</small></div>
+                    <div class="lang-toggle-header">
+                        <button class="header-lang-btn active" id="hLangBnBtn" onclick="setAppLanguage('bn')">বাংলা</button>
+                        <button class="header-lang-btn" id="hLangEnBtn" onclick="setAppLanguage('en')">English</button>
+                    </div>
+                </div>
+
+                <div class="chat-box" id="chatBox">
+                    <div class="bot-msg-box">
+                        <div class="bot-msg" id="welcomeMsg">হ্যালো আপু! আমি সখী। আপনার গর্ভাবস্থা সংক্রান্ত যেকোনো প্রশ্ন আমাকে করতে পারেন।</div>
+                    </div>
+                </div>
+
+                <!-- INPUT AREA -->
+                <div class="chat-input-wrapper">
+                    <div class="chat-input-area">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="previewAndSendImage()">
+                        <button class="icon-btn" onclick="document.getElementById('imageInput').click()" title="ছবি আপলোড"><i class="fa-solid fa-paperclip"></i></button>
+                        <input type="text" class="chat-input" id="userInput" placeholder="আপনার প্রশ্নটি লিখুন..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                        <button class="icon-btn" id="voiceBtn" onclick="startVoiceRecognition()" title="কথা বলুন"><i class="fa-solid fa-microphone"></i></button>
+                        <button class="icon-btn send-btn" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                    <div class="ai-disclaimer">Shokhi is AI and can make mistakes.</div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDEBAR: TOOLS -->
+            <div class="tools-section">
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-quote-left"></i> <span id="t_inspiration">আজকের প্রেরণা</span></h3>
+                    <p id="quoteText" style="font-size: 12px; font-style: italic; color: #555;"></p>
+                </div>
+
+                <div class="tool-card" id="routineBox"></div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-calculator"></i> <span id="t_edd">প্রসবের তারিখ হিসাব</span></h3>
+                    <input type="date" id="lmpDate" class="small-input">
+                    <button class="small-btn" id="t_calcBtn" onclick="calculatePregnancy()">হিসাব করুন</button>
+                    <div id="calcResult" style="font-size: 11px; margin-top: 8px;"></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-utensils"></i> <span id="t_diet">ট্রাইমেস্টার ডায়েট প্ল্যান</span></h3>
+                    <div class="diet-tabs">
+                        <button class="diet-tab-btn" id="tab1" onclick="switchDietTab(1)">১ম</button>
+                        <button class="diet-tab-btn" id="tab2" onclick="switchDietTab(2)">২য়</button>
+                        <button class="diet-tab-btn" id="tab3" onclick="switchDietTab(3)">৩য়</button>
+                    </div>
+                    <div class="diet-content" id="dietContentBox"></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-bowl-food"></i> <span id="t_meal">খাবার লগ</span></h3>
+                    <select id="mealTypeSelect" class="small-input"></select>
+                    <input type="text" id="mealDescInput" class="small-input">
+                    <button class="small-btn" id="t_addLogBtn" onclick="logDailyMeal()">লগ যুক্ত করুন</button>
+                    <div class="log-box" id="dietLogBox"></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-face-smile"></i> <span id="t_mood">মূড ট্র্যাকার</span></h3>
+                    <div style="display:flex; gap:5px; margin-bottom:8px;">
+                        <button class="small-btn" style="background:#ec4899;" id="m_good" onclick="logMood('Good / ভালো')">😊 Good</button>
+                        <button class="small-btn" style="background:#6366f1;" id="m_tired" onclick="logMood('Tired / ক্লান্ত')">😴 Tired</button>
+                    </div>
+                    <button class="small-btn" style="background:#e11d48;" id="symptom_nausea" onclick="toggleSymptom('বমি ভাব / Nausea', 'symptom_nausea')">🤮 Nausea</button>
+                    <div class="log-box" id="moodLogBox"></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-user-doctor"></i> <span id="t_doc">ডাক্তার অ্যাপয়েন্টমেন্ট</span></h3>
+                    <input type="text" id="docNameInput" class="small-input">
+                    <input type="datetime-local" id="appTimeInput" class="small-input">
+                    <button class="small-btn" id="t_saveDocBtn" onclick="saveAppointment()">সেভ করুন</button>
+                    <div class="log-box" id="appLogBox"></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-heart-pulse"></i> <span id="t_vitals">বিপি ও ওজন</span></h3>
+                    <input type="text" id="bpInput" class="small-input" placeholder="BP (e.g. 120/80)">
+                    <input type="number" id="weightInput" class="small-input" placeholder="Weight (kg)">
+                    <button class="small-btn" id="t_saveVitalBtn" onclick="logVitals()">সেভ করুন</button>
+                    <div class="log-box" id="vitalsLogBox"></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-clock"></i> <span id="t_reminder">রিমাইন্ডার</span></h3>
+                    <div style="margin-bottom:8px;">
+                        <small id="t_waterTxt">💧 পানি খাওয়ার রিমাইন্ডার:</small>
+                        <button class="small-btn" id="waterBtn" style="background:#0ea5e9; margin-top:3px;" onclick="toggleWaterReminder()">Start (1 Hour)</button>
+                        <div id="waterTimerStatus" style="font-size:10px; color:#666;"></div>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <small id="t_kickTxt">👶 বেবি কিক কাউন্টার:</small>
+                        <div style="display:flex; gap:5px; margin-top:3px;">
+                            <button class="small-btn" style="background:#10b981;" onclick="countKick()">+ Kick</button>
+                            <button class="small-btn" style="background:#64748b;" onclick="resetKick()">Reset</button>
+                        </div>
+                        <div id="kickDisplay" style="font-weight:bold; font-size:12px; margin-top:2px;">0 Kicks</div>
+                    </div>
+                    <button class="small-btn" style="background:#8b5cf6;" id="t_hospBtn" onclick="findNearbyHospitals()"><i class="fa-solid fa-hospital"></i> কাছের হাসপাতাল খুঁজুন</button>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-baby"></i> <span id="t_babyName">পছন্দের বাচ্চার নাম</span></h3>
+                    <input type="text" id="babyNameInput" class="small-input">
+                    <button class="small-btn" id="t_addNameBtn" onclick="addBabyName()">যোগ করুন</button>
+                    <div class="log-box" id="nameListBox"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT FIXED SPEECH SYNTHESIS ENGINE -->
+    <script>
+        let currentLang = 'bn'; 
+        let currentChatId = null;
+        let speechSynth = window.speechSynthesis;
+        let speechUtterance = null;
+        let activeTtsButton = null;
+        let recognition = null;
+
+        // Populate voices asynchronously
+        let availableVoices = [];
+        function loadVoices() {
+            availableVoices = speechSynth.getVoices();
+        }
+        loadVoices();
+        if (speechSynth.onvoiceschanged !== undefined) {
+            speechSynth.onvoiceschanged = loadVoices;
+        }
+
+        const translations = {
+            bn: {
+                welcomeTitle: "স্বাগতম", welcomeDesc: "আপনার যাত্রা শুরু হোক ভালোবাসায়", selectLangTxt: "ভাষা নির্বাচন করুন", startBtnText: "শুরু করুন",
+                loginTitle: "স্বাগতম", loginSub: "আপনার অ্যাকাউন্টে প্রবেশ করুন", emailPlaceholder: "ইমেইল অ্যাড্রেস", passPlaceholder: "পাসওয়ার্ড",
+                loginBtnText: "লগইন করুন", userInput: "আপনার প্রশ্নটি লিখুন...", assistantTitle: "সখী সহকারী",
+                welcomeMsg: "হ্যালো আপু! আমি সখী। আপনার গর্ভাবস্থা সংক্রান্ত যেকোনো প্রশ্ন আমাকে করতে পারেন।",
+                sideTitle: "সখী AI", newChatBtnTxt: "নতুন চ্যাট", t_inspiration: "আজকের প্রেরণা", t_edd: "প্রসবের তারিখ হিসাব", t_calcBtn: "হিসাব করুন",
+                t_diet: "ট্রাইমেস্টার ডায়েট প্ল্যান", tab1: "১ম", tab2: "২য়", tab3: "৩য়", t_meal: "খাবার লগ",
+                mealOptions: ["সকালের নাস্তা", "দুপুরের খাবার", "রাতের খাবার", "স্ন্যাকস"], mealDescInput: "কী খেলেন লিখুন...", t_addLogBtn: "লগ যুক্ত করুন",
+                t_mood: "মূড ট্র্যাকার", m_good: "😊 ভালো", m_tired: "😴 ক্লান্ত", symptom_nausea: "🤮 বমি ভাব", t_doc: "ডাক্তার অ্যাপয়েন্টমেন্ট",
+                docNameInput: "ডাক্তারের নাম", t_saveDocBtn: "সেভ করুন", t_vitals: "বিপি ও ওজন", t_saveVitalBtn: "সেভ করুন", t_reminder: "রিমাইন্ডার",
+                t_waterTxt: "💧 পানি খাওয়ার রিমাইন্ডার:", t_kickTxt: "👶 বেবি কিক কাউন্টার:", t_hospBtn: "কাছের হাসপাতাল খুঁজুন", t_babyName: "পছন্দের বাচ্চার নাম",
+                babyNameInput: "নাম লিখুন...", t_addNameBtn: "যোগ করুন"
+            },
+            en: {
+                welcomeTitle: "Welcome", welcomeDesc: "May your journey begin with love", selectLangTxt: "Select Language", startBtnText: "Start Now",
+                loginTitle: "Welcome", loginSub: "Login to your account", emailPlaceholder: "Email Address", passPlaceholder: "Password",
+                loginBtnText: "Login", userInput: "Type your question here...", assistantTitle: "Shokhi Assistant",
+                welcomeMsg: "Hello! I am Shokhi. Feel free to ask me any pregnancy-related questions.",
+                sideTitle: "Shokhi AI", newChatBtnTxt: "New Chat", t_inspiration: "Today's Inspiration", t_edd: "Due Date Calculator", t_calcBtn: "Calculate",
+                t_diet: "Trimester Diet Plan", tab1: "1st", tab2: "2nd", tab3: "3rd", t_meal: "Meal Log",
+                mealOptions: ["Breakfast", "Lunch", "Dinner", "Snack"], mealDescInput: "What did you eat...", t_addLogBtn: "Add Log",
+                t_mood: "Mood Tracker", m_good: "😊 Good", m_tired: "😴 Tired", symptom_nausea: "🤮 Nausea", t_doc: "Doctor Appointment",
+                docNameInput: "Doctor's Name", t_saveDocBtn: "Save", t_vitals: "BP & Weight", t_saveVitalBtn: "Save", t_reminder: "Reminders",
+                t_waterTxt: "💧 Water Intake Reminder:", t_kickTxt: "👶 Baby Kick Counter:", t_hospBtn: "Find Nearby Hospitals", t_babyName: "Favorite Baby Names",
+                babyNameInput: "Type name...", t_addNameBtn: "Add Name"
+            }
+        };
+
+        function setAppLanguage(lang) {
+            currentLang = lang;
+
+            let langBnBtn = document.getElementById('langBnBtn');
+            let langEnBtn = document.getElementById('langEnBtn');
+            if (langBnBtn) langBnBtn.classList.toggle('active', lang === 'bn');
+            if (langEnBtn) langEnBtn.classList.toggle('active', lang === 'en');
+
+            let hLangBnBtn = document.getElementById('hLangBnBtn');
+            let hLangEnBtn = document.getElementById('hLangEnBtn');
+            if (hLangBnBtn) hLangBnBtn.classList.toggle('active', lang === 'bn');
+            if (hLangEnBtn) hLangEnBtn.classList.toggle('active', lang === 'en');
+
+            const t = translations[lang];
+
+            let welcomeTitle = document.getElementById('welcomeTitle');
+            if (welcomeTitle) welcomeTitle.innerText = t.welcomeTitle;
+            let welcomeDesc = document.getElementById('welcomeDesc');
+            if (welcomeDesc) welcomeDesc.innerText = t.welcomeDesc;
+            let selectLangTxt = document.getElementById('selectLangTxt');
+            if (selectLangTxt) selectLangTxt.innerText = t.selectLangTxt;
+            let startBtnText = document.getElementById('startBtnText');
+            if (startBtnText) startBtnText.innerText = t.startBtnText;
+            let loginTitle = document.getElementById('loginTitle');
+            if (loginTitle) loginTitle.innerText = t.loginTitle;
+            let loginSub = document.getElementById('loginSub');
+            if (loginSub) loginSub.innerText = t.loginSub;
+            let emailPlaceholder = document.getElementById('emailPlaceholder');
+            if (emailPlaceholder) emailPlaceholder.placeholder = t.emailPlaceholder;
+            let passPlaceholder = document.getElementById('passPlaceholder');
+            if (passPlaceholder) passPlaceholder.placeholder = t.passPlaceholder;
+            let loginBtnText = document.getElementById('loginBtnText');
+            if (loginBtnText) loginBtnText.innerText = t.loginBtnText;
+            let userInput = document.getElementById('userInput');
+            if (userInput) userInput.placeholder = t.userInput;
+            let assistantTitle = document.getElementById('assistantTitle');
+            if (assistantTitle) assistantTitle.innerText = t.assistantTitle;
+            let welcomeMsg = document.getElementById('welcomeMsg');
+            if (welcomeMsg) welcomeMsg.innerText = t.welcomeMsg;
+            let sideTitle = document.getElementById('sideTitle');
+            if (sideTitle) sideTitle.innerText = t.sideTitle;
+            let newChatBtnTxt = document.getElementById('newChatBtnTxt');
+            if (newChatBtnTxt) newChatBtnTxt.innerText = t.newChatBtnTxt;
+
+            let t_inspiration = document.getElementById('t_inspiration');
+            if (t_inspiration) t_inspiration.innerText = t.t_inspiration;
+            let t_edd = document.getElementById('t_edd');
+            if (t_edd) t_edd.innerText = t.t_edd;
+            let t_calcBtn = document.getElementById('t_calcBtn');
+            if (t_calcBtn) t_calcBtn.innerText = t.t_calcBtn;
+            let t_diet = document.getElementById('t_diet');
+            if (t_diet) t_diet.innerText = t.t_diet;
+            let tab1 = document.getElementById('tab1');
+            if (tab1) tab1.innerText = t.tab1;
+            let tab2 = document.getElementById('tab2');
+            if (tab2) tab2.innerText = t.tab2;
+            let tab3 = document.getElementById('tab3');
+            if (tab3) tab3.innerText = t.tab3;
+            let t_meal = document.getElementById('t_meal');
+            if (t_meal) t_meal.innerText = t.t_meal;
+            
+            let select = document.getElementById('mealTypeSelect');
+            if (select) {
+                select.innerHTML = '';
+                t.mealOptions.forEach(opt => {
+                    let o = document.createElement('option');
+                    o.value = opt; o.innerText = opt;
+                    select.appendChild(o);
+                });
+            }
+
+            let mealDescInput = document.getElementById('mealDescInput');
+            if (mealDescInput) mealDescInput.placeholder = t.mealDescInput;
+            let t_addLogBtn = document.getElementById('t_addLogBtn');
+            if (t_addLogBtn) t_addLogBtn.innerText = t.t_addLogBtn;
+            let t_mood = document.getElementById('t_mood');
+            if (t_mood) t_mood.innerText = t.t_mood;
+            let m_good = document.getElementById('m_good');
+            if (m_good) m_good.innerText = t.m_good;
+            let m_tired = document.getElementById('m_tired');
+            if (m_tired) m_tired.innerText = t.m_tired;
+            let symptom_nausea = document.getElementById('symptom_nausea');
+            if (symptom_nausea) symptom_nausea.innerText = t.symptom_nausea;
+            let t_doc = document.getElementById('t_doc');
+            if (t_doc) t_doc.innerText = t.t_doc;
+            let docNameInput = document.getElementById('docNameInput');
+            if (docNameInput) docNameInput.placeholder = t.docNameInput;
+            let t_saveDocBtn = document.getElementById('t_saveDocBtn');
+            if (t_saveDocBtn) t_saveDocBtn.innerText = t.t_saveDocBtn;
+            let t_vitals = document.getElementById('t_vitals');
+            if (t_vitals) t_vitals.innerText = t.t_vitals;
+            let t_saveVitalBtn = document.getElementById('t_saveVitalBtn');
+            if (t_saveVitalBtn) t_saveVitalBtn.innerText = t.t_saveVitalBtn;
+            let t_reminder = document.getElementById('t_reminder');
+            if (t_reminder) t_reminder.innerText = t.t_reminder;
+            let t_waterTxt = document.getElementById('t_waterTxt');
+            if (t_waterTxt) t_waterTxt.innerText = t.t_waterTxt;
+            let t_kickTxt = document.getElementById('t_kickTxt');
+            if (t_kickTxt) t_kickTxt.innerText = t.t_kickTxt;
+            let t_hospBtn = document.getElementById('t_hospBtn');
+            if (t_hospBtn) t_hospBtn.innerHTML = `<i class="fa-solid fa-hospital"></i> ${t.t_hospBtn}`;
+            let t_babyName = document.getElementById('t_babyName');
+            if (t_babyName) t_babyName.innerText = t.t_babyName;
+            let babyNameInput = document.getElementById('babyNameInput');
+            if (babyNameInput) babyNameInput.placeholder = t.babyNameInput;
+            let t_addNameBtn = document.getElementById('t_addNameBtn');
+            if (t_addNameBtn) t_addNameBtn.innerText = t.t_addNameBtn;
+
+            displayRandomAffirmation();
+            switchDietTab(1);
+            renderDailyRoutine();
+        }
+
+        function goToPage(pageId) {
+            document.getElementById('page-welcome').style.display = 'none';
+            document.getElementById('page-login').style.display = 'none';
+            document.getElementById('page-main').style.display = 'none';
+
+            if (pageId === 'page-main') {
+                document.getElementById(pageId).style.display = 'block';
+                initApp();
+            } else {
+                document.getElementById(pageId).style.display = 'flex';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            goToPage('page-main');
+        }
+
+        async function initApp() {
+            setAppLanguage(currentLang);
+            await refreshSidebar();
+            
+            let firstItem = document.querySelector('.history-item');
+            if (firstItem) {
+                firstItem.click();
+            } else {
+                createNewChat();
+            }
+        }
+
+        /* FULL FIXED TTS SPEECH FUNCTION (SOLVES THE 1-WORD BUG & BENGALI BUG) */
+        function readAloud(rawText, buttonElement) {
+            // Stop speech if already speaking
+            if (speechSynth.speaking && activeTtsButton === buttonElement) {
+                speechSynth.cancel();
+                resetTtsButton(buttonElement);
+                return;
+            }
+
+            if (speechSynth.speaking) {
+                speechSynth.cancel();
+                if (activeTtsButton) resetTtsButton(activeTtsButton);
+            }
+
+            activeTtsButton = buttonElement;
+            buttonElement.innerHTML = "<i class='fa-solid fa-square'></i> Stop";
+            buttonElement.style.backgroundColor = "#ef4444"; 
+
+            // 1. CLEAN THE TEXT FULLY (Remove HTML, bullet symbols, Markdown stars, newlines)
+            let cleanText = rawText
+                .replace(/<[^>]*>?/gm, '')         // Remove HTML tags
+                .replace(/\*/g, '')               // Remove markdown stars
+                .replace(/•/g, '')               // Remove bullet points
+                .replace(/\n/g, ' ')             // Replace linebreaks with spaces
+                .trim();
+
+            if (!cleanText) {
+                resetTtsButton(buttonElement);
+                return;
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(cleanText);
+
+            // 2. DETECT LANGUAGE OF TEXT OR USE CURRENT SELECTED LANG
+            let isBangla = /[\u0980-\u09FF]/.test(cleanText) || currentLang === 'bn';
+            let targetLang = isBangla ? 'bn' : 'en';
+
+            speechUtterance.lang = isBangla ? 'bn-BD' : 'en-US';
+
+            // 3. VOICE SELECTION LOGIC
+            loadVoices();
+            let selectedVoice = availableVoices.find(v => 
+                v.lang.toLowerCase().startsWith(targetLang) || 
+                v.lang.toLowerCase().includes(isBangla ? 'bn' : 'en')
+            );
+
+            if (selectedVoice) {
+                speechUtterance.voice = selectedVoice;
+            }
+
+            speechUtterance.pitch = 1.1; 
+            speechUtterance.rate = 0.95; // Slightly slower for clear full-sentence reading
+
+            speechUtterance.onend = function() { resetTtsButton(buttonElement); };
+            speechUtterance.onerror = function(e) { 
+                console.error("TTS Error:", e);
+                resetTtsButton(buttonElement); 
+            };
+
+            // Speak Full Clean Sentence
+            speechSynth.speak(speechUtterance);
+        }
+
+        function resetTtsButton(btn) {
+            if(btn) {
+                btn.innerHTML = "<i class='fa-solid fa-volume-high'></i> Speak";
+                btn.style.backgroundColor = "#db2777"; 
+            }
+            if (activeTtsButton === btn) activeTtsButton = null;
+        }
+
+        async function startVoiceRecognition() {
+            let voiceBtn = document.getElementById("voiceBtn");
+            let inputField = document.getElementById("userInput");
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert(currentLang === 'en' ? "Voice recognition not supported." : "ভয়েস টাইপিং সাপোর্ট করে না।");
+                return;
+            }
+
+            if (recognition) { recognition.stop(); return; }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = currentLang === 'en' ? 'en-US' : 'bn-BD'; 
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                if(voiceBtn) voiceBtn.style.color = "#ef4444"; 
+                if(inputField) inputField.placeholder = currentLang === 'en' ? "Listening..." : "শুনছি আপু, বলুন...";
+            };
+
+            recognition.onresult = function(event) {
+                const speechToText = event.results[0][0].transcript;
+                if(speechToText.trim() !== "" && inputField) {
+                    inputField.value = speechToText;
+                    sendChatMessage(); 
+                }
+            };
+
+            recognition.onend = function() {
+                if(voiceBtn) voiceBtn.style.color = "#db2777";
+                if(inputField) inputField.placeholder = translations[currentLang].userInput;
+                recognition = null;
+            };
+
+            recognition.start();
+        }
+
+        const routineItems = {
+            bn: [
+                "সকালের ভিটামিন / ফলিক অ্যাসিড",
+                "হালকা ব্যায়াম / হাঁটা (১৫-২০ মিনিট)",
+                "কমপক্ষে ৩ লিটার পানি পান",
+                "দুপুরের বিশ্রাম / হালকা ঘুম",
+                "বাচ্চার কিক গণনাকরণ",
+                "সংধ্যাকালীন ওষুধ / ক্যালসিয়াম ও আয়রন"
+            ],
+            en: [
+                "Morning Vitamin / Folic Acid",
+                "Light Stretching / Walk (15-20 min)",
+                "Drink at least 3 Liters of Water",
+                "Afternoon Rest / Short Nap",
+                "Count Baby Kicks",
+                "Evening Medicine / Calcium & Iron"
+            ]
+        };
+
+        function renderDailyRoutine() {
+            let routineBox = document.getElementById("routineBox");
+            if (!routineBox) return;
+
+            let title = currentLang === 'en' ? "Daily Routine Tracker" : "দৈনন্দিন রুটিন ট্র্যাকার";
+
+            routineBox.innerHTML = `
+                <h3><i class="fa-solid fa-square-check"></i> ${title}</h3>
+                <div class="checklist-container" id="routineChecklistContainer"></div>
+            `;
+
+            let container = document.getElementById("routineChecklistContainer");
+            routineItems[currentLang].forEach((item, index) => {
+                let label = document.createElement("label");
+                label.className = "check-item";
+                label.innerHTML = `<input type="checkbox" id="routine_item_${index}"> ${item}`;
+                container.appendChild(label);
+            });
+        }
+
+        function logDailyMeal() {
+            let mealTypeSelect = document.getElementById("mealTypeSelect");
+            let mealDescInput = document.getElementById("mealDescInput");
+            let logBox = document.getElementById("dietLogBox");
+
+            if (!mealTypeSelect || !mealDescInput || !logBox) return;
+
+            let mealType = mealTypeSelect.value;
+            let mealDesc = mealDescInput.value.trim();
+
+            if (mealDesc === "") return;
+
+            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#10b981";
+            logItem.innerHTML = `<span><strong>${mealType}:</strong> ${mealDesc} (${timeStr})</span>`;
+            
+            logBox.insertBefore(logItem, logBox.firstChild);
+            mealDescInput.value = "";
+        }
+
+        function logMood(moodText) {
+            let logBox = document.getElementById("moodLogBox");
+            if (!logBox) return;
+            let timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#ec4899";
+            logItem.innerHTML = `<span>${moodText} (${timeStr})</span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+        }
+
+        function toggleSymptom(symptomName, id) {
+            let logBox = document.getElementById("moodLogBox");
+            if (!logBox) return;
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#e11d48";
+            logItem.innerHTML = `<span>Logged: ${symptomName}</span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+        }
+
+        function saveAppointment() {
+            let docNameInput = document.getElementById("docNameInput");
+            let appTimeInput = document.getElementById("appTimeInput");
+            let logBox = document.getElementById("appLogBox");
+
+            if (!docNameInput || !appTimeInput || !logBox) return;
+
+            let docName = docNameInput.value.trim();
+            let appTime = appTimeInput.value;
+
+            if(!docName || !appTime) return;
+
+            let dateObj = new Date(appTime);
+            let formattedDate = dateObj.toLocaleDateString([], {month: 'short', day: 'numeric'}) + " - " + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#8b5cf6";
+            logItem.innerHTML = `<span>🩺 ${docName} - ${formattedDate}</span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+
+            docNameInput.value = ""; appTimeInput.value = "";
+        }
+
+        function addBabyName() {
+            let nameField = document.getElementById("babyNameInput");
+            let nameListBox = document.getElementById("nameListBox");
+
+            if (!nameField || !nameListBox) return;
+            let nameText = nameField.value.trim();
+
+            if(nameText === "") return;
+
+            let item = document.createElement("div");
+            item.className = "log-item";
+            item.innerHTML = `<span>👶 ${nameText}</span> <i class="fa-solid fa-trash" style="color: #ef4444; cursor: pointer;" onclick="this.parentElement.remove()"></i>`;
+            nameListBox.appendChild(item);
+            nameField.value = "";
+        }
+
+        const affirmations = {
+            bn: [
+                "আপু, আপনার শরীরের ভেতরে একটি চমৎকার নতুন প্রাণের সৃষ্টি হচ্ছে। আপনি অসাধারণ!",
+                "প্রতিটি নতুন দিন আপনাকে আপনার সোনামণির আরও কাছে নিয়ে আসছে। নিজের যত্ন নিন।",
+                "আপনার শরীর শক্তিশালী এবং এটি একটি সুন্দর অলৌকিক ঘটনা ঘটাতে পুরোপুরি সক্ষম।",
+                "সব চিন্তা দূরে রাখুন, আপনার ছোট্ট সোনাটি আপনার গর্ভে একদম নিরাপদ ও শান্তিতে আছে।"
+            ],
+            en: [
+                "Dear sister, a wonderful new life is blooming inside you. You are amazing!",
+                "Every single day brings you closer to holding your little bundle of joy. Take care of yourself.",
+                "Your body is strong and perfectly capable of performing this incredible miracle.",
+                "Rest your mind; your little baby is safe, warm, and peaceful inside you."
+            ]
+        };
+
+        function displayRandomAffirmation() {
+            let textElement = document.getElementById("quoteText");
+            if (textElement) {
+                let list = affirmations[currentLang];
+                let randomIndex = Math.floor(Math.random() * list.length);
+                textElement.innerText = list[randomIndex];
+            }
+        }
+
+        const dietData = {
+            bn: {
+                1: "🟢 <strong>১ম ট্রাইমেস্টার:</strong><br>• ফলিক অ্যাসিড সমৃদ্ধ খাবার (সবুজ শাকসবজি, ডাল) খান।<br>• আদা চা বা শুকনো মুড়ি খেতে পারেন।<br>• প্রচুর পানি পান করুন।",
+                2: "🟡 <strong>২য় ট্রাইমেস্টার:</strong><br>• ক্যালসিয়াম ও আয়রন (দুধ, ডিম, ছোট মাছ) বাড়ান।<br>• প্রোটিন (চিকেন, ডাল) বেশি খান।<br>• কাঁচা পেঁপে এড়িয়ে চলুন।",
+                3: "🔵 <strong>৩য় ট্রাইমেস্টার:</strong><br>• আঁশযুক্ত খাবার (ওটস, ফল) খান।<br>• এনার্জির জন্য বারবার পুষ্টিকর খাবার খান।<br>• অতিরিক্ত তেল বাদ দিন।"
+            },
+            en: {
+                1: "🟢 <strong>1st Trimester:</strong><br>• Eat folic acid-rich foods (green leafy veggies, lentils).<br>• Drink ginger tea or dry puffed rice for morning sickness.<br>• Stay hydrated with water.",
+                2: "🟡 <strong>2nd Trimester:</strong><br>• Increase calcium and iron intake (milk, eggs, small fish).<br>• Eat protein-rich foods (chicken, beans).<br>• Avoid raw papaya.",
+                3: "🔵 <strong>3rd Trimester:</strong><br>• Eat fiber-rich foods (oats, fresh fruits).<br>• Have small, frequent nutritious meals for energy.<br>• Avoid oily foods."
+            }
+        };
+
+        function switchDietTab(tabNum) {
+            document.querySelectorAll('.diet-tab-btn').forEach(btn => btn.classList.remove('active'));
+            let activeBtn = document.getElementById("tab" + tabNum);
+            if (activeBtn) activeBtn.classList.add('active');
+            let contentBox = document.getElementById("dietContentBox");
+            if (contentBox) contentBox.innerHTML = dietData[currentLang][tabNum];
+        }
+
+        async function refreshSidebar() {
+            let historyList = document.getElementById("historyList");
+            if (!historyList) return;
+            historyList.innerHTML = "";
+            try {
+                let response = await fetch('/api/get_all_sessions');
+                let sessions = await response.json();
+                
+                sessions.forEach(session => {
+                    let item = document.createElement("div");
+                    item.className = "history-item";
+                    if (session.chat_id === currentChatId) item.className += " active";
+                    item.innerText = session.title;
+                    item.setAttribute("data-id", session.chat_id);
+                    item.onclick = async function() {
+                        document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+                        item.classList.add('active');
+                        currentChatId = session.chat_id;
+                        await loadChatMessages(currentChatId);
+                    };
+                    historyList.appendChild(item);
+                });
+            } catch (e) { console.error("Error fetching sessions:", e); }
+        }
+
+        async function loadChatMessages(chatId) {
+            let chatBox = document.getElementById("chatBox");
+            if (!chatBox) return;
+            chatBox.innerHTML = "";
+            try {
+                let response = await fetch(`/api/get_chat_messages/${chatId}`);
+                let messages = await response.json();
+                
+                if(!messages || messages.length === 0) {
+                    let welcomeText = translations[currentLang].welcomeMsg;
+                    chatBox.innerHTML = `<div class="bot-msg-box"><div class="bot-msg">${welcomeText}</div></div>`;
+                    return;
+                }
+                messages.forEach(msg => {
+                    if (msg.role === 'user') appendUserMessageToUI(msg.content);
+                    else if (msg.role === 'assistant') appendBotMessageToUI(formatCleanText(msg.content));
+                });
+            } catch (e) { console.error("Error loading chat messages:", e); }
+        }
+
+        function createNewChat() {
+            currentChatId = 'chat_' + Math.random().toString(36).substr(2, 9);
+            let chatBox = document.getElementById("chatBox");
+            if (chatBox) {
+                chatBox.innerHTML = `<div class="bot-msg-box"><div class="bot-msg">${translations[currentLang].welcomeMsg}</div></div>`;
+            }
+            
+            let historyList = document.getElementById("historyList");
+            let item = document.createElement("div");
+            item.className = "history-item active";
+            item.innerText = currentLang === 'en' ? "New Chat..." : "নতুন চ্যাট সেশন...";
+            item.setAttribute("data-id", currentChatId);
+            
+            document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+            item.onclick = function() {
+                document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                currentChatId = item.getAttribute("data-id");
+                loadChatMessages(currentChatId);
+            };
+            if (historyList) historyList.insertBefore(item, historyList.firstChild);
+        }
+
+        async function sendChatMessage() {
+            let inputField = document.getElementById("userInput");
+            if (!inputField) return;
+            let userText = inputField.value.trim();
+            if (userText === "") return;
+            
+            if (!currentChatId) {
+                currentChatId = 'chat_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            appendUserMessageToUI(userText);
+            inputField.value = "";
+            
+            let activeHistory = document.querySelector('.history-item.active');
+            if (activeHistory && (activeHistory.innerText.includes("নতুন চ্যাট") || activeHistory.innerText.includes("New Chat") || activeHistory.innerText.includes("..."))) {
+                activeHistory.innerText = userText.length > 18 ? userText.substring(0, 18) + "..." : userText;
+            }
+            await getBotResponse(userText);
+        }
+
+        function previewAndSendImage() {
+            let fileInput = document.getElementById("imageInput");
+            let chatBox = document.getElementById("chatBox");
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = async function(e) {
+                    let userDiv = document.createElement("div");
+                    userDiv.className = "user-msg";
+                    let img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.className = "chat-img";
+                    userDiv.appendChild(document.createTextNode(currentLang === 'en' ? "Uploaded an image:" : "একটি ছবি আপলোড করেছেন:"));
+                    userDiv.appendChild(document.createElement("br"));
+                    userDiv.appendChild(img);
+                    if(chatBox) {
+                        chatBox.appendChild(userDiv);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }
+                    let prompt = currentLang === 'en' ? "I uploaded an image related to my health. Please advise in English." : "আমি আমার গর্ভাবস্থার স্বাস্থ্য সংক্রান্ত একটি ছবি আপলোড করেছি। আমাকে বাংলাতে পরামর্শ দিন।";
+                    await getBotResponse(prompt);
+                }
+                reader.readAsDataURL(fileInput.files[0]);
+                fileInput.value = "";
+            }
+        }
+
+        function formatCleanText(text) {
+            if (!text) return "";
+            let cleaned = text.replace(/\*\*(.*?)\*\*/g, "$1");
+            cleaned = cleaned.replace(/^\s*\*\s*/gm, "• ");
+            return cleaned;
+        }
+
+        function appendUserMessageToUI(text) {
+            let chatBox = document.getElementById("chatBox");
+            if(!chatBox) return;
+            let userDiv = document.createElement("div");
+            userDiv.className = "user-msg";
+            userDiv.innerText = text;
+            chatBox.appendChild(userDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function appendBotMessageToUI(cleanText) {
+            let chatBox = document.getElementById("chatBox");
+            if(!chatBox) return;
+            let box = document.createElement("div");
+            box.className = "bot-msg-box";
+            let msgDiv = document.createElement("div");
+            msgDiv.className = "bot-msg";
+            msgDiv.innerText = cleanText;
+            let ttsBtn = document.createElement("button");
+            ttsBtn.className = "tts-btn";
+            ttsBtn.innerHTML = "<i class='fa-solid fa-volume-high'></i> Speak";
+            
+            ttsBtn.onclick = function() { readAloud(cleanText, ttsBtn); };
+            
+            box.appendChild(msgDiv);
+            box.appendChild(ttsBtn);
+            chatBox.appendChild(box);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function getBotResponse(promptText) {
+            let chatBox = document.getElementById("chatBox");
+            if (!chatBox) return;
+            
+            if (!currentChatId) {
+                currentChatId = 'chat_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            let loadingDiv = document.createElement("div");
+            loadingDiv.className = "loading-msg";
+            loadingDiv.id = "prova-loading";
+            loadingDiv.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${currentLang === 'en' ? 'Shokhi is thinking...' : 'সখী ভাবছে...'}`;
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            try {
+                let response = await fetch('/api/ask_prova_chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: currentChatId,
+                        prompt_text: promptText,
+                        language: currentLang
+                    })
+                });
+
+                let data = await response.json();
+                let loading = document.getElementById("prova-loading");
+                if (loading) loading.remove();
+
+                if (data && data.reply) {
+                    appendBotMessageToUI(formatCleanText(data.reply));
+                } else {
+                    appendBotMessageToUI(currentLang === 'en' ? "I am here with you. How can I help?" : "আমি আপনার সাথেই আছি আপু। বলুন কীভাবে সাহায্য করতে পারি?");
+                }
+                await refreshSidebar();
+            } catch (error) {
+                console.error("API Fetch Error:", error);
+                let loading = document.getElementById("prova-loading");
+                if (loading) loading.remove();
+                appendBotMessageToUI(currentLang === 'en' ? "Sorry, having trouble connecting to the server." : "দুঃখিত আপু, সার্ভারের সাথে সংযোগে সমস্যা হচ্ছে।");
+            }
+        }
+
+        function calculatePregnancy() {
+            let lmpInput = document.getElementById("lmpDate");
+            if (!lmpInput || !lmpInput.value) return;
+            let lmp = new Date(lmpInput.value);
+            let today = new Date();
+            if (lmp > today) {
+                let calcResult = document.getElementById("calcResult");
+                if(calcResult) calcResult.innerHTML = `<span style="color: #ef4444;">⚠️ ${currentLang === 'en' ? 'Select valid date' : 'সঠিক তারিখ নির্বাচন করুন'}</span>`;
+                return;
+            }
+            let dueDate = new Date(lmp.getTime() + (280 * 24 * 60 * 60 * 1000));
+            let diffDays = Math.ceil(Math.abs(today - lmp) / (1000 * 60 * 60 * 24));
+            let weeks = Math.floor(diffDays / 7);
+            let days = diffDays % 7;
+            
+            let trimester = weeks <= 12 ? (currentLang === 'en' ? "1st Trimester" : "১ম ট্রাইমেস্টার") : weeks <= 26 ? (currentLang === 'en' ? "2nd Trimester" : "২য় ট্রাইমেস্টার") : (currentLang === 'en' ? "3rd Trimester" : "৩য় ট্রাইমেস্টার");
+            let calcResult = document.getElementById("calcResult");
+            if(calcResult) {
+                calcResult.innerHTML = `<strong>${currentLang==='en'?'Due Date':'সম্ভাব্য তারিখ'}:</strong> ${dueDate.toDateString()}<br><strong>${currentLang==='en'?'Progress':'অগ্রগতি'}:</strong> ${weeks} ${currentLang==='en'?'weeks':'সপ্তাহ'}, ${days} ${currentLang==='en'?'days':'দিন'}<br><strong>${trimester}</strong>`;
+            }
+        }
+
+        function logVitals() {
+            let bpInput = document.getElementById("bpInput");
+            let weightInput = document.getElementById("weightInput");
+            let logBox = document.getElementById("vitalsLogBox");
+
+            if(!bpInput || !weightInput || !logBox) return;
+
+            let bp = bpInput.value.trim();
+            let weight = weightInput.value.trim();
+            
+            if (!bp && !weight) return;
+            let dateStr = new Date().toLocaleDateString([], { month: 'short', day: 'numeric' });
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.innerHTML = `<span>${dateStr} - BP: ${bp||'N/A'} | ${weight||'N/A'} kg</span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+            bpInput.value = ""; weightInput.value = "";
+        }
+
+        let waterIntervalId = null;
+        function toggleWaterReminder() {
+            let btn = document.getElementById("waterBtn");
+            let status = document.getElementById("waterTimerStatus");
+
+            if (waterIntervalId === null) {
+                waterIntervalId = setInterval(() => { alert(currentLang === 'en' ? "🥤 Time to drink water!" : "🥤 আপু, পানি খাওয়ার সময় হয়েছে!"); }, 3600000);
+                btn.innerText = currentLang === 'en' ? "Stop Reminder" : "রিমাইন্ডার বন্ধ করুন"; 
+                btn.style.backgroundColor = "#ef4444";
+                status.innerText = currentLang === 'en' ? "Reminder Active" : "রিমাইন্ডার চালু আছে"; 
+                status.style.color = "#10b981";
+            } else {
+                clearInterval(waterIntervalId); waterIntervalId = null;
+                btn.innerText = "Start (1 Hour)"; btn.style.backgroundColor = "#0ea5e9";
+                status.innerText = currentLang === 'en' ? "Reminder Off" : "রিমাইন্ডার বন্ধ আছে"; 
+                status.style.color = "#666";
+            }
+        }
+
+        let kickCount = 0;
+        function countKick() { 
+            kickCount++; 
+            let display = document.getElementById("kickDisplay");
+            if(display) display.innerText = kickCount + " Kicks"; 
+        }
+        function resetKick() { 
+            kickCount = 0; 
+            let display = document.getElementById("kickDisplay");
+            if(display) display.innerText = "0 Kicks"; 
+        }
+
+        function findNearbyHospitals() { window.open("https://www.google.com/maps/search/hospitals+near+me/", "_blank"); }
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+.env
+instance/
+__pycache__/
+*.pyc
+temp_audio.mp3
+chat_history.json

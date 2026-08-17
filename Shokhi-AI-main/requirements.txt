@@ -1,0 +1,9 @@
+Flask>=3.0.0
+Flask-Cors
+Flask-SQLAlchemy
+Flask-Admin
+APScheduler
+gTTS
+google-genai
+google-generativeai
+python-dotenv
