@@ -49,7 +49,7 @@
             overflow-x: hidden;
         }
 
-        /* Ambient floating light shapes for depth */
+        /* Ambient floating light shapes */
         .bg-orb {
             position: fixed;
             border-radius: 50%;
@@ -532,6 +532,7 @@
             line-height: 1.65;
             box-shadow: 0 4px 16px rgba(219, 39, 119, 0.07);
             word-wrap: break-word;
+            white-space: pre-wrap;
         }
 
         .tts-btn {
@@ -1667,15 +1668,19 @@
                 let response = await fetch(`/api/get_chat_messages/${chatId}`);
                 let messages = await response.json();
                 
-                if(!messages || messages.length === 0) {
+                if (!messages || messages.length === 0) {
                     let welcomeText = translations[currentLang].welcomeMsg;
                     chatBox.innerHTML = `<div class="bot-msg-box"><div class="bot-msg">${welcomeText}</div></div>`;
                     return;
                 }
                 messages.forEach(msg => {
-                    if (msg.role === 'user') appendUserMessageToUI(msg.content);
-                    else if (msg.role === 'assistant') appendBotMessageToUI(formatCleanText(msg.content));
+                    if (msg.role === 'user') {
+                        appendUserMessageToUI(msg.content);
+                    } else if (msg.role === 'assistant') {
+                        appendBotMessageToUI(formatCleanText(msg.content));
+                    }
                 });
+                chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) { console.error("Error loading chat messages:", e); }
         }
 

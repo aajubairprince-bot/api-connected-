@@ -320,5 +320,18 @@ def speak_text():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    port = int(os.getenv('FLASK_PORT', 5000))
-    app.run(debug=True, port=port)
+    
+    target_port = int(os.getenv('FLASK_PORT', 5000))
+    import socket
+    
+    def is_port_in_use(p):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            return s.connect_ex(('127.0.0.1', p)) == 0
+            
+    port = target_port
+    while is_port_in_use(port):
+        print(f"Port {port} is currently in use or in TIME_WAIT. Trying port {port + 1}...")
+        port += 1
+        
+    print(f"Shokhi AI Server running at: http://127.0.0.1:{port}")
+    app.run(debug=True, port=port, use_reloader=False)
