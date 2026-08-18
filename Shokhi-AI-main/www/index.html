@@ -853,13 +853,105 @@
             50% { transform: scale(1.15); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
-        .send-btn {
-            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-            color: #ffffff;
-            border: none;
-            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+        /* 🎙️ Voice Assistant Overlay Modal & Audio Visualizer */
+        .voice-modal-mic-wrap {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            margin: 16px auto 12px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .send-btn:hover { transform: scale(1.06); box-shadow: 0 6px 16px rgba(225, 29, 72, 0.4); }
+        .voice-modal-pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(244, 63, 94, 0.2);
+            animation: ringPulse 1.6s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        @keyframes ringPulse {
+            0% { transform: scale(0.85); opacity: 0.9; }
+            50% { transform: scale(1.35); opacity: 0.3; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .voice-modal-mic-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            color: #ffffff;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 24px rgba(244, 63, 94, 0.4);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        .voice-equalizer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 28px;
+            margin: 10px 0 14px 0;
+        }
+        .voice-equalizer span {
+            width: 4px;
+            height: 6px;
+            background: #f43f5e;
+            border-radius: 4px;
+            transition: height 0.08s ease;
+        }
+        .voice-status-badge {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-deep);
+            margin-bottom: 12px;
+        }
+        .voice-transcript-preview {
+            background: #f8fafc;
+            border: 1.5px solid #fecdd3;
+            border-radius: 14px;
+            padding: 16px 18px;
+            min-height: 80px;
+            max-height: 140px;
+            overflow-y: auto;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #1e293b;
+            font-weight: 600;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        .voice-btn-secondary {
+            background: #f1f5f9;
+            border: none;
+            color: #64748b;
+            padding: 11px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .voice-btn-secondary:hover { background: #e2e8f0; color: #1e293b; }
+        .voice-btn-primary {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            border: none;
+            color: #ffffff;
+            padding: 11px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+            transition: var(--transition);
+        }
+        .voice-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(244, 63, 94, 0.45); }
 
         /* 3. RIGHT HEALTH HUB: 4 TABBED MODULES */
         .tools-section {
@@ -1549,6 +1641,54 @@
         </div>
     </div>
 
+    <!-- 7. LIVE VOICE INPUT & SPEECH RECOGNITION OVERLAY MODAL -->
+    <div class="modal-overlay" id="voiceModal" style="display:none; align-items:center; justify-content:center; z-index:99999;">
+        <div class="modal-card" style="max-width: 480px; text-align:center; padding:26px 24px; border-radius:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span style="font-size:13.5px; font-weight:800; color:var(--primary-deep);" id="voiceModalTitle">
+                    <i class="fa-solid fa-microphone-lines" style="color:var(--primary); margin-right:5px;"></i> ভয়েস ইনপুট (Voice Typing)
+                </span>
+                <div class="lang-toggle-pill" style="margin:0;">
+                    <button class="h-lang-btn active" id="vLangBn" onclick="switchVoiceLang('bn')">বাংলা</button>
+                    <button class="h-lang-btn" id="vLangEn" onclick="switchVoiceLang('en')">English</button>
+                </div>
+            </div>
+
+            <!-- Glowing Mic Circle -->
+            <div class="voice-modal-mic-wrap">
+                <div class="voice-modal-pulse-ring"></div>
+                <div class="voice-modal-mic-circle" id="voiceMicCircle">
+                    <i class="fa-solid fa-microphone" id="voiceMicIcon"></i>
+                </div>
+            </div>
+
+            <!-- Dynamic Equalizer Waves -->
+            <div class="voice-equalizer" id="voiceEqualizer">
+                <span style="height:6px;"></span><span style="height:12px;"></span>
+                <span style="height:20px;"></span><span style="height:8px;"></span>
+                <span style="height:16px;"></span><span style="height:24px;"></span>
+                <span style="height:10px;"></span><span style="height:18px;"></span>
+                <span style="height:14px;"></span><span style="height:6px;"></span>
+            </div>
+
+            <div class="voice-status-badge" id="voiceStatusText">🎙️ শুনছি... আপনার প্রশ্নটি বলুন</div>
+
+            <div class="voice-transcript-preview" id="voiceTranscriptBox">
+                <span style="color:#94a3b8; font-style:italic;" id="voicePlaceholderTxt">আপনার বলা কথাগুলো এখানে সরাসরি দেখতে পাবেন...</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display:flex; gap:10px; margin-top:20px; justify-content:center;">
+                <button onclick="cancelVoiceModal()" class="voice-btn-secondary" id="voiceCancelBtn">
+                    <i class="fa-solid fa-xmark"></i> বাতিল
+                </button>
+                <button onclick="commitVoiceModal()" class="voice-btn-primary" id="voiceSendBtn">
+                    <i class="fa-solid fa-paper-plane"></i> চ্যাটে পাঠান
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC & BILINGUAL ENGINE -->
     <script>
         let currentLang = localStorage.getItem('shokhi_app_lang') || 'bn';
@@ -2221,122 +2361,245 @@
             goToPage('page-main');
         }
 
-        async function handleGoogleSignIn() {
-            const btn = document.getElementById('googleAuthBtn');
-            const btnText = document.getElementById('googleBtnText');
-            if (btnText) btnText.textContent = (currentLang === 'en' ? 'Redirecting to Google...' : 'গুগলে রিডাইরেক্ট হচ্ছে...');
-            if (btn) btn.style.opacity = '0.7';
+        /* 🎙️ LIVE VOICE ASSISTANT & SPEECH-TO-TEXT WITH AUDIO VISUALIZER */
+        let isVoiceRecognizing = false;
+        let activeVoiceLang = currentLang === 'en' ? 'en' : 'bn';
+        let capturedVoiceText = '';
+        let audioContext = null;
+        let audioAnalyser = null;
+        let audioSource = null;
+        let audioStream = null;
+        let visualizerAnimFrame = null;
 
-            try {
-                if (!supaClient) await initSupabaseAuth();
-                if (supaClient?.auth) {
-                    const redirectUrl = `${window.location.origin}/app`;
-                    const { error } = await supaClient.auth.signInWithOAuth({
-                        provider: 'google',
-                        options: { redirectTo: redirectUrl }
-                    });
-                    if (error) throw error;
-                } else {
-                    showAuthAlert(currentLang === 'en' ? 'Connecting to Google Authentication...' : 'গুগল অথেন্টিকেশন প্রস্তুত হচ্ছে, আরেকবার চাপ দিন।', false);
-                }
-            } catch (err) {
-                console.error("Google OAuth error:", err);
-                showAuthAlert((currentLang === 'en' ? 'Google login error: ' : 'গুগল লগইন ত্রুটি: ') + err.message, true);
-            } finally {
-                if (btnText) btnText.textContent = currentLang === 'en' ? 'Continue with Google' : 'গুগল দিয়ে প্রবেশ করুন (Continue with Google)';
-                if (btn) btn.style.opacity = '1';
-            }
-        }
-
-        function doLogout() {
-            stopAnySpeech();
-            closeProfileModal();
-            authToken = null;
-            currentUser = null;
-            localStorage.removeItem('shokhi_auth_token');
-            localStorage.removeItem('shokhi_user');
-            if (supaClient?.auth) {
-                try { supaClient.auth.signOut(); } catch(_) {}
-            }
-            goToPage('page-welcome');
-        }
-
-        function goToPage(pageId) {
-            document.getElementById('page-welcome').style.display = 'none';
-            document.getElementById('page-login').style.display = 'none';
-            document.getElementById('page-main').style.display = 'none';
-
-            if (pageId === 'page-main') {
-                document.getElementById(pageId).style.display = 'block';
-                initApp();
-            } else {
-                document.getElementById(pageId).style.display = 'flex';
-            }
-        }
-
-        /* 4 TAB SWITCHING */
-        function switchHubTab(paneId) {
-            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.hub-tab-btn').forEach(b => b.classList.remove('active'));
-
-            const targetPane = document.getElementById(paneId);
-            if (targetPane) targetPane.classList.add('active');
-
-            if (paneId === 'paneTrackers') document.getElementById('tabTrackers')?.classList.add('active');
-            else if (paneId === 'paneDiet') document.getElementById('tabDiet')?.classList.add('active');
-            else if (paneId === 'paneClinical') document.getElementById('tabClinical')?.classList.add('active');
-            else if (paneId === 'paneWellness') document.getElementById('tabWellness')?.classList.add('active');
-        }
-
-        async function initApp() {
-            setAppLanguage(currentLang);
+        function openVoiceModal() {
+            const modal = document.getElementById('voiceModal');
+            if (!modal) return;
+            modal.style.display = 'flex';
             
-            // Sync user profile from backend
-            try {
-                const pRes = await fetch('/api/profile', { headers: getApiHeaders() });
-                const pData = await pRes.json();
-                if (pData.success && pData.profile) {
-                    if (!currentUser) currentUser = {};
-                    currentUser.name = pData.profile.name || currentUser.name || 'নুসরাত জাহান';
-                    currentUser.email = pData.profile.email || currentUser.email || 'user@shokhi.ai';
-                    currentUser.pregnancy_week = pData.profile.pregnancy_week || currentUser.pregnancy_week || 24;
-                    currentUser.due_date = pData.profile.due_date || currentUser.due_date || null;
-                    localStorage.setItem('shokhi_user', JSON.stringify(currentUser));
-                }
-            } catch(e) {}
+            // Set default voice lang buttons
+            activeVoiceLang = currentLang === 'en' ? 'en' : 'bn';
+            updateVoiceLangUI();
 
-            updateProfileUI();
-
-            await refreshSidebar();
-            await fetchNotifications();
-            await fetchMaternityOverview();
-            displayRandomAffirmation();
-            renderDailyRoutine();
+            const transcriptBox = document.getElementById('voiceTranscriptBox');
+            const statusEl = document.getElementById('voiceStatusText');
+            if (transcriptBox) {
+                transcriptBox.innerHTML = `<span style="color:#94a3b8; font-style:italic;" id="voicePlaceholderTxt">${activeVoiceLang === 'en' ? 'Speak clearly, your words will appear here...' : 'আপনার প্রশ্নটি স্পষ্ট করে বলুন, কথাগুলো এখানে ভেসে উঠবে...'}</span>`;
+            }
+            if (statusEl) {
+                statusEl.textContent = activeVoiceLang === 'en' ? '🎙️ Listening... Speak now' : '🎙️ শুনছি আপু... আপনার প্রশ্নটি বলুন';
+            }
+            capturedVoiceText = '';
         }
 
-        function updateProfileUI() {
-            if (currentUser) {
-                const nameEl = document.getElementById('userDisplayName');
-                const avatarEl = document.getElementById('userAvatarText');
-                const weekEl = document.getElementById('userWeekBadge');
-                const w = parseInt(currentUser.pregnancy_week || 24, 10);
-                const trimester = getTrimesterName(w);
+        function switchVoiceLang(lang) {
+            activeVoiceLang = lang;
+            updateVoiceLangUI();
+            
+            // Restart recognition with new language if currently running
+            if (isVoiceRecognizing && recognition) {
+                try {
+                    recognition.stop();
+                } catch (_) {}
+            }
+            setTimeout(() => {
+                initiateSpeechRecognizer();
+            }, 200);
+        }
 
-                if (nameEl) nameEl.textContent = currentUser.name || 'নুসরাত জাহান';
-                if (avatarEl) avatarEl.textContent = (currentUser.name || 'নু').charAt(0).toUpperCase();
-                if (weekEl) weekEl.textContent = `${w} ${currentLang === 'en' ? 'Weeks • ' + trimester : 'সপ্তাহ • ' + trimester}`;
+        function updateVoiceLangUI() {
+            const bnBtn = document.getElementById('vLangBn');
+            const enBtn = document.getElementById('vLangEn');
+            if (bnBtn) bnBtn.classList.toggle('active', activeVoiceLang === 'bn');
+            if (enBtn) enBtn.classList.toggle('active', activeVoiceLang === 'en');
+        }
 
-                // Modal elements
-                const mName = document.getElementById('modalName');
-                const mAvatar = document.getElementById('modalAvatar');
-                const mWeek = document.getElementById('modalWeek');
-                const mEmail = document.getElementById('modalEmail');
-                if (mName) mName.textContent = currentUser.name || 'নুসরাত জাহান';
-                if (mAvatar) mAvatar.textContent = (currentUser.name || 'নু').charAt(0).toUpperCase();
-                if (mWeek) mWeek.textContent = `${w} ${currentLang === 'en' ? 'Weeks • ' + trimester : 'সপ্তাহ • ' + trimester}`;
-                if (mEmail) mEmail.textContent = currentUser.email || 'user@shokhi.ai';
+        async function startVoiceRecognition() {
+            openVoiceModal();
+            await startAudioVisualizer();
+            initiateSpeechRecognizer();
+        }
 
-                updateGestationalHeroBar(w);
+        async function startAudioVisualizer() {
+            try {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+                
+                audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                
+                audioContext = new AudioCtx();
+                audioAnalyser = audioContext.createAnalyser();
+                audioAnalyser.fftSize = 64;
+                audioAnalyser.smoothingTimeConstant = 0.6;
+                
+                audioSource = audioContext.createMediaStreamSource(audioStream);
+                audioSource.connect(audioAnalyser);
+                
+                const bufferLength = audioAnalyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                const equalizerBars = document.querySelectorAll('#voiceEqualizer span');
+                
+                function drawWave() {
+                    if (!isVoiceRecognizing && (!audioStream || !audioStream.active)) {
+                        equalizerBars.forEach(b => b.style.height = '6px');
+                        return;
+                    }
+                    
+                    audioAnalyser.getByteFrequencyData(dataArray);
+                    
+                    equalizerBars.forEach((bar, idx) => {
+                        const val = dataArray[idx % bufferLength] || 10;
+                        const height = Math.max(4, Math.min(28, (val / 255) * 32));
+                        bar.style.height = `${height}px`;
+                    });
+                    
+                    visualizerAnimFrame = requestAnimationFrame(drawWave);
+                }
+                drawWave();
+            } catch (err) {
+                console.warn('Audio Visualizer setup notice:', err);
+            }
+        }
+
+        function stopAudioVisualizer() {
+            if (visualizerAnimFrame) {
+                cancelAnimationFrame(visualizerAnimFrame);
+                visualizerAnimFrame = null;
+            }
+            if (audioStream) {
+                audioStream.getTracks().forEach(track => track.stop());
+                audioStream = null;
+            }
+            if (audioContext && audioContext.state !== 'closed') {
+                try { audioContext.close(); } catch (_) {}
+                audioContext = null;
+            }
+            const equalizerBars = document.querySelectorAll('#voiceEqualizer span');
+            equalizerBars.forEach(b => b.style.height = '6px');
+        }
+
+        function initiateSpeechRecognizer() {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const statusEl = document.getElementById('voiceStatusText');
+            const micCircle = document.getElementById('voiceMicCircle');
+            const transcriptBox = document.getElementById('voiceTranscriptBox');
+            
+            if (!SpeechRec) {
+                if (statusEl) {
+                    statusEl.innerHTML = `<span style="color:#ef4444;">⚠️ আপনার ব্রাউজারে ভয়েস টাইপিং সাপোর্ট করে না। Google Chrome বা Edge ব্যবহার করুন।</span>`;
+                }
+                return;
+            }
+
+            try {
+                if (recognition) {
+                    try { recognition.abort(); } catch (_) {}
+                    recognition = null;
+                }
+
+                recognition = new SpeechRec();
+                recognition.lang = activeVoiceLang === 'en' ? 'en-US' : 'bn-BD';
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = () => {
+                    isVoiceRecognizing = true;
+                    if (micCircle) {
+                        micCircle.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                        micCircle.style.boxShadow = '0 12px 28px rgba(239, 68, 68, 0.55)';
+                    }
+                    if (statusEl) {
+                        statusEl.textContent = activeVoiceLang === 'en' ? '🎙️ Listening... Speak now' : '🎙️ শুনছি আপু... আপনার প্রশ্নটি বলুন';
+                    }
+                };
+
+                recognition.onresult = (e) => {
+                    let interimTranscript = '';
+                    let finalTranscript = '';
+
+                    for (let i = e.resultIndex; i < e.results.length; ++i) {
+                        if (e.results[i].isFinal) {
+                            finalTranscript += e.results[i][0].transcript;
+                        } else {
+                            interimTranscript += e.results[i][0].transcript;
+                        }
+                    }
+
+                    const activeText = finalTranscript || interimTranscript;
+                    if (activeText && activeText.trim()) {
+                        capturedVoiceText = activeText.trim();
+                        if (transcriptBox) {
+                            transcriptBox.innerHTML = `<span style="color:#1e293b; font-size:15.5px; font-weight:600;">${capturedVoiceText}</span>`;
+                        }
+                        const chatInput = document.getElementById('userInput');
+                        if (chatInput) chatInput.value = capturedVoiceText;
+                    }
+                };
+
+                recognition.onerror = (e) => {
+                    console.warn('Speech recognition notice:', e.error);
+                    if (e.error === 'not-allowed' || e.error === 'permission-denied') {
+                        if (statusEl) {
+                            statusEl.innerHTML = `<span style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> মাইক্রোফোন পারমিশন এলাও করুন (Allow Mic in Address Bar)</span>`;
+                        }
+                    } else if (e.error === 'network') {
+                        // If bn-BD has network error, fallback to bn-IN or prompt user
+                        if (activeVoiceLang === 'bn') {
+                            recognition.lang = 'bn-IN';
+                        }
+                    }
+                };
+
+                recognition.onend = () => {
+                    if (isVoiceRecognizing) {
+                        // Keep listening or restart smoothly while modal is open
+                        try {
+                            if (document.getElementById('voiceModal')?.style.display === 'flex') {
+                                recognition.start();
+                            }
+                        } catch (_) {}
+                    }
+                };
+
+                recognition.start();
+            } catch (err) {
+                console.error('Speech recognition startup error:', err);
+                if (statusEl) {
+                    statusEl.innerHTML = `<span style="color:#ef4444;">ভয়েস ইঞ্জিন চালু করা যায়নি। পুনরায় চেষ্টা করুন।</span>`;
+                }
+            }
+        }
+
+        function cancelVoiceModal() {
+            isVoiceRecognizing = false;
+            if (recognition) {
+                try { recognition.abort(); } catch (_) {}
+                recognition = null;
+            }
+            stopAudioVisualizer();
+            const modal = document.getElementById('voiceModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function commitVoiceModal() {
+            isVoiceRecognizing = false;
+            if (recognition) {
+                try { recognition.stop(); } catch (_) {}
+                recognition = null;
+            }
+            stopAudioVisualizer();
+            
+            const modal = document.getElementById('voiceModal');
+            if (modal) modal.style.display = 'none';
+
+            const chatInput = document.getElementById('userInput');
+            if (capturedVoiceText && capturedVoiceText.trim()) {
+                if (chatInput) chatInput.value = capturedVoiceText.trim();
+                sendChatMessage();
+            } else if (chatInput && chatInput.value.trim()) {
+                sendChatMessage();
             }
         }
 
