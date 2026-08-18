@@ -1,6 +1,6 @@
 import { sendJsonResponse, sendJsonError } from '../../../lib/errors.js';
 import { verifyAuth } from '../../../lib/auth.js';
-import { localDb } from '../../../lib/supabase.js';
+import { getSupabaseConfig, getSupabaseAdminClient, localDb } from '../../../lib/supabase.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST' && req.method !== 'DELETE') {
@@ -14,6 +14,18 @@ export default async function handler(req, res) {
 
   const userId = String(authUser.id);
   const todayStr = new Date().toISOString().slice(0, 10);
+  const config = getSupabaseConfig();
+
+  if (config.is_configured) {
+    try {
+      const supabase = getSupabaseAdminClient();
+      await supabase
+        .from('daily_routines')
+        .update({ is_completed: false, completed_at: null })
+        .eq('user_id', userId)
+        .eq('record_date', todayStr);
+    } catch (_) {}
+  }
 
   localDb.daily_routines.forEach(r => {
     if (String(r.user_id) === userId && r.record_date === todayStr) {

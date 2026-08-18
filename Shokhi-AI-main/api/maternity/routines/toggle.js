@@ -1,7 +1,7 @@
 import { sendJsonResponse, sendJsonError } from '../../../lib/errors.js';
 import { verifyAuth } from '../../../lib/auth.js';
 import { escapeHtml } from '../../../lib/validation.js';
-import { localDb } from '../../../lib/supabase.js';
+import { getSupabaseConfig, getSupabaseAdminClient, localDb } from '../../../lib/supabase.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -14,6 +14,7 @@ export default async function handler(req, res) {
   }
 
   const userId = String(authUser.id);
+  const config = getSupabaseConfig();
   const body = req.body || {};
   const routineKey = escapeHtml((body.routine_key || '').trim());
   const todayStr = new Date().toISOString().slice(0, 10);
@@ -33,6 +34,25 @@ export default async function handler(req, res) {
     targetState = !item.is_completed;
   }
 
+  // 1. Persist in Supabase daily_routines table
+  if (config.is_configured) {
+    try {
+      const supabase = getSupabaseAdminClient();
+      await supabase
+        .from('daily_routines')
+        .upsert({
+          user_id: userId,
+          routine_key: routineKey,
+          is_completed: targetState,
+          record_date: todayStr,
+          completed_at: targetState ? new Date().toISOString() : null
+        }, { onConflict: 'user_id,routine_key,record_date' });
+    } catch (err) {
+      console.warn('[Supabase daily_routines upsert error]:', err.message);
+    }
+  }
+
+  // 2. Persist in local store
   if (item) {
     item.is_completed = targetState;
     item.completed_at = targetState ? Date.now() / 1000 : null;

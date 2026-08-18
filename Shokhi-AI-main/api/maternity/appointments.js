@@ -1,7 +1,7 @@
 import { sendJsonResponse, sendJsonError } from '../../lib/errors.js';
 import { verifyAuth } from '../../lib/auth.js';
 import { escapeHtml } from '../../lib/validation.js';
-import { localDb } from '../../lib/supabase.js';
+import { getSupabaseConfig, getSupabaseAdminClient, localDb } from '../../lib/supabase.js';
 
 export default async function handler(req, res) {
   const authUser = await verifyAuth(req);
@@ -10,6 +10,7 @@ export default async function handler(req, res) {
   }
 
   const userId = String(authUser.id);
+  const config = getSupabaseConfig();
 
   if (req.method === 'POST') {
     const body = req.body || {};
@@ -22,8 +23,39 @@ export default async function handler(req, res) {
       return sendJsonError(res, 400, 'Doctor name and appointment time required');
     }
 
+    let createdId = localDb.generateId();
+
+    // 1. Persist in Supabase appointments table
+    if (config.is_configured) {
+      try {
+        const supabase = getSupabaseAdminClient();
+        const { data, error } = await supabase
+          .from('appointments')
+          .insert({
+            user_id: userId,
+            doctor_name: doctorName,
+            hospital_clinic: hospitalClinic,
+            appointment_time: appointmentTime,
+            notes: notes,
+            is_completed: false,
+            created_at: new Date().toISOString()
+          })
+          .select()
+          .single();
+
+        if (!error && data) {
+          createdId = data.id;
+        } else if (error) {
+          console.warn('[Supabase appointments insert warning]:', error.message);
+        }
+      } catch (err) {
+        console.warn('[Supabase appointments insert error]:', err.message);
+      }
+    }
+
+    // 2. Persist in local store
     const item = {
-      id: localDb.generateId(),
+      id: createdId,
       user_id: userId,
       doctor_name: doctorName,
       hospital_clinic: hospitalClinic,
@@ -32,7 +64,7 @@ export default async function handler(req, res) {
       is_completed: false,
       created_at: Date.now() / 1000
     };
-    localDb.appointments.push(item);
+    localDb.appointments.unshift(item);
 
     return sendJsonResponse(res, 201, {
       success: true,
@@ -47,11 +79,21 @@ export default async function handler(req, res) {
 
   if (req.method === 'DELETE') {
     const id = parseInt(req.query?.id || req.url?.split('/').pop()?.split('?')[0], 10);
-    const index = localDb.appointments.findIndex(a => a.id === id && String(a.user_id) === userId);
-    if (index === -1) {
-      return sendJsonError(res, 404, 'Appointment not found');
+    
+    if (config.is_configured) {
+      try {
+        const supabase = getSupabaseAdminClient();
+        await supabase
+          .from('appointments')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', userId);
+      } catch (_) {}
     }
-    localDb.appointments.splice(index, 1);
+
+    const index = localDb.appointments.findIndex(a => a.id === id && String(a.user_id) === userId);
+    if (index !== -1) localDb.appointments.splice(index, 1);
+
     return sendJsonResponse(res, 200, { success: true });
   }
 

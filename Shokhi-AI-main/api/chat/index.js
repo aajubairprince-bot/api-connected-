@@ -72,8 +72,6 @@ export default async function handler(req, res) {
   const dbUser = localDb.users.find(u => String(u.id) === userId) || authUser;
 
   // 5. Generate AI Response
-
-  // 6. Generate AI Response
   let replyText = '';
   try {
     replyText = await askGemini(promptText, history, {
@@ -83,10 +81,12 @@ export default async function handler(req, res) {
     });
   } catch (geminiErr) {
     console.warn('[Gemini Service Notice]:', geminiErr.message);
-    replyText = getOfflineFallback(promptText, language);
+    replyText = language === 'en' 
+      ? 'I am currently operating in safe offline maternal advisory mode. For clinical emergencies, call 999 or 16263 immediately.' 
+      : 'আমি বর্তমানে সুরক্ষিত অফলাইন মাতৃত্ব পরামর্শ মোডে রয়েছি। জরুরি শারীরিক সমস্যায় অবিলম্বে ১৬২৬৩ অথবা ৯৯৯ নম্বরে যোগাযোগ করুন।';
   }
 
-  // 7. Save Assistant Turn in localDb
+  // 6. Save Assistant Turn in localDb
   const aiMsg = {
     id: localDb.generateId(),
     session_id: chatId,
@@ -99,55 +99,54 @@ export default async function handler(req, res) {
   };
   localDb.chat_messages.push(aiMsg);
 
-  // 8. Automatic Emergency Red-Flag Audit Logging
+  // 7. Automatic Emergency Red-Flag Audit Logging
   if (isEmergencyQuery(promptText, language)) {
-    localDb.emergency_logs.push({
+    const emergItem = {
       id: localDb.generateId(),
       user_id: userId,
       trigger_source: 'chat_triage',
       symptom_detected: promptText.substring(0, 200),
       action_taken: 'Emergency advisory banner injected and hospital referral recommended',
       created_at: Date.now() / 1000
-    });
+    };
+    localDb.emergency_logs.push(emergItem);
   }
 
-  // 9. Sync to Supabase PostgreSQL asynchronously in the background
+  // 8. Persist to Supabase PostgreSQL Database (chat_sessions & chat_messages)
   const supaConfig = getSupabaseConfig();
   if (supaConfig.is_configured) {
-    (async () => {
-      try {
-        const supabase = getSupabaseAdminClient();
-        await supabase.from('chat_sessions').upsert({
-          id: chatId,
-          user_id: userId,
-          title: session.title,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' });
+    try {
+      const supabase = getSupabaseAdminClient();
+      await supabase.from('chat_sessions').upsert({
+        id: chatId,
+        user_id: userId,
+        title: session.title,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'id' });
 
-        await supabase.from('chat_messages').insert([
-          {
-            session_id: chatId,
-            user_id: userId,
-            role: 'user',
-            content: promptText,
-            has_image: Boolean(imageUrl),
-            image_url: imageUrl,
-            created_at: new Date().toISOString()
-          },
-          {
-            session_id: chatId,
-            user_id: userId,
-            role: 'assistant',
-            content: replyText,
-            has_image: false,
-            image_url: null,
-            created_at: new Date().toISOString()
-          }
-        ]);
-      } catch (e) {
-        console.warn('[Supabase Sync Notice]:', e.message);
-      }
-    })().catch(() => {});
+      await supabase.from('chat_messages').insert([
+        {
+          session_id: chatId,
+          user_id: userId,
+          role: 'user',
+          content: promptText,
+          has_image: Boolean(imageUrl),
+          image_url: imageUrl,
+          created_at: new Date().toISOString()
+        },
+        {
+          session_id: chatId,
+          user_id: userId,
+          role: 'assistant',
+          content: replyText,
+          has_image: false,
+          image_url: null,
+          created_at: new Date().toISOString()
+        }
+      ]);
+    } catch (e) {
+      console.warn('[Supabase Chat Sync Error]:', e.message);
+    }
   }
 
   sendJsonResponse(res, 200, {
