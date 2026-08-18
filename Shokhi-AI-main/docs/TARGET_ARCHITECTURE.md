@@ -19,31 +19,30 @@
 * **AI & Intelligence Engine:** Google Gemini Generative AI (`gemini-2.5-flash`, `gemini-3.5-flash`) with prompt injection filtering, clinical red-flag triage, and graceful pre-compiled fallback responses.
 
 ```mermaid
-graph TD
-    User["Expectant Mother / Admin"] -->|HTTPS Web Interface| ClientApp["Shokhi AI Frontend (HTML/CSS/JS)"]
+flowchart TD
+    User["Expectant Mother / Admin"] --> ClientApp["Shokhi AI Frontend (HTML/CSS/JS)"]
 
-    subgraph Client ["Client Tier: Web Browser & PWA"]
-        ClientApp -->|Native Voice| WebSpeech["Web Speech API (STT / Audio Playback)"]
-        ClientApp -->|Direct Auth / Session| SupabaseAuthClient["Supabase JS SDK (Auth & Realtime)"]
-        ClientApp -->|Authenticated REST API| ClientHTTP["HTTP Client (Authorization: Bearer JWT)"]
+    subgraph ClientTier ["Client Tier: Web Browser & PWA"]
+        ClientApp --> WebSpeech["Web Speech API (STT / Audio Playback)"]
+        ClientApp --> SupabaseAuthClient["Supabase JS SDK (Auth & Realtime)"]
+        ClientApp --> ClientHTTP["HTTP Client (Authorization: Bearer JWT)"]
     end
 
-    subgraph BackendTier ["Application Server Tier: Node.js / Vercel Serverless"]
-        ClientHTTP -->|Authorization: Bearer JWT| NodeGateway["Node.js Serverless Gateway (api/)"]
-        NodeGateway -->|Token & Role Verification| AuthMiddleware["Auth & RBAC Middleware (lib/auth.js)"]
-        NodeGateway -->|Input Sanitization| ValidationModule["Validation & XSS Sanitizer (lib/validation.js)"]
-        NodeGateway -->|Rate Limiting| RateLimiter["Sliding-Window Rate Limiter (lib/rateLimit.js)"]
-        NodeGateway -->|Maternity Controllers| HealthManager["Maternal Health Engine (api/maternity/)"]
-        NodeGateway -->|AI Orchestrator| GeminiService["Gemini AI Service & Triage (lib/gemini.js)"]
-        NodeGateway -->|Admin Dashboard| AdminManager["Admin Telemetry & Live Controls (api/admin/)"]
+    subgraph BackendTier ["Application Server Tier: Node.js Serverless"]
+        ClientHTTP --> NodeGateway["Node.js Serverless Gateway (/api)"]
+        NodeGateway --> AuthMiddleware["Auth & RBAC Middleware (lib/auth.js)"]
+        NodeGateway --> ValidationModule["Validation & XSS Sanitizer (lib/validation.js)"]
+        NodeGateway --> RateLimiter["Sliding-Window Rate Limiter (lib/rateLimit.js)"]
+        NodeGateway --> HealthManager["Maternal Health Engine (handlers/maternity)"]
+        NodeGateway --> GeminiService["Gemini AI Service & Triage (lib/gemini.js)"]
+        NodeGateway --> AdminManager["Admin Telemetry & Live Controls (handlers/admin)"]
     end
 
     subgraph CloudServices ["Cloud & Persistence Tier"]
-        AuthMiddleware -->|Verify JWT / Live DB Role| SupabaseAuth["Supabase Auth & Profiles Table"]
-        HealthManager -->|PostgreSQL Client / Service Role| SupabaseDB[("Supabase PostgreSQL (12 Tables)")]
-        AdminManager -->|Service Role Client (RLS Bypass)| SupabaseDB
-        SupabaseDB -.->|Postgres Changes Realtime| ClientApp
-        GeminiService -->|Prompt + Gestational Context| GoogleGemini["Google Gemini 2.5/3.5 Flash API"]
+        AuthMiddleware --> SupabaseAuth["Supabase Auth & Profiles Table"]
+        HealthManager --> SupabaseDB[("Supabase PostgreSQL Database")]
+        AdminManager --> SupabaseDB
+        GeminiService --> GoogleGemini["Google Gemini 2.5/3.5 Flash API"]
     end
 ```
 
@@ -96,29 +95,29 @@ sequenceDiagram
     alt Path A: Email & Password Registration
         User->>Frontend: Fills Name, Email, Password, Pregnancy Week
         Frontend->>AuthAPI: POST /api/auth/register { email, password, name, pregnancy_week }
-        AuthAPI->>AuthAPI: bcryptjs.hash(password, 10)
-        AuthAPI->>SupaAuth: supabase.auth.signUp({ email, password })
-        SupaAuth-->>AuthAPI: { user.id }
-        AuthAPI->>DB: INSERT INTO profiles (id, full_name, pregnancy_week, is_admin: false)
+        AuthAPI->>AuthAPI: Hashes password with bcryptjs
+        AuthAPI->>SupaAuth: supabase.auth.signUp(email, password)
+        SupaAuth-->>AuthAPI: User ID returned
+        AuthAPI->>DB: INSERT INTO profiles (id, full_name, pregnancy_week, is_admin)
         DB-->>AuthAPI: Profile row created
-        AuthAPI->>AuthAPI: generateToken({ id, email, is_admin: false }) → 30-day JWT
+        AuthAPI->>AuthAPI: Generates 30-day JWT token
         AuthAPI-->>Frontend: HTTP 201 { token, user }
-        Frontend->>Frontend: Stores token in localStorage & navigates to index.html
+        Frontend->>Frontend: Stores token in localStorage and navigates to index.html
     else Path B: Google OAuth Sign-In
         User->>Frontend: Clicks "Continue with Google"
-        Frontend->>SupaAuth: supabase.auth.signInWithOAuth({ provider: 'google' })
+        Frontend->>SupaAuth: supabase.auth.signInWithOAuth(google)
         SupaAuth-->>Frontend: Returns OAuth session
         Frontend->>AuthAPI: POST /api/auth/google { email, name, google_id }
-        AuthAPI->>DB: UPSERT profiles (id=google_id, full_name, ...)
+        AuthAPI->>DB: UPSERT profiles (id, full_name)
         DB-->>AuthAPI: Profile synced
         AuthAPI-->>Frontend: HTTP 200 { token, user }
     else Path C: Session Verification on Load
         Frontend->>AuthAPI: GET /api/auth/me (Bearer Token)
-        AuthAPI->>AuthAPI: verifyAuth() → verifies JWT & queries profiles.is_admin live
+        AuthAPI->>AuthAPI: Verifies JWT and queries profiles.is_admin live
         AuthAPI-->>Frontend: HTTP 200 { id, email, full_name, is_admin, pregnancy_week }
-        alt is_admin = true
+        alt Admin Access
             Frontend->>Frontend: Redirects to /admin.html
-        else is_admin = false
+        else Maternal Access
             Frontend->>Frontend: Loads maternal dashboard in index.html
         end
     end
@@ -142,20 +141,20 @@ sequenceDiagram
     Frontend->>Frontend: Optimistically renders user message bubble
     Frontend->>ChatAPI: POST /api/ask_prova_chat (Bearer JWT) { prompt_text, chat_id, language: 'bn' }
     
-    ChatAPI->>ChatAPI: verifyAuth() verifies token -> extracts user_id
-    ChatAPI->>ChatAPI: rateLimit() verifies request rate < 10 RPM
-    ChatAPI->>ChatAPI: sanitizeUserPrompt() filters prompt injection patterns
+    ChatAPI->>ChatAPI: Verifies token and extracts user_id
+    ChatAPI->>ChatAPI: Verifies request rate under 10 RPM
+    ChatAPI->>ChatAPI: Filters prompt injection patterns
     
     ChatAPI->>Triage: isEmergencyQuery(prompt_text, 'bn')
-    Triage-->>ChatAPI: emergency = false
+    Triage-->>ChatAPI: emergency is false
     
     ChatAPI->>DB: SELECT pregnancy_week, due_date, blood_group FROM profiles WHERE id = user_id
-    DB-->>ChatAPI: { pregnancy_week: 20, due_date: "2026-12-15" }
+    DB-->>ChatAPI: Returns week 20 and due date
     
-    ChatAPI->>DB: SELECT * FROM chat_messages WHERE session_id = chat_id ORDER BY created_at ASC LIMIT 10
+    ChatAPI->>DB: SELECT messages FROM chat_messages WHERE session_id = chat_id ORDER BY created_at ASC LIMIT 10
     DB-->>ChatAPI: Message history
     
-    ChatAPI->>ChatAPI: Injects Gestational Context (Week 20, 2nd Trimester, 140 days left) + Bengali Sister Persona
+    ChatAPI->>ChatAPI: Injects Gestational Context (Week 20, 2nd Trimester) + Bengali Sister Persona
     ChatAPI->>Gemini: generateContent(System Instruction + Context Header + History + Prompt)
     Gemini-->>ChatAPI: Empathetic culturally-grounded response
     
@@ -178,11 +177,11 @@ sequenceDiagram
 
     Mother->>Frontend: Logs Vitals (BP: "120/80", Weight: 62.5 kg)
     Frontend->>MaternityAPI: POST /api/maternity/vitals (Bearer JWT) { bp: "120/80", weight_kg: 62.5 }
-    MaternityAPI->>MaternityAPI: verifyAuth() extracts user_id
+    MaternityAPI->>MaternityAPI: Extracts user_id from token
     MaternityAPI->>MaternityAPI: Validates numeric ranges & formats
     MaternityAPI->>DB: INSERT INTO vital_records (user_id, bp, weight_kg, recorded_at)
     DB-->>MaternityAPI: Returns created record (id: 104)
-    MaternityAPI-->>Frontend: HTTP 201 { success: true, item: { id: 104, ... } }
+    MaternityAPI-->>Frontend: HTTP 201 { success: true, item: { id: 104 } }
     Frontend->>Frontend: Prepends entry to Vitals Log UI & updates trend chart
 ```
 
@@ -199,13 +198,13 @@ sequenceDiagram
     participant AdminClient as Supabase Admin Client (Service Role)
     participant DB as Supabase PostgreSQL
 
-    Admin->>AdminUI: Opens admin dashboard (with shokhi_admin_token)
+    Admin->>AdminUI: Opens admin dashboard (with admin token)
     AdminUI->>AdminAPI: GET /api/admin/metrics (Bearer admin-token)
-    AdminAPI->>AdminAPI: verifyAuth() checks profiles.is_admin === true
+    AdminAPI->>AdminAPI: Checks profiles.is_admin is true
     AdminAPI->>AdminClient: getSupabaseAdminClient() bypasses RLS
     AdminClient->>DB: Queries all users, chat turns, meals, vitals, mood, routines, notifications, emergency logs
     DB-->>AdminClient: Aggregated clinical dataset
-    AdminAPI-->>AdminUI: HTTP 200 { academic_defense_metrics, data: { users, chats, ... } }
+    AdminAPI-->>AdminUI: HTTP 200 { academic_defense_metrics, data: { users, chats } }
     AdminUI->>AdminUI: Renders 6 metric cards & 8 clinical data tables
     
     Note over AdminUI,DB: Realtime WebSocket Subscription Active
