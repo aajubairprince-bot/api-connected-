@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation Hub | Shokhi AI (সখী AI)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Markdown & Diagram Parsers -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  
+  <style>
+    :root {
+      --primary: #f43f5e;
+      --primary-hover: #e11d48;
+      --primary-light: #fff1f2;
+      --primary-border: #fecdd3;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --bg: #ffffff;
+      --sidebar-bg: #f8fafc;
+      --sidebar-width: 320px;
+      --header-height: 64px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--slate-800);
+      line-height: 1.6;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navbar */
+    header {
+      height: var(--header-height);
+      background: #ffffff;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      z-index: 40;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--slate-900);
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #f43f5e, #fb7185);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      color: white;
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      border: 1px solid var(--primary-border);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--slate-600);
+      text-decoration: none;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--slate-100);
+      color: var(--slate-900);
+    }
+
+    .nav-btn.primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 8px rgba(244, 63, 94, 0.2);
+    }
+
+    .nav-btn.primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 0.45rem 0.75rem;
+      font-size: 1rem;
+      color: var(--slate-700);
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    .app-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - var(--header-height));
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    aside {
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--slate-200);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: transform 0.25s ease;
+    }
+
+    .search-box {
+      padding: 1rem;
+      border-bottom: 1px solid var(--slate-200);
+      background: #ffffff;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+    }
+
+    .search-input-wrapper i {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate-400);
+      font-size: 0.875rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.55rem 0.85rem 0.55rem 2.25rem;
+      font-size: 0.875rem;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      background: var(--slate-50);
+      color: var(--slate-800);
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1);
+    }
+
+    .doc-nav-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+    }
+
+    .category-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .category-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate-400);
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .doc-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--slate-600);
+      text-decoration: none;
+      margin-bottom: 2px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .doc-item:hover {
+      background: var(--slate-200);
+      color: var(--slate-900);
+    }
+
+    .doc-item.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+      border-left: 3px solid var(--primary);
+    }
+
+    .doc-item-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .doc-item-badge {
+      font-size: 0.65rem;
+      color: var(--slate-400);
+    }
+
+    /* Content Area */
+    main {
+      flex: 1;
+      overflow-y: auto;
+      background: #ffffff;
+      padding: 2.5rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--slate-200);
+      padding-bottom: 1.25rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .content-title-area {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .content-breadcrumb {
+      font-size: 0.8rem;
+      color: var(--slate-400);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .content-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.025em;
+    }
+
+    .content-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--slate-700);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--slate-50);
+      border-color: var(--slate-300);
+      color: var(--slate-900);
+    }
+
+    /* Markdown Styling */
+    .markdown-body {
+      color: var(--slate-800);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      max-width: 900px;
+    }
+
+    .markdown-body h1,
+    .markdown-body h2,
+    .markdown-body h3,
+    .markdown-body h4 {
+      color: var(--slate-900);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .markdown-body h1 {
+      font-size: 1.6rem;
+      border-bottom: 1px solid var(--slate-200);
+      padding-bottom: 0.5rem;
+    }
+
+    .markdown-body h2 {
+      font-size: 1.3rem;
+      border-bottom: 1px solid var(--slate-100);
+      padding-bottom: 0.4rem;
+    }
+
+    .markdown-body h3 {
+      font-size: 1.1rem;
+    }
+
+    .markdown-body p {
+      margin-bottom: 1.25rem;
+    }
+
+    .markdown-body ul,
+    .markdown-body ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.75rem;
+    }
+
+    .markdown-body li {
+      margin-bottom: 0.4rem;
+    }
+
+    .markdown-body code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      background: var(--slate-100);
+      color: #be123c;
+      padding: 0.2em 0.4em;
+      border-radius: 6px;
+      border: 1px solid var(--slate-200);
+    }
+
+    .markdown-body pre {
+      background: var(--slate-900);
+      color: #f8fafc;
+      padding: 1.25rem;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--slate-800);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    }
+
+    .markdown-body pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border: none;
+      font-size: 0.875rem;
+    }
+
+    .markdown-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.75rem;
+      font-size: 0.875rem;
+    }
+
+    .markdown-body th,
+    .markdown-body td {
+      border: 1px solid var(--slate-200);
+      padding: 0.65rem 0.9rem;
+      text-align: left;
+    }
+
+    .markdown-body th {
+      background: var(--slate-50);
+      font-weight: 600;
+      color: var(--slate-700);
+    }
+
+    .markdown-body tr:hover td {
+      background: var(--slate-50);
+    }
+
+    .markdown-body blockquote {
+      border-left: 4px solid var(--primary);
+      padding: 0.75rem 1.25rem;
+      background: var(--primary-light);
+      color: var(--slate-800);
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .markdown-body hr {
+      border: 0;
+      height: 1px;
+      background: var(--slate-200);
+      margin: 2rem 0;
+    }
+
+    /* Mermaid Diagrams Container */
+    .mermaid {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      overflow-x: auto;
+    }
+
+    /* Loading State */
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 0;
+      color: var(--slate-400);
+      gap: 1rem;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--slate-200);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--slate-900);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      aside {
+        position: fixed;
+        left: 0;
+        top: var(--header-height);
+        bottom: 0;
+        z-index: 30;
+        transform: translateX(-100%);
+        box-shadow: 8px 0 24px rgba(0,0,0,0.1);
+      }
+
+      aside.open {
+        transform: translateX(0);
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      main {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button class="mobile-menu-btn" id="menuToggle" aria-label="Toggle menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <a href="/landing.html" class="brand">
+        <div class="brand-logo">🌸</div>
+        <span class="brand-title">Shokhi AI</span>
+        <span class="brand-badge">Docs Hub</span>
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a href="/landing.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="/index.html" class="nav-btn"><i class="fa-solid fa-heart-pulse"></i> App</a>
+      <a href="/admin.html" class="nav-btn"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+      <a href="/api/health" target="_blank" class="nav-btn primary"><i class="fa-solid fa-signal"></i> System Status</a>
+    </nav>
+  </header>
+
+  <!-- Main App Layout -->
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="search-box">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search 35+ documents..." autocomplete="off">
+        </div>
+      </div>
+
+      <nav class="doc-nav-list" id="docNavList">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <span style="font-size: 0.85rem;">Loading documentation index...</span>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content Reader -->
+    <main id="mainContent">
+      <div class="content-header">
+        <div class="content-title-area">
+          <div class="content-breadcrumb">
+            <span>Docs</span> <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
+            <span id="breadcrumbCategory">Overview</span>
+          </div>
+          <h1 class="content-title" id="docTitle">Welcome to Shokhi AI Documentation</h1>
+        </div>
+        <div class="content-actions">
+          <button class="action-btn" id="copyMarkdownBtn"><i class="fa-regular fa-copy"></i> Copy Markdown</button>
+          <button class="action-btn" id="rawBtn"><i class="fa-solid fa-code"></i> View Raw</button>
+        </div>
+      </div>
+
+      <div id="markdownBody" class="markdown-body">
+        <!-- Markdown rendered content goes here -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <i class="fa-solid fa-circle-check" style="color: #4ade80;"></i>
+    <span id="toastMsg">Action completed</span>
+  </div>
+
+  <script>
+    // Initialize Mermaid
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose',
+      fontFamily: 'Inter, sans-serif'
+    });
+
+    // App State
+    let allDocs = [];
+    let categories = [];
+    let currentDoc = null;
+    let rawContent = '';
+    let isRawView = false;
+
+    const docNavList = document.getElementById('docNavList');
+    const searchInput = document.getElementById('searchInput');
+    const markdownBody = document.getElementById('markdownBody');
+    const docTitle = document.getElementById('docTitle');
+    const breadcrumbCategory = document.getElementById('breadcrumbCategory');
+    const copyMarkdownBtn = document.getElementById('copyMarkdownBtn');
+    const rawBtn = document.getElementById('rawBtn');
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Toggle Mobile Sidebar
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+
+    // Fetch Docs Index
+    async function loadDocsIndex() {
+      try {
+        const res = await fetch('/api/docs');
+        const data = await res.json();
+        allDocs = data.docs || [];
+        categories = data.categories || [];
+        renderSidebar(allDocs);
+
+        // Check hash or load default doc
+        const hash = window.location.hash.replace(/^#/, '');
+        const targetDoc = hash || 'API_REFERENCE.md';
+        loadDocument(targetDoc);
+      } catch (err) {
+        docNavList.innerHTML = `<div style="padding: 1rem; color: #ef4444; font-size: 0.85rem;">Failed to load documentation index: ${err.message}</div>`;
+      }
+    }
+
+    // Render Sidebar Navigation
+    function renderSidebar(docsToRender) {
+      if (!docsToRender.length) {
+        docNavList.innerHTML = `<div style="padding: 1rem; color: #94a3b8; font-size: 0.85rem; text-align: center;">No matching documents found</div>`;
+        return;
+      }
+
+      // Group by category
+      const grouped = {};
+      docsToRender.forEach(d => {
+        if (!grouped[d.category]) grouped[d.category] = [];
+        grouped[d.category].push(d);
+      });
+
+      let html = '';
+      for (const [catName, docs] of Object.entries(grouped)) {
+        html += `
+          <div class="category-group">
+            <div class="category-title">
+              <i class="fa-regular fa-folder-open"></i> ${catName}
+            </div>
+            ${docs.map(doc => `
+              <div class="doc-item ${currentDoc === doc.filename ? 'active' : ''}" data-file="${doc.filename}">
+                <span class="doc-item-title">
+                  <i class="fa-regular fa-file-lines" style="font-size: 0.8rem; color: var(--slate-400);"></i>
+                  ${doc.title}
+                </span>
+                <span class="doc-item-badge">${Math.round(doc.sizeBytes / 1024)}k</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      docNavList.innerHTML = html;
+
+      // Add click listeners
+      docNavList.querySelectorAll('.doc-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const file = item.getAttribute('data-file');
+          loadDocument(file);
+          if (window.innerWidth <= 900) {
+            sidebar.classList.remove('open');
+          }
+        });
+      });
+    }
+
+    // Search Filter
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      if (!q) {
+        renderSidebar(allDocs);
+        return;
+      }
+
+      const filtered = allDocs.filter(d => 
+        d.title.toLowerCase().includes(q) || 
+        d.filename.toLowerCase().includes(q) ||
+        d.category.toLowerCase().includes(q)
+      );
+      renderSidebar(filtered);
+    });
+
+    // Load Single Document Content
+    async function loadDocument(filename) {
+      currentDoc = filename;
+      window.location.hash = filename;
+
+      // Update sidebar active class
+      document.querySelectorAll('.doc-item').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-file') === filename);
+      });
+
+      markdownBody.innerHTML = `
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <span>Loading document...</span>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(`/api/docs?file=${encodeURIComponent(filename)}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        
+        rawContent = data.content;
+        isRawView = false;
+        rawBtn.innerHTML = '<i class="fa-solid fa-code"></i> View Raw';
+
+        // Update header
+        const matched = allDocs.find(d => d.filename === filename);
+        docTitle.textContent = matched ? matched.title : filename;
+        breadcrumbCategory.textContent = matched ? matched.category : 'Documentation';
+
+        renderMarkdownContent(data.content);
+      } catch (err) {
+        markdownBody.innerHTML = `
+          <div style="padding: 2rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; color: #be123c;">
+            <h3>Failed to load ${filename}</h3>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    // Render Markdown and Mermaid
+    function renderMarkdownContent(content) {
+      if (isRawView) {
+        markdownBody.innerHTML = `<pre><code>${escapeHtml(content)}</code></pre>`;
+        return;
+      }
+
+      // Configure marked
+      marked.setOptions({
+        gfm: true,
+        breaks: true
+      });
+
+      // Parse markdown to HTML
+      let html = marked.parse(content);
+      markdownBody.innerHTML = html;
+
+      // Replace ```mermaid blocks with <div class="mermaid">
+      const codeBlocks = markdownBody.querySelectorAll('pre code.language-mermaid, pre code.lang-mermaid');
+      codeBlocks.forEach((block, idx) => {
+        const pre = block.parentElement;
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.id = `mermaid-${Date.now()}-${idx}`;
+        let text = block.textContent || block.innerText || '';
+        mermaidDiv.textContent = text.trim();
+        pre.parentNode.replaceChild(mermaidDiv, pre);
+      });
+
+      // Run Mermaid rendering asynchronously
+      try {
+        if (window.mermaid) {
+          mermaid.run({
+            nodes: document.querySelectorAll('.mermaid')
+          }).catch(err => {
+            console.warn('Mermaid render notice:', err);
+          });
+        }
+      } catch (e) {
+        console.warn('Mermaid rendering error:', e);
+      }
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    // Copy Markdown Handler
+    copyMarkdownBtn.addEventListener('click', () => {
+      if (!rawContent) return;
+      navigator.clipboard.writeText(rawContent).then(() => {
+        showToast('Markdown copied to clipboard!');
+      });
+    });
+
+    // View Raw Handler
+    rawBtn.addEventListener('click', () => {
+      isRawView = !isRawView;
+      rawBtn.innerHTML = isRawView 
+        ? '<i class="fa-solid fa-eye"></i> View Formatted' 
+        : '<i class="fa-solid fa-code"></i> View Raw';
+      renderMarkdownContent(rawContent);
+    });
+
+    // Start
+    loadDocsIndex();
+  </script>
+</body>
+</html>

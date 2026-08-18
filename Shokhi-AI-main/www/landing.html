@@ -1,0 +1,2567 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সখী AI (Shokhi AI) — Your Caring AI Maternity Companion</title>
+    <meta name="description" content="সখী AI (Shokhi AI) is your caring, bilingual AI maternity companion. Guiding expecting mothers through pregnancy with week-by-week tracking, nutrition awareness, symptom logging, and empathetic healthcare support in Bengali and English.">
+    <meta name="keywords" content="Maternity AI, Pregnancy Tracker Bangladesh, সখী AI, Shokhi AI, Fetal Movement, Gestational Health, Maternal Healthcare AI">
+    <meta name="theme-color" content="#FBF9F5">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="সখী AI (Shokhi AI) — Your Caring AI Maternity Companion">
+    <meta property="og:description" content="AI-powered pregnancy support, fetal kick tracking, meal logging, and maternal wellness in Bengali & English.">
+    <meta property="og:image" content="/assets/maternal_hero.png">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts: Plus Jakarta Sans & Hind Siliguri for crisp Bengali typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome 6 Pro Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* -------------------------------------------------------------
+           🎨 ROOT DESIGN TOKENS & SYSTEM
+           ------------------------------------------------------------- */
+        :root {
+            --bg-canvas: #FBF9F5;
+            --bg-surface: #FFFFFF;
+            --bg-surface-soft: #F5EFEB;
+            --bg-surface-sage: #EBF3EE;
+            --bg-surface-rose: #FDF0F3;
+            --bg-surface-lavender: #F6EFF9;
+
+            --primary: #D95D74;
+            --primary-hover: #C64961;
+            --primary-soft: rgba(217, 93, 116, 0.10);
+            
+            --sage: #3E6B56;
+            --sage-dark: #2C4D3E;
+            --sage-soft: rgba(62, 107, 86, 0.10);
+
+            --lavender: #725D89;
+            --lavender-soft: rgba(114, 93, 137, 0.10);
+
+            --text-main: #18201D;
+            --text-secondary: #4A5650;
+            --text-muted: #7E8C85;
+            --text-light: #FBF9F5;
+
+            --border-light: rgba(114, 93, 137, 0.10);
+            --border-rose: rgba(217, 93, 116, 0.18);
+            --border-sage: rgba(62, 107, 86, 0.18);
+
+            --shadow-subtle: 0 4px 20px -2px rgba(24, 32, 29, 0.04);
+            --shadow-card: 0 16px 40px -12px rgba(24, 32, 29, 0.07);
+            --shadow-float: 0 20px 48px -10px rgba(217, 93, 116, 0.16);
+            --shadow-phone: 0 28px 64px -16px rgba(24, 32, 29, 0.18), 0 0 0 1px rgba(24, 32, 29, 0.08);
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --radius-pill: 9999px;
+
+            --font-en: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+            --font-bn: 'Hind Siliguri', 'Noto Serif Bengali', system-ui, sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-family: var(--font-bn), var(--font-en);
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: var(--bg-canvas);
+        }
+
+        .bn-font { font-family: var(--font-bn); }
+        .en-font { font-family: var(--font-en); }
+
+        .container {
+            width: 100%;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 96px 0;
+            position: relative;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            border: 1px solid var(--border-rose);
+            margin-bottom: 20px;
+        }
+
+        .badge.sage {
+            background-color: var(--bg-surface-sage);
+            color: var(--sage);
+            border-color: var(--border-sage);
+        }
+
+        .badge.lavender {
+            background-color: var(--bg-surface-lavender);
+            color: var(--lavender);
+            border-color: var(--border-light);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 3.8vw, 2.85rem);
+            font-weight: 700;
+            line-height: 1.22;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            line-height: 1.65;
+            font-weight: 400;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: var(--radius-pill);
+            font-size: 0.98rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #FFFFFF;
+            box-shadow: 0 8px 24px -4px rgba(217, 93, 116, 0.35);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px -4px rgba(217, 93, 116, 0.45);
+            color: #FFFFFF;
+        }
+
+        .btn-secondary {
+            background-color: #FFFFFF;
+            color: var(--text-main);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-surface-soft);
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+            color: var(--text-main);
+        }
+
+        .site-lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(114, 93, 137, 0.08);
+            padding: 3px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-light);
+        }
+
+        .site-lang-btn {
+            padding: 5px 12px;
+            border-radius: var(--radius-pill);
+            font-size: 0.82rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .site-lang-btn.active {
+            background: #FFFFFF;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            padding: 18px 0;
+            background: rgba(251, 249, 245, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
+        }
+
+        .navbar.scrolled {
+            padding: 12px 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom-color: rgba(114, 93, 137, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #FDE8ED 0%, #F5E3EC 100%);
+            border: 1px solid var(--border-rose);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px rgba(217, 93, 116, 0.15);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        .brand-tagline {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--sage);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        /* Hero */
+        .hero-section {
+            padding-top: 145px;
+            padding-bottom: 90px;
+            position: relative;
+            background: radial-gradient(circle at 80% 20%, rgba(253, 240, 243, 0.85) 0%, rgba(251, 249, 245, 0) 50%),
+                        radial-gradient(circle at 10% 80%, rgba(235, 243, 238, 0.7) 0%, rgba(251, 249, 245, 0) 50%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero-headline {
+            font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+            font-weight: 800;
+            line-height: 1.18;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            margin-bottom: 22px;
+        }
+
+        .hero-headline .highlight-rose {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-subtext {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 34px;
+            max-width: 540px;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 34px;
+        }
+
+        .hero-trust-badges {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(114, 93, 137, 0.12);
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .trust-item i {
+            color: var(--sage);
+            font-size: 1rem;
+        }
+
+        /* Phone Mockup */
+        .phone-mockup-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 10px;
+        }
+
+        .phone-device {
+            width: 100%;
+            max-width: 375px;
+            background: #FFFFFF;
+            border-radius: 46px;
+            padding: 10px;
+            box-shadow: 0 28px 64px -16px rgba(24, 32, 29, 0.18), 0 0 0 1px rgba(24, 32, 29, 0.08);
+            border: 6px solid #E2E8F0;
+            position: relative;
+            z-index: 2;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .phone-device:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 34px 72px -16px rgba(217, 93, 116, 0.22), 0 0 0 1px rgba(217, 93, 116, 0.15);
+        }
+
+        .phone-screen {
+            background: #FAF8F5;
+            border-radius: 38px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .phone-notch {
+            height: 28px;
+            background: #FAF8F5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #1E2522;
+        }
+
+        .phone-app-header {
+            background: #FFFFFF;
+            padding: 12px 18px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .phone-user-tag {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #FDF0F3;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            border: 1px solid #FECDD3;
+            box-shadow: 0 2px 6px rgba(217, 93, 116, 0.1);
+        }
+
+        .phone-chat-stream {
+            padding: 18px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 290px;
+            background: radial-gradient(circle at 50% 10%, rgba(253, 240, 243, 0.6) 0%, transparent 65%);
+        }
+
+        .phone-bubble {
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .phone-bubble.user {
+            align-self: flex-end;
+            background: #D95D74;
+            color: #FFFFFF;
+            border-radius: 20px 20px 4px 20px;
+            max-width: 86%;
+            box-shadow: 0 4px 14px rgba(217, 93, 116, 0.25);
+            font-weight: 500;
+        }
+
+        .phone-bubble.bot {
+            align-self: flex-start;
+            background: #FFFFFF;
+            color: #18201D;
+            border-radius: 20px 20px 20px 4px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            max-width: 90%;
+        }
+
+        .phone-audio-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 6px 14px;
+            background: #FDF0F3;
+            border-radius: var(--radius-pill);
+            font-size: 0.76rem;
+            color: var(--primary);
+            font-weight: 700;
+            border: 1px solid rgba(217, 93, 116, 0.15);
+        }
+
+        .waveform-lines {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 12px;
+        }
+
+        .wave-bar {
+            width: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: wavePulse 1.2s ease-in-out infinite alternate;
+        }
+
+        .wave-bar:nth-child(2) { height: 8px; animation-delay: 0.2s; }
+        .wave-bar:nth-child(3) { height: 12px; animation-delay: 0.4s; }
+        .wave-bar:nth-child(4) { height: 6px; animation-delay: 0.1s; }
+        .wave-bar:nth-child(5) { height: 10px; animation-delay: 0.3s; }
+
+        @keyframes wavePulse {
+            0% { transform: scaleY(0.4); }
+            100% { transform: scaleY(1.2); }
+        }
+
+        .hero-float-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 48px -10px rgba(217, 93, 116, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .hero-float-card.top-right { top: 16px; right: -28px; }
+        .hero-float-card.bottom-left { bottom: 16px; left: -28px; }
+
+        .float-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+        }
+        .float-icon-box.rose { background: var(--bg-surface-rose); color: var(--primary); }
+        .float-icon-box.sage { background: var(--bg-surface-sage); color: var(--sage); }
+
+        /* Trust Strip */
+        .trust-strip {
+            background-color: #FFFFFF;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            padding: 32px 0;
+        }
+
+        .trust-strip-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+        }
+
+        .value-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .value-icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--bg-canvas);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--sage);
+            flex-shrink: 0;
+        }
+
+        .value-text h4 {
+            font-size: 0.96rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+
+        .value-text p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: linear-gradient(180deg, #FBF9F5 0%, #F5EFEB 100%);
+        }
+
+        .problem-header {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 54px auto;
+        }
+
+        .question-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .question-card {
+            background: #FFFFFF;
+            padding: 24px 28px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(114, 93, 137, 0.1);
+            box-shadow: var(--shadow-subtle);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--border-rose);
+        }
+
+        .q-icon {
+            font-size: 1.3rem;
+            color: var(--primary);
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        .q-text {
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .problem-resolution-banner {
+            background: linear-gradient(135deg, var(--bg-surface-rose) 0%, var(--bg-surface-sage) 100%);
+            border: 1px solid rgba(217, 93, 116, 0.2);
+            border-radius: var(--radius-xl);
+            padding: 32px 40px;
+            text-align: center;
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        .resolution-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .feature-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            padding: 32px 28px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-card);
+            border-color: var(--border-rose);
+        }
+
+        .feature-card.featured-large {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--bg-surface-rose) 100%);
+        }
+
+        .feature-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon-box.rose { background: var(--bg-surface-rose); color: var(--primary); }
+        .feature-icon-box.sage { background: var(--bg-surface-sage); color: var(--sage); }
+        .feature-icon-box.lavender { background: var(--bg-surface-lavender); color: var(--lavender); }
+
+        .feature-card h3 {
+            font-size: 1.22rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        /* Micro UI Widget inside Feature Cards */
+        .micro-ui-box {
+            background: var(--bg-canvas);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 18px;
+            font-size: 0.84rem;
+        }
+
+        .progress-bar-wrap {
+            height: 6px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .progress-bar-fill.rose { background: var(--primary); }
+        .progress-bar-fill.sage { background: var(--sage); }
+
+        .feature-pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .feature-pill {
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            background: var(--bg-canvas);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-light);
+        }
+
+        .card-launch-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 14px;
+        }
+
+        /* AI Chat Showcase */
+        .chat-showcase-section {
+            background-color: var(--bg-surface-soft);
+        }
+
+        .chat-showcase-wrapper {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .showcase-topbar {
+            background: var(--bg-canvas);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .showcase-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .showcase-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .lang-switch-pills {
+            display: flex;
+            background: var(--bg-surface-soft);
+            padding: 4px;
+            border-radius: var(--radius-pill);
+            gap: 4px;
+        }
+
+        .lang-pill-btn {
+            padding: 6px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.84rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .lang-pill-btn.active {
+            background: #FFFFFF;
+            color: var(--primary);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .showcase-body {
+            padding: 36px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            background: radial-gradient(circle at 90% 10%, rgba(253, 240, 243, 0.4) 0%, transparent 60%);
+        }
+
+        .chat-bubble {
+            max-width: 82%;
+            padding: 18px 24px;
+            border-radius: 20px;
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        .chat-bubble.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: #FFFFFF;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-bubble.bot {
+            align-self: flex-start;
+            background: var(--bg-canvas);
+            color: var(--text-main);
+            border: 1px solid var(--border-light);
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .bot-header-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .voice-demo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            background: #FFFFFF;
+            border: 1px solid var(--border-rose);
+            color: var(--primary);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .voice-demo-btn:hover {
+            background: var(--bg-surface-rose);
+        }
+
+        /* Timeline */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            position: relative;
+        }
+
+        .timeline-card {
+            background: #FFFFFF;
+            padding: 30px 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-subtle);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--sage);
+        }
+
+        .timeline-step-badge {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--sage);
+            background: var(--bg-surface-sage);
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            display: inline-block;
+            margin-bottom: 14px;
+        }
+
+        .timeline-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .timeline-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Bilingual */
+        .bilingual-section {
+            background: linear-gradient(135deg, #FAF4EF 0%, #F5EAE4 100%);
+        }
+
+        .bilingual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .bilingual-card {
+            background: #FFFFFF;
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-card);
+        }
+
+        .bilingual-tag {
+            display: inline-block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Privacy */
+        .privacy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .privacy-card {
+            background: #FFFFFF;
+            padding: 32px 28px;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .privacy-icon {
+            font-size: 1.8rem;
+            color: var(--sage);
+            margin-bottom: 18px;
+        }
+
+        .privacy-card h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .privacy-card p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .medical-disclaimer-box {
+            margin-top: 48px;
+            background: var(--bg-surface-rose);
+            border: 1px solid var(--border-rose);
+            border-radius: var(--radius-lg);
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .disclaimer-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* How It Works */
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 36px;
+        }
+
+        .how-card {
+            text-align: left;
+            position: relative;
+        }
+
+        .step-num-huge {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: rgba(217, 93, 116, 0.2);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .how-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .how-card p {
+            font-size: 0.94rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Scenarios */
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .scenario-card {
+            background: #FFFFFF;
+            padding: 36px 30px;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-subtle);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .scenario-quote {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.45;
+            margin-bottom: 16px;
+        }
+
+        .scenario-desc {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Final CTA */
+        .final-cta-section {
+            background: linear-gradient(135deg, #2D3748 0%, #1A202C 100%);
+            color: #FFFFFF;
+            padding: 96px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta-wrapper {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .final-cta-title {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+        }
+
+        .final-cta-sub {
+            font-size: 1.15rem;
+            color: #CBD5E1;
+            margin-bottom: 36px;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: #1A202C;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94A3B8;
+            padding: 60px 0 30px 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+
+        .footer-links-col h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 16px;
+        }
+
+        .footer-links-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links-col a {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links-col a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            font-size: 0.82rem;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 50px; text-align: center; }
+            .hero-subtext { margin-left: auto; margin-right: auto; }
+            .hero-cta-group { justify-content: center; }
+            .hero-trust-badges { justify-content: center; }
+            .trust-strip-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .feature-card.featured-large { grid-column: span 2; }
+            .timeline-grid { grid-template-columns: repeat(2, 1fr); }
+            .privacy-grid { grid-template-columns: repeat(2, 1fr); }
+            .how-grid { grid-template-columns: 1fr; gap: 40px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .hero-float-card { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-actions .btn-secondary { display: none; }
+            .mobile-toggle { display: block; }
+            .question-cards-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .feature-card.featured-large { grid-column: span 1; }
+            .timeline-grid { grid-template-columns: 1fr; }
+            .bilingual-grid { grid-template-columns: 1fr; }
+            .privacy-grid { grid-template-columns: 1fr; }
+            .scenarios-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🌸 1. NAVIGATION -->
+    <nav class="navbar" id="mainNavbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="/" class="brand-logo" aria-label="Shokhi AI Home">
+                    <div class="brand-icon-box">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">সখী <span style="color: var(--primary);">AI</span></span>
+                        <span class="brand-tagline" id="t_brandTagline">Maternity Companion</span>
+                    </div>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="#features" class="nav-link" id="t_navFeatures">সুবিধাসমূহ</a></li>
+                    <li><a href="#how-it-works" class="nav-link" id="t_navHowItWorks">কীভাবে কাজ করে</a></li>
+                    <li><a href="#bilingual" class="nav-link" id="t_navBilingual">দ্বিভাষিক যত্ন</a></li>
+                    <li><a href="#safety" class="nav-link" id="t_navSafety">নিরাপত্তা ও বিশ্বাস</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <!-- Global Language Switcher -->
+                    <div class="site-lang-toggle" title="Change Site Language">
+                        <button class="site-lang-btn active" id="btnLangBn" onclick="setSiteLanguage('bn')">বাংলা</button>
+                        <button class="site-lang-btn" id="btnLangEn" onclick="setSiteLanguage('en')">English</button>
+                    </div>
+
+                    <a href="/app?mode=login" class="btn btn-secondary" id="t_navLogin" style="padding: 9px 20px; font-size: 0.88rem;">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> লগইন
+                    </a>
+                    <a href="/app?mode=register" class="btn btn-primary" id="t_navGetStarted" style="padding: 9px 20px; font-size: 0.88rem;">
+                        শুরু করুন →
+                    </a>
+                    <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🌺 2. HERO SECTION WITH REALISTIC APP MOCKUP -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="badge" id="t_heroBadge">
+                        <i class="fa-solid fa-sparkles"></i> এআই-চালিত মাতৃত্বকালীন সঙ্গী
+                    </div>
+                    <h1 class="hero-headline" id="t_heroHeadline">
+                        আপনার মাতৃত্বের যাত্রায়,<br>
+                        <span class="highlight-rose">সখী হয়ে পাশে।</span>
+                    </h1>
+                    <p class="hero-subtext" id="t_heroSubtext">
+                        গর্ভাবস্থায় প্রতিটি পদক্ষেপে আপনাকে সাহায্য করতে সখী এআই প্রস্তুত—পুষ্টি পরামর্শ, লক্ষণ ট্র্যাকিং এবং মাতৃস্নেহভরা এআই সঙ্গ বাংলায় ও ইংরেজিতে।
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="/app" class="btn btn-primary" id="t_heroCtaPrimary" style="font-size: 1.05rem; padding: 16px 32px;">
+                            📱 মোবাইল অ্যাপে প্রবেশ করুন →
+                        </a>
+                        <a href="#features" class="btn btn-secondary" id="t_heroCtaSecondary">
+                            সুবিধাসমূহ দেখুন
+                        </a>
+                    </div>
+
+                    <div class="hero-trust-badges">
+                        <div class="trust-item">
+                            <i class="fa-solid fa-shield-check"></i> <span id="t_heroTrust1">ব্যক্তিগত ও এনক্রিপ্টেড</span>
+                        </div>
+                        <div class="trust-item">
+                            <i class="fa-solid fa-language"></i> <span id="t_heroTrust2">১০০% বাংলা ও ইংরেজি</span>
+                        </div>
+                        <div class="trust-item">
+                            <i class="fa-solid fa-user-doctor"></i> <span id="t_heroTrust3">চিকিৎসকের পরিপূরক সহায়তা</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Realistic Titanium App Device Mockup (Clickable Link to /app) -->
+                <a href="/app" style="text-decoration: none; color: inherit; display: block;" class="phone-mockup-wrapper" title="সখী AI মোবাইল অ্যাপে প্রবেশ করুন">
+                    <!-- Top Right Floating UI Badge -->
+                    <div class="hero-float-card top-right">
+                        <div class="float-icon-box rose">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-main);" id="t_heroBadge1Title">২৪ সপ্তাহ • ২য় ত্রৈমাসিক</div>
+                            <div style="font-size: 0.74rem; color: var(--text-muted);" id="t_heroBadge1Sub">বাচ্চার নড়াচড়া সক্রিয়</div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Left Floating UI Badge -->
+                    <div class="hero-float-card bottom-left">
+                        <div class="float-icon-box sage">
+                            <i class="fa-solid fa-baby"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-main);" id="t_heroBadge2Title">বাচ্চার কিক সংখ্যা: ১০ / ১০</div>
+                            <div style="font-size: 0.74rem; color: var(--text-muted);" id="t_heroBadge2Sub">সুস্থ ছন্দ রেকর্ড করা হয়েছে</div>
+                        </div>
+                    </div>
+
+                    <!-- Phone Frame -->
+                    <div class="phone-device">
+                        <div class="phone-screen">
+                            <div class="phone-notch">
+                                <span>9:41</span>
+                                <div style="display: flex; gap: 4px; align-items: center;">
+                                    <i class="fa-solid fa-signal" style="font-size: 10px;"></i>
+                                    <i class="fa-solid fa-wifi" style="font-size: 10px;"></i>
+                                    <i class="fa-solid fa-battery-full" style="font-size: 11px;"></i>
+                                </div>
+                            </div>
+
+                            <div class="phone-app-header">
+                                <div class="phone-user-tag">
+                                    <div class="phone-avatar">🌸</div>
+                                    <div>
+                                        <div style="font-weight: 700; font-size: 0.86rem; color: #1E2522;">সখী AI</div>
+                                        <div style="font-size: 0.70rem; color: var(--sage); font-weight: 600;" id="t_phoneWeek">● ২৪তম সপ্তাহ • ২য় ত্রৈমাসিক</div>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-volume-high" style="color: var(--primary); font-size: 0.9rem;"></i>
+                            </div>
+
+                            <div class="phone-chat-stream">
+                                <div class="phone-bubble user" id="t_phoneUserMsg">
+                                    "আপু, আজকে আমার হালকা পিঠে ব্যথা হচ্ছে। কী করব?"
+                                </div>
+                                <div class="phone-bubble bot">
+                                    <div id="t_phoneBotMsg">"কেমন আছো আপু? ২৪ সপ্তাহে জরায়ুর আকার বৃদ্ধির কারণে হালকা পিঠব্যথা স্বাভাবিক। বাম কাত হয়ে বিশ্রাম নিন ও পর্যাপ্ত পানি পান করুন।"</div>
+                                    <div class="phone-audio-bar">
+                                        <i class="fa-solid fa-play" style="font-size: 8px;"></i>
+                                        <span id="t_phoneVoice">ভয়েস শুনুন (0:18)</span>
+                                        <div class="waveform-lines">
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                            <div class="wave-bar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mockup Bottom Bar -->
+                            <div style="background: #FFFFFF; padding: 10px 14px; border-top: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between;">
+                                <div style="background: #F1F5F9; border-radius: 20px; padding: 6px 12px; font-size: 0.76rem; color: #94A3B8; flex-grow: 1; margin-right: 8px;" id="t_phonePlaceholder">
+                                    আপনার প্রশ্ন লিখুন...
+                                </div>
+                                <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🌱 3. TRUST / VALUE STRIP -->
+    <section class="trust-strip">
+        <div class="container">
+            <div class="trust-strip-grid">
+                <div class="value-card">
+                    <div class="value-icon-circle"><i class="fa-solid fa-sparkles"></i></div>
+                    <div class="value-text">
+                        <h4 id="t_trust1Title">আন্তরিক এআই সহায়তা</h4>
+                        <p id="t_trust1Sub">গর্ভকালীন মানসিক প্রশান্তি ও সঠিক পুষ্টি নির্দেশিকা।</p>
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <div class="value-text">
+                        <h4 id="t_trust2Title">গর্ভকালীন সপ্তাহ অনুযায়ী</h4>
+                        <p id="t_trust2Sub">১ম সপ্তাহ থেকে ৪০+ সপ্তাহ পর্যন্ত ব্যক্তিগত যত্ন।</p>
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon-circle"><i class="fa-solid fa-language"></i></div>
+                    <div class="value-text">
+                        <h4 id="t_trust3Title">সাবলীল দ্বিভাষিক কণ্ঠ</h4>
+                        <p id="t_trust3Sub">মিষ্টি বাংলা ও স্পষ্ট ইংরেজিতে ভয়েস কথোপকথন।</p>
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon-circle"><i class="fa-solid fa-lock"></i></div>
+                    <div class="value-text">
+                        <h4 id="t_trust4Title">সম্পূর্ণ ব্যক্তিগত ও সুরক্ষিত</h4>
+                        <p id="t_trust4Sub">মাল্টি-টেন্যান্ট ডেটা সুরক্ষায় কোনো তথ্য ফাঁস নয়।</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 💭 4. THE PROBLEM SECTION -->
+    <section class="section problem-section">
+        <div class="container">
+            <div class="problem-header">
+                <div class="badge lavender" id="t_problemBadge">মানসিক প্রশান্তি</div>
+                <h2 class="section-title" id="t_problemTitle">গর্ভাবস্থা নিয়ে মনে আসে নানা প্রশ্ন।</h2>
+                <p class="section-subtitle" id="t_problemSub">
+                    প্রতিটি মায়ের প্রয়োজন তাৎক্ষণিক ভরসা, গোছানো হিসাব এবং যেকোনো উদ্বেগে ভালোবাসার একটি কণ্ঠ।
+                </p>
+            </div>
+
+            <div class="question-cards-grid">
+                <div class="question-card">
+                    <i class="fa-regular fa-circle-question q-icon"></i>
+                    <div class="q-text" id="t_q1">"২৪ সপ্তাহে হালকা মাথা ঘোরা বা পিঠে ব্যথা কি স্বাভাবিক?"</div>
+                </div>
+                <div class="question-card">
+                    <i class="fa-solid fa-bowl-food q-icon"></i>
+                    <div class="q-text" id="t_q2">"বাচ্চার সঠিক বৃদ্ধির জন্য দেশীয় কী কী পুষ্টিকর খাবার খাব?"</div>
+                </div>
+                <div class="question-card">
+                    <i class="fa-solid fa-calendar-check q-icon"></i>
+                    <div class="q-text" id="t_q3">"আমার পরবর্তী আল্ট্রাসাউন্ড বা ডক্টর ভিজিট কবে?"</div>
+                </div>
+                <div class="question-card">
+                    <i class="fa-solid fa-face-smile-beam q-icon"></i>
+                    <div class="q-text" id="t_q4">"হঠাৎ মেজাজ পরিবর্তন ও সকালে ক্লান্তি কেন লাগছে?"</div>
+                </div>
+                <div class="question-card">
+                    <i class="fa-solid fa-pills q-icon"></i>
+                    <div class="q-text" id="t_q5">"আজকের আয়রন ও ফলিক এসিডের ওষুধ কি খেয়েছি?"</div>
+                </div>
+                <div class="question-card">
+                    <i class="fa-solid fa-baby q-icon"></i>
+                    <div class="q-text" id="t_q6">"দুপুরে বাচ্চার নড়াচড়া কেমন হওয়া উচিত?"</div>
+                </div>
+            </div>
+
+            <div class="problem-resolution-banner">
+                <div class="resolution-text" id="t_problemResolution">
+                    🌸 সখী আপনার মাতৃত্বের এই প্রতিটি ছোট-বড় বিষয়কে এক নিরাপদ ও স্নেহময় আশ্রয়ে সাজিয়ে রাখে।
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🌿 5. FEATURES ECOSYSTEM WITH BESPOKE UI MOCKUPS -->
+    <section class="section" id="features">
+        <div class="container">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 60px auto;">
+                <div class="badge sage" id="t_featBadge">সম্পূর্ণ সেবা পরিকাঠামো</div>
+                <h2 class="section-title" id="t_featTitle">আপনার যা কিছু প্রয়োজন।<br>একটি যত্নশীল আশ্রয়ে।</h2>
+                <p class="section-subtitle" id="t_featSub" style="margin: 0 auto;">
+                    মাতৃত্বকালীন সুস্বাস্থ্য, মানসিক শান্তি ও গোছানো অভ্যাসের একটি সম্পূর্ণ ইকোসিস্টেম।
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <!-- Feature 1: AI Chat Companion -->
+                <a href="/app" class="feature-card featured-large">
+                    <div class="feature-icon-box rose">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3 id="t_feat1Title">সখী এআই মাতৃত্ব সঙ্গী (AI Companion)</h3>
+                    <p id="t_feat1Desc">
+                        যেকোনো সময় বাংলায় বা ইংরেজিতে সখীর সাথে কথা বলুন। একজন অভিজ্ঞ বড় আপুর মতো যিনি মনোযোগ দিয়ে শোনেন, দেশীয় খাবারের পুষ্টি পরামর্শ দেন এবং বিপদের লক্ষণ দেখলে শান্তভাবে হাসপাতালে যাওয়ার পরামর্শ দেন।
+                    </p>
+
+                    <!-- Interactive Micro Mockup -->
+                    <div class="micro-ui-box" style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid fa-waveform-lines" style="color: var(--primary); font-size: 1.2rem;"></i>
+                            <div>
+                                <div style="font-weight: 700; color: var(--text-main);" id="t_m1_t">Neural Female Voice TTS</div>
+                                <div style="font-size: 0.74rem; color: var(--text-muted);" id="t_m1_s">Fluent Bengali & English Audio Engine</div>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.75rem; background: #DEF7EC; color: #03543F; padding: 3px 8px; border-radius: 4px; font-weight: 700;">● Active</span>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat1Tag1">বাংলা ও ইংরেজি</span>
+                        <span class="feature-pill" id="t_feat1Tag2">গর্ভকালীন সপ্তাহ সচেতন</span>
+                        <span class="feature-pill" id="t_feat1Tag3">জরুরি বিপদ অ্যালার্ট</span>
+                        <span class="feature-pill" id="t_feat1Tag4">সাবলীল অডিও ভয়েস</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp1">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+
+                <!-- Feature 2: Meal & Nutrition Tracker -->
+                <a href="/app" class="feature-card">
+                    <div class="feature-icon-box sage">
+                        <i class="fa-solid fa-apple-whole"></i>
+                    </div>
+                    <h3 id="t_feat2Title">খাবার ও পুষ্টি ট্র্যাকার</h3>
+                    <p id="t_feat2Desc">
+                        সকাল, দুপুর ও রাতের খাবার রেকর্ড করুন। গর্ভস্থ শিশুর বৃদ্ধির জন্য আয়রন, ফলিক এসিড, ক্যালসিয়াম ও প্রোটিনের সঠিক মাত্রা জানুন।
+                    </p>
+
+                    <!-- Micro Nutrition Metric -->
+                    <div class="micro-ui-box">
+                        <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.78rem;">
+                            <span id="t_m2_t">দৈনিক আয়রন (Daily Iron)</span>
+                            <span style="color: var(--sage);" id="t_m2_s">১০০% অর্জিত</span>
+                        </div>
+                        <div class="progress-bar-wrap">
+                            <div class="progress-bar-fill sage" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat2Tag1">দেশীয় খাবারের তালিকা</span>
+                        <span class="feature-pill" id="t_feat2Tag2">পুষ্টির হিসাব</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp2">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+
+                <!-- Feature 3: Mood & Symptom Journal -->
+                <a href="/app" class="feature-card">
+                    <div class="feature-icon-box lavender">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h3 id="t_feat3Title">মন ও শারীরিক উপসর্গের ডায়েরি</h3>
+                    <p id="t_feat3Desc">
+                        বমি বমি ভাব, পিঠে ব্যথা, ক্লান্তি ও মানসিক অনুভূতিগুলো লিখে রাখুন এবং সময়ের সাথে সাথে নিজের স্বাস্থ্যের ধারা বুঝুন।
+                    </p>
+
+                    <!-- Micro Mood Badges -->
+                    <div class="micro-ui-box" style="display: flex; gap: 8px; justify-content: space-around;">
+                        <span style="background: #FFF; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.78rem;" id="t_m3_b1">😊 শান্ত ও সতেজ</span>
+                        <span style="background: #FFF; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.78rem;" id="t_m3_b2">😴 হালকা ক্লান্তি</span>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat3Tag1">স্বাস্থ্য ধারা অ্যানালিটিক্স</span>
+                        <span class="feature-pill" id="t_feat3Tag2">মানসিক স্বস্তি</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp3">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+
+                <!-- Feature 4: Baby Kick Counter -->
+                <a href="/app" class="feature-card">
+                    <div class="feature-icon-box rose">
+                        <i class="fa-solid fa-baby"></i>
+                    </div>
+                    <h3 id="t_feat4Title">শিশুর কিক কাউন্টার</h3>
+                    <p id="t_feat4Desc">
+                        সহজ ১-ট্যাপে বাচ্চার নড়াচড়া গণনা করুন, টাইমার দিয়ে সেশন রেকর্ড রাখুন এবং বাচ্চার সুস্থতা নিশ্চিত করুন।
+                    </p>
+
+                    <!-- Micro Kick Counter Widget -->
+                    <div class="micro-ui-box" style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 1.15rem; font-weight: 800; color: var(--primary);" id="t_m4_t">১০ কিক সম্পন্ন</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);" id="t_m4_s">সেশন সময়: ২২ মিনিট</div>
+                        </div>
+                        <i class="fa-solid fa-circle-check" style="font-size: 1.4rem; color: var(--sage);"></i>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat4Tag1">১-ট্যাপ কাউন্টার</span>
+                        <span class="feature-pill" id="t_feat4Tag2">ছন্দ রেকর্ড</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp4">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+
+                <!-- Feature 5: Appointments & Scans -->
+                <a href="/app" class="feature-card">
+                    <div class="feature-icon-box sage">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <h3 id="t_feat5Title">ডাক্তার ও আল্ট্রাসাউন্ড ভিজিট</h3>
+                    <p id="t_feat5Desc">
+                        ডাক্তারের অ্যাপয়েন্টমেন্ট, হাসপাতালের তথ্য এবং রুটিন আল্ট্রাসাউন্ড স্ক্যানের সময়সূচি গুছিয়ে রাখুন।
+                    </p>
+
+                    <!-- Micro Appointment Pass -->
+                    <div class="micro-ui-box">
+                        <div style="font-weight: 700; color: var(--text-main);" id="t_m5_t">ডা. সায়মা পারভীন (গাইনি)</div>
+                        <div style="font-size: 0.74rem; color: var(--sage); font-weight: 600;" id="t_m5_s">১০ সেপ্টেম্বর • সকাল ১০:৩০ টা</div>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat5Tag1">ভিজিট শিডিউল</span>
+                        <span class="feature-pill" id="t_feat5Tag2">ডাক্তারের নোটস</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp5">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+
+                <!-- Feature 6: Vitals & Blood Pressure -->
+                <a href="/app" class="feature-card">
+                    <div class="feature-icon-box lavender">
+                        <i class="fa-solid fa-stethoscope"></i>
+                    </div>
+                    <h3 id="t_feat6Title">রক্তচাপ ও ওজনের হিসাব</h3>
+                    <p id="t_feat6Desc">
+                        রক্তচাপ (BP), নাড়ির গতি এবং গর্ভাবস্থায় ওজন বৃদ্ধির ইতিহাস নিয়মিত সংরক্ষণ করুন।
+                    </p>
+
+                    <!-- Micro Vitals Metric -->
+                    <div class="micro-ui-box" style="display: flex; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);" id="t_m6_l1">রক্তচাপ (BP)</div>
+                            <div style="font-weight: 800; color: var(--text-main);" id="t_m6_v1">১১৮ / ৭৬ mmHg</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.72rem; color: var(--text-muted);" id="t_m6_l2">বর্তমান ওজন</div>
+                            <div style="font-weight: 800; color: var(--text-main);" id="t_m6_v2">৬০.৫ কেজি</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat6Tag1">রক্তচাপ লগ</span>
+                        <span class="feature-pill" id="t_feat6Tag2">ওজন ট্র্যাকিং</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp6">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+
+                <!-- Feature 7: Daily Routines & Hydration -->
+                <a href="/app" class="feature-card">
+                    <div class="feature-icon-box sage">
+                        <i class="fa-solid fa-glass-water"></i>
+                    </div>
+                    <h3 id="t_feat7Title">দৈনিক অভ্যাস ও পানি পান</h3>
+                    <p id="t_feat7Desc">
+                        দিনে ২.৫ লিটার পানি পান, গর্ভকালীন ভিটামিন গ্রহণ এবং সকালের হালকা হাঁটার স্বাস্থ্যকর অভ্যাস গড়ে তুলুন।
+                    </p>
+
+                    <!-- Micro Habit Checklist -->
+                    <div class="micro-ui-box">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <i class="fa-solid fa-square-check" style="color: var(--sage);"></i>
+                            <span style="font-size: 0.78rem;" id="t_m7_t1">২.৫ লিটার পানি পান সম্পন্ন</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-square-check" style="color: var(--sage);"></i>
+                            <span style="font-size: 0.78rem;" id="t_m7_t2">ফলিক এসিড ট্যাবলেট গ্রহণ</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat7Tag1">পানি পান ট্র্যাকার</span>
+                        <span class="feature-pill" id="t_feat7Tag2">ওষুধ রিমাইন্ডার</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp7">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+
+                <!-- Feature 8: Baby Names Collection -->
+                <a href="/app" class="feature-card">
+                    <div class="feature-icon-box rose">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </div>
+                    <h3 id="t_feat8Title">সুন্দর শিশুর নামের তালিকা</h3>
+                    <p id="t_feat8Desc">
+                        অর্থসহ সুন্দর ও অর্থবহ বাংলা এবং আরবি ছেলে ও মেয়েদের পছন্দের নাম সংরক্ষণ করে রাখুন।
+                    </p>
+
+                    <!-- Micro Name Card -->
+                    <div class="micro-ui-box" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 700; color: var(--text-main);" id="t_m8_t">আরিয়ান (Aaryan)</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);" id="t_m8_s">অর্থ: মহান ও সম্মানিত</div>
+                        </div>
+                        <i class="fa-solid fa-heart" style="color: var(--primary);"></i>
+                    </div>
+
+                    <div class="feature-pill-list">
+                        <span class="feature-pill" id="t_feat8Tag1">অর্থসহ নাম</span>
+                        <span class="feature-pill" id="t_feat8Tag2">পছন্দের তালিকা</span>
+                    </div>
+                    <div class="card-launch-tag"><span id="t_tryInApp8">অ্যাপে ব্যবহার করুন</span> →</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 💬 6. AI CHAT SHOWCASE (INTERACTIVE) -->
+    <section class="section chat-showcase-section">
+        <div class="container">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 48px auto;">
+                <div class="badge" id="t_showcaseBadge">সরাসরি এআই অভিজ্ঞতা</div>
+                <h2 class="section-title" id="t_showcaseTitle">সখীর সাথে কথা বলুন আপন মানুষের মতো।</h2>
+                <p class="section-subtitle" id="t_showcaseSub" style="margin: 0 auto;">
+                    সখীর সহানুভূতিশীল, স্পষ্ট ও স্নেহভরা নির্দেশনার সৌন্দর্য নিজেই অনুভব করুন।
+                </p>
+            </div>
+
+            <div class="chat-showcase-wrapper">
+                <div class="showcase-topbar">
+                    <div class="showcase-user-info">
+                        <div class="showcase-avatar">🌸</div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.95rem;" id="t_demoTitle">সখী (Shokhi AI)</div>
+                            <div style="font-size: 0.76rem; color: var(--sage); font-weight: 600;" id="t_demoStatus">● অনলাইন • মাতৃত্ব সহযোগী প্ল্যাটফর্ম</div>
+                        </div>
+                    </div>
+
+                    <div class="lang-switch-pills">
+                        <button class="lang-pill-btn active" id="demoBnBtn" onclick="switchDemoLang('bn')">বাংলা (Bengali)</button>
+                        <button class="lang-pill-btn" id="demoEnBtn" onclick="switchDemoLang('en')">English</button>
+                    </div>
+                </div>
+
+                <div class="showcase-body" id="demoChatBody">
+                    <div class="chat-bubble user" id="demoUserMsg">
+                        "আজকে আমার ২৪ সপ্তাহ চলছে। মাঝে মাঝে একটু পিঠে ব্যথা হচ্ছে। এটা কি স্বাভাবিক?"
+                    </div>
+
+                    <div class="chat-bubble bot" id="demoBotMsg">
+                        <div class="bot-header-label">
+                            <i class="fa-solid fa-sparkles"></i> <span id="demoBotHeader">সখী AI (Week 24 • ২য় ত্রৈমাসিক)</span>
+                        </div>
+                        <div id="demoBotText">
+                            "কেমন আছো আপু? ২৪ সপ্তাহে জরায়ুর আকার বৃদ্ধি এবং হরমোনের পরিবর্তনের কারণে হালকা পিঠে ব্যথা হওয়া বেশ স্বাভাবিক। আপনি ভারী কিছু তুলবেন না, বসার সময় পিঠের পেছনে নরম কুশন ব্যবহার করুন এবং ঘুমানোর সময় বাম কাত হয়ে দুই হাঁটুর মাঝে কোলবালিশ রাখুন। তবে ব্যথা যদি খুব তীব্র হয় বা তলপেটে ছড়িয়ে পড়ে, তবে দেরি না করে চিকিৎসকের সাথে যোগাযোগ করবেন।"
+                        </div>
+                        <button class="voice-demo-btn" id="demoVoiceBtn" onclick="playDemoVoice()">
+                            <i class="fa-solid fa-volume-high"></i> <span id="demoVoiceBtnTxt">শুনুন (Listen to Voice)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📈 7. PERSONALIZED GESTATIONAL JOURNEY -->
+    <section class="section">
+        <div class="container">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 54px auto;">
+                <div class="badge sage" id="t_timelineBadge">ধারাবাহিক যত্ন</div>
+                <h2 class="section-title" id="t_timelineTitle">আপনার যাত্রার প্রতিটি ধাপে সাথে আছে।</h2>
+                <p class="section-subtitle" id="t_timelineSub" style="margin: 0 auto;">
+                    গর্ভধারণের প্রথম ত্রৈমাসিক থেকে শুরু করে প্রসব প্রস্তুতি ও প্রসবোত্তর নবজাতকের যত্ন।
+                </p>
+            </div>
+
+            <div class="timeline-grid">
+                <div class="timeline-card">
+                    <span class="timeline-step-badge" id="t_t1Badge">১ – ১৩ সপ্তাহ</span>
+                    <h4 id="t_t1Title">১ম ত্রৈমাসিক</h4>
+                    <p id="t_t1Desc">
+                        মর্নিং সিকনেস সামলানো, ফলিক এসিডের সতর্কতা, প্রাথমিক আল্ট্রাসাউন্ড ও খাবারের অভ্যাস।
+                    </p>
+                </div>
+                <div class="timeline-card" style="border-color: var(--primary);">
+                    <span class="timeline-step-badge" style="background: var(--bg-surface-rose); color: var(--primary);" id="t_t2Badge">১৪ – ২৭ সপ্তাহ</span>
+                    <h4 id="t_t2Title">২য় ত্রৈমাসিক</h4>
+                    <p id="t_t2Desc">
+                        প্রথম কিক অনুভব করা, আয়রন সমৃদ্ধ খাদ্য তালিকা, অ্যানোমালি স্ক্যান ও হালকা ব্যায়াম।
+                    </p>
+                </div>
+                <div class="timeline-card">
+                    <span class="timeline-step-badge" id="t_t3Badge">২৮ – ৪০ সপ্তাহ</span>
+                    <h4 id="t_t3Title">৩য় ত্রৈমাসিক</h4>
+                    <p id="t_t3Desc">
+                        কিক কাউন্ট মনিটরিং, ডেলিভারি ব্যাগ প্রস্তুতি, প্রসব পরিকল্পনা এবং জরুরি সংকেত অ্যালার্ট।
+                    </p>
+                </div>
+                <div class="timeline-card">
+                    <span class="timeline-step-badge" id="t_t4Badge">প্রসবোত্তর যত্ন</span>
+                    <h4 id="t_t4Title">নবজাতক ও মায়ের যত্ন</h4>
+                    <p id="t_t4Desc">
+                        মায়ের শারীরিক সুস্থতা, বুকের দুধ খাওয়ানো, মানসিক প্রশান্তি এবং নবজাতকের যত্ন।
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🇧🇩 8. BILINGUAL SECTION -->
+    <section class="section bilingual-section" id="bilingual">
+        <div class="container">
+            <div class="bilingual-grid">
+                <div>
+                    <div class="badge lavender" id="t_biBadge">১০০% দ্বিভাষিক</div>
+                    <h2 class="section-title" id="t_biTitle">মাতৃত্বের সেবায় ভাষার কোনো বাধা নেই।</h2>
+                    <p class="section-subtitle" id="t_biSub" style="margin-bottom: 24px;">
+                        সখী বাংলা ও ইংরেজি দুটো ভাষাই চমৎকার বোঝে—যাতে গর্ভবতী মায়েরা তাদের মনের ভাব প্রকাশ করতে পারেন একদম স্বাচ্ছন্দ্যে।
+                    </p>
+                    <div style="display: flex; gap: 16px; flex-direction: column;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-solid fa-circle-check" style="color: var(--sage);"></i>
+                            <span style="font-weight: 600;" id="t_biPoint1">প্রমিত ও মিষ্টি বাংলা ভাষায় আন্তরিক কথোপকথন</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-solid fa-circle-check" style="color: var(--sage);"></i>
+                            <span style="font-weight: 600;" id="t_biPoint2">মাতৃত্বকালীন মেডিকেল তথ্য ও সঠিক পুষ্টির ইংরেজি বিবরণ</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-solid fa-circle-check" style="color: var(--sage);"></i>
+                            <span style="font-weight: 600;" id="t_biPoint3">উভয় ভাষাতেই রিয়েল-টাইম অডিও কণ্ঠের সহায়তা</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div class="bilingual-card">
+                        <span class="bilingual-tag">বাংলায় কথা বলুন (Bengali)</span>
+                        <div class="bn-font" style="font-size: 1.15rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">
+                            "আপু, আমার হালকা মাথা ঘোরা হচ্ছে, এখন কী করা উচিত?"
+                        </div>
+                        <p class="bn-font" style="font-size: 0.94rem; color: var(--text-secondary);">
+                            সখী তৎক্ষণাৎ রক্তচাপ, পানি শূন্যতা ও বিশ্রামের প্রয়োজনীয়তা নিয়ে সাবলীল পরামর্শ দেবে।
+                        </p>
+                    </div>
+
+                    <div class="bilingual-card">
+                        <span class="bilingual-tag">Talk in English</span>
+                        <div style="font-size: 1.05rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">
+                            "What are the best iron-rich local foods for my second trimester?"
+                        </div>
+                        <p style="font-size: 0.94rem; color: var(--text-secondary);">
+                            Shokhi provides clear dietary suggestions including eggs, spinach, lentils, and seasonal fruits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🔒 9. PRIVACY & SAFETY -->
+    <section class="section" id="safety">
+        <div class="container">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 54px auto;">
+                <div class="badge sage" id="t_safeBadge">গোপনীয়তা ও সুরক্ষা</div>
+                <h2 class="section-title" id="t_safeTitle">আপনার মাতৃত্ব ব্যক্তিগত।<br>আপনার তথ্যও সুরক্ষিত।</h2>
+                <p class="section-subtitle" id="t_safeSub" style="margin: 0 auto;">
+                    আমরা সর্বোচ্চ প্রযুক্তির সাথে মায়েদের তথ্যের নিরাপত্তা ও ব্যক্তিগত গোপনীয়তা রক্ষা করি।
+                </p>
+            </div>
+
+            <div class="privacy-grid">
+                <div class="privacy-card">
+                    <div class="privacy-icon"><i class="fa-solid fa-user-shield"></i></div>
+                    <h4 id="t_s1Title">এনক্রিপ্টেড ব্যক্তিগত অ্যাকাউন্ট</h4>
+                    <p id="t_s1Desc">
+                        এনক্রিপ্টেড জেডব্লিউটি সেশন ও কঠোর মাল্টি-টেন্যান্ট আইসোলেশন, যাতে একজন ব্যবহারকারীর ডেটা অন্য কেউ দেখতে না পারে।
+                    </p>
+                </div>
+                <div class="privacy-card">
+                    <div class="privacy-icon"><i class="fa-solid fa-triangle-exclamation" style="color: var(--primary);"></i></div>
+                    <h4 id="t_s2Title">জরুরি বিপদের লক্ষণ শনাক্তকরণ</h4>
+                    <p id="t_s2Desc">
+                        রক্তপাত, তীব্র ব্যথা বা খিঁচুনির মতো জরুরি উপসর্গ শনাক্ত হলে সাথে সাথে ৯৯৯ ও ১৬২৬৩ বা হাসপাতালে যাওয়ার সংকেত।
+                    </p>
+                </div>
+                <div class="privacy-card">
+                    <div class="privacy-icon"><i class="fa-solid fa-database"></i></div>
+                    <h4 id="t_s3Title">পোস্টগ্রেএসকিউএল নির্ভরযোগ্যতা</h4>
+                    <p id="t_s3Desc">
+                        সুপাবেস পোস্টগ্রেএসকিউএল ডেটাবেস দ্বারা সুরক্ষিত, যা ৯৯.৯% আপটাইম ও নির্ভরযোগ্য রেকর্ড নিশ্চিত করে।
+                    </p>
+                </div>
+            </div>
+
+            <div class="medical-disclaimer-box">
+                <i class="fa-solid fa-circle-info disclaimer-icon"></i>
+                <div class="disclaimer-text" id="t_disclaimerText">
+                    <strong>চিকিৎসা সতর্কতা:</strong> সখী এআই একটি তথ্যবহুল ও মানসিক সহযোগী প্ল্যাটফর্ম এবং এটি সরাসরি কোনো <strong>রেজিস্টার্ড চিকিৎসকের বিকল্প নয়</strong>। যেকোনো শারীরিক জটিলতায় বা জরুরি অবস্থায় নিকটস্থ হাসপাতাল বা গাইনি চিকিৎসকের পরামর্শ নিন।
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🪜 10. HOW IT WORKS -->
+    <section class="section" id="how-it-works" style="background-color: var(--bg-surface-soft);">
+        <div class="container">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 54px auto;">
+                <div class="badge" id="t_howBadge">সহজ পদ্ধতি</div>
+                <h2 class="section-title" id="t_howTitle">শুরু করা সহজ। ব্যবহারে প্রশান্তি।</h2>
+                <p class="section-subtitle" id="t_howSub" style="margin: 0 auto;">
+                    মাত্র তিনটি সহজ ধাপে হাজারো গর্ভবতী মায়ের সাথে যুক্ত হোন।
+                </p>
+            </div>
+
+            <div class="how-grid">
+                <div class="how-card">
+                    <div class="step-num-huge">01</div>
+                    <h3 id="t_h1Title">প্রোফাইল তৈরি করুন</h3>
+                    <p id="t_h1Desc">কয়েক সেকেন্ডে সাইন আপ করে আপনার গর্ভকালীন সপ্তাহ বা সম্ভাব্য প্রসবের তারিখ দিন।</p>
+                </div>
+                <div class="how-card">
+                    <div class="step-num-huge">02</div>
+                    <h3 id="t_h2Title">প্রশ্ন করুন ও ট্র্যাকিং করুন</h3>
+                    <p id="t_h2Desc">স্বাস্থ্য নিয়ে প্রশ্ন করুন, খাবার লগ করুন, কিক গুনুন এবং ডাক্তারের ভিজিট সাজিয়ে রাখুন।</p>
+                </div>
+                <div class="how-card">
+                    <div class="step-num-huge">03</div>
+                    <h3 id="t_h3Title">প্রতিদিনের নিশ্চিন্ত মাতৃত্ব</h3>
+                    <p id="t_h3Desc">সময়মতো রিমাইন্ডার, স্বাস্থ্যকর অভ্যাসের চেকলিস্ট ও প্রতিদিনের ভালোবাসার সঙ্গ পান।</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🌟 11. REAL PREGNANCY SCENARIOS -->
+    <section class="section">
+        <div class="container">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 54px auto;">
+                <div class="badge lavender" id="t_scenBadge">বাস্তব জীবনের যত্ন</div>
+                <h2 class="section-title" id="t_scenTitle">গর্ভবতী মায়ের বাস্তব প্রয়োজনকে কেন্দ্র করে তৈরি।</h2>
+                <p class="section-subtitle" id="t_scenSub" style="margin: 0 auto;">
+                    সেই নীরব মুহূর্ত, আকস্মিক প্রশ্ন আর প্রতিদিনের গুরুত্বপূর্ণ অভ্যাসের জন্য।
+                </p>
+            </div>
+
+            <div class="scenarios-grid">
+                <div class="scenario-card">
+                    <div>
+                        <div class="scenario-quote" id="t_scen1Title">"মাঝরাতে জেগে ওঠার আকস্মিক প্রশ্নের জন্য।"</div>
+                        <div class="scenario-desc" id="t_scen1Desc">
+                            হঠাৎ কোনো দুশ্চিন্তা বা অচেনা লক্ষণ মনে ভয় ধরালে, সখী দেয় তাৎক্ষণিক শান্ত ও যুক্তিসঙ্গত ভরসা।
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; color: var(--primary); font-size: 0.88rem; font-weight: 700;" id="t_scen1Tag">
+                        <i class="fa-solid fa-moon"></i> ২৪/৭ ভরসা
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <div>
+                        <div class="scenario-quote" id="t_scen2Title">"পুরো গর্ভাবস্থার হিসাব এক জায়গায় গুছিয়ে রাখার জন্য।"</div>
+                        <div class="scenario-desc" id="t_scen2Desc">
+                            কাগজপত্র বা এলোমেলো নোট নয়—আল্ট্রাসাউন্ড, প্রেসক্রিপশন ও কিক কাউন্টের সব তথ্য এক নিরাপদ জায়গায়।
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; color: var(--sage); font-size: 0.88rem; font-weight: 700;" id="t_scen2Tag">
+                        <i class="fa-solid fa-clipboard-check"></i> সম্পূর্ণ গোছানো
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <div>
+                        <div class="scenario-quote" id="t_scen3Title">"নিজের সবচেয়ে প্রিয় ভাষায় মনের কথা বলার জন্য।"</div>
+                        <div class="scenario-desc" id="t_scen3Desc">
+                            বাংলায় বা ইংরেজিতে নিজের লক্ষণ খুলে বলুন এবং মিষ্টি কণ্ঠে অডিওতে উত্তর শুনুন।
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; color: var(--lavender); font-size: 0.88rem; font-weight: 700;" id="t_scen3Tag">
+                        <i class="fa-solid fa-heart"></i> সাংস্কৃতিক আন্তরিকতা
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 💖 12. FINAL CTA -->
+    <section class="final-cta-section">
+        <div class="container">
+            <div class="final-cta-wrapper">
+                <div class="badge" id="t_ctaBadge" style="background: rgba(255,255,255,0.1); color: #F8B4C0; border-color: rgba(255,255,255,0.2);">
+                    🌸 আজই বিনামূল্যে শুরু করুন
+                </div>
+                <h2 class="final-cta-title" id="t_ctaTitle">আপনার মাতৃত্বের যাত্রা একটি সুন্দর সঙ্গী পাওয়ার যোগ্য।</h2>
+                <p class="final-cta-sub" id="t_ctaSub">
+                    আজই যুক্ত হোন সখী এআই-তে এবং উপভোগ করুন এক শান্ত, স্বাস্থ্যকর ও গোছানো মাতৃত্বের পথচলা।
+                </p>
+                <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                    <a href="/app?mode=register" class="btn btn-primary" id="t_ctaPrimary" style="font-size: 1.05rem; padding: 16px 36px;">
+                        বিনামূল্যে শুরু করুন (Get Started) →
+                    </a>
+                    <a href="/app?mode=login" class="btn btn-secondary" id="t_ctaSecondary" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.3);">
+                        পূর্ববর্তী ব্যবহারকারী? লগইন করুন
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🦶 13. FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>সখী <span style="color: var(--primary);">AI</span></h3>
+                    <p style="margin-bottom: 16px; line-height: 1.6;" id="t_footerDesc">
+                        আপনার যত্নশীল এআই মাতৃত্ব সঙ্গী। গর্ভকালীন সপ্তাহের মাইলফলক, বাচ্চার নড়াচড়া ট্র্যাকিং এবং পুষ্টি নির্দেশিকা প্রদান করে বাংলায় ও ইংরেজিতে।
+                    </p>
+                    <div style="display: flex; gap: 12px; font-size: 1.2rem;">
+                        <a href="/app" style="color: #94A3B8;"><i class="fa-brands fa-chrome"></i></a>
+                        <a href="/app" style="color: #94A3B8;"><i class="fa-solid fa-heart-pulse"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4 id="t_footerFeat">সুবিধাসমূহ (Features)</h4>
+                    <ul>
+                        <li><a href="/app" id="t_f1">এআই মাতৃত্ব চ্যাট</a></li>
+                        <li><a href="/app" id="t_f2">বাচ্চার কিক কাউন্টার</a></li>
+                        <li><a href="/app" id="t_f3">খাবার ও পুষ্টি ট্র্যাকার</a></li>
+                        <li><a href="/app" id="t_f4">লক্ষণ ও মুড ডায়েরি</a></li>
+                        <li><a href="/app" id="t_f5">ডাক্তার ও স্ক্যান শিডিউল</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4 id="t_footerTrust">সুরক্ষা ও রিসোর্স</h4>
+                    <ul>
+                        <li><a href="#safety" id="t_f6">নিরাপত্তা ও গোপনীয়তা</a></li>
+                        <li><a href="#bilingual" id="t_f7">দ্বিভাষিক সহায়তা</a></li>
+                        <li><a href="#how-it-works" id="t_f8">কীভাবে কাজ করে</a></li>
+                        <li><a href="/admin" id="t_f9">ক্লিনিক্যাল এডমিন পোর্টাল</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4 id="t_footerStart">শুরু করুন</h4>
+                    <ul>
+                        <li><a href="/app?mode=register" id="t_f10">নতুন একাউন্ট খুলুন</a></li>
+                        <li><a href="/app?mode=login" id="t_f11">লগইন করুন</a></li>
+                        <li><a href="/app" id="t_f12">ওয়েব অ্যাপ চালু করুন</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p id="t_footerCopy">
+                    © ২০২৬ সখী এআই (Shokhi AI) — উন্নত মাতৃত্ব স্বাস্থ্য বুদ্ধিমত্তা। সর্বস্বত্ব সংরক্ষিত।
+                </p>
+                <p style="margin-top: 6px; font-size: 0.76rem; color: #64748B;" id="t_footerDisclaimer">
+                    *সখী এআই একটি তথ্যমূলক সহায়ক প্ল্যাটফর্ম এবং এটি সরাসরি কোনো পেশাদার চিকিৎসকের বিকল্প নয়।
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Script Logic & Full Bilingual Translation Engine -->
+    <script>
+        // Auto-forward OAuth callbacks to /app if landed on root domain
+        (function() {
+            const hasAuthHash = window.location.hash && (window.location.hash.includes('access_token=') || window.location.hash.includes('refresh_token='));
+            const hasAuthCode = window.location.search && (window.location.search.includes('code=') || window.location.search.includes('error='));
+            if (hasAuthHash || hasAuthCode) {
+                window.location.replace('/app' + window.location.search + window.location.hash);
+            }
+        })();
+
+        const landingTranslations = {
+            bn: {
+                brandTagline: "Maternity Companion",
+                navFeatures: "সুবিধাসমূহ",
+                navHowItWorks: "কীভাবে কাজ করে",
+                navBilingual: "দ্বিভাষিক যত্ন",
+                navSafety: "নিরাপত্তা ও বিশ্বাস",
+                navLogin: '<i class="fa-solid fa-arrow-right-to-bracket"></i> লগইন',
+                navGetStarted: "শুরু করুন →",
+
+                heroBadge: '<i class="fa-solid fa-sparkles"></i> এআই-চালিত মাতৃত্বকালীন সঙ্গী',
+                heroHeadline: 'আপনার মাতৃত্বের যাত্রায়,<br><span class="highlight-rose">সখী হয়ে পাশে।</span>',
+                heroSubtext: "গর্ভাবস্থায় প্রতিটি পদক্ষেপে আপনাকে সাহায্য করতে সখী এআই প্রস্তুত—পুষ্টি পরামর্শ, লক্ষণ ট্র্যাকিং এবং মাতৃস্নেহভরা এআই সঙ্গ বাংলায় ও ইংরেজিতে।",
+                heroCtaPrimary: "আপনার যাত্রা শুরু করুন →",
+                heroCtaSecondary: "সুবিধাসমূহ দেখুন",
+                heroTrust1: "ব্যক্তিগত ও এনক্রিপ্টেড",
+                heroTrust2: "১০০% বাংলা ও ইংরেজি",
+                heroTrust3: "চিকিৎসকের পরিপূরক সহায়তা",
+                heroBadge1Title: "২৪ সপ্তাহ • ২য় ত্রৈমাসিক",
+                heroBadge1Sub: "বাচ্চার নড়াচড়া সক্রিয়",
+                heroBadge2Title: "বাচ্চার কিক সংখ্যা: ১০ / ১০",
+                heroBadge2Sub: "সুস্থ ছন্দ রেকর্ড করা হয়েছে",
+
+                phoneWeek: "● ২৪তম সপ্তাহ • ২য় ত্রৈমাসিক",
+                phoneUserMsg: '"আপু, আজকে আমার হালকা পিঠে ব্যথা হচ্ছে। কী করব?"',
+                phoneBotMsg: '"কেমন আছো আপু? ২৪ সপ্তাহে জরায়ুর আকার বৃদ্ধির কারণে হালকা পিঠব্যথা স্বাভাবিক। বাম কাত হয়ে বিশ্রাম নিন ও পর্যাপ্ত পানি পান করুন।"',
+                phoneVoice: "ভয়েস শুনুন (0:18)",
+                phonePlaceholder: "আপনার প্রশ্ন লিখুন...",
+
+                trust1Title: "আন্তরিক এআই সহায়তা",
+                trust1Sub: "গর্ভকালীন মানসিক প্রশান্তি ও সঠিক পুষ্টি নির্দেশিকা।",
+                trust2Title: "গর্ভকালীন সপ্তাহ অনুযায়ী",
+                trust2Sub: "১ম সপ্তাহ থেকে ৪০+ সপ্তাহ পর্যন্ত ব্যক্তিগত যত্ন।",
+                trust3Title: "সাবলীল দ্বিভাষিক কণ্ঠ",
+                trust3Sub: "মিষ্টি বাংলা ও স্পষ্ট ইংরেজিতে ভয়েস কথোপকথন।",
+                trust4Title: "সম্পূর্ণ ব্যক্তিগত ও সুরক্ষিত",
+                trust4Sub: "মাল্টি-টেন্যান্ট ডেটা সুরক্ষায় কোনো তথ্য ফাঁস নয়।",
+
+                problemBadge: "মানসিক প্রশান্তি",
+                problemTitle: "গর্ভাবস্থা নিয়ে মনে আসে নানা প্রশ্ন।",
+                problemSub: "প্রতিটি মায়ের প্রয়োজন তাৎক্ষণিক ভরসা, গোছানো হিসাব এবং যেকোনো উদ্বেগে ভালোবাসার একটি কণ্ঠ।",
+                q1: '"২৪ সপ্তাহে হালকা মাথা ঘোরা বা পিঠে ব্যথা কি স্বাভাবিক?"',
+                q2: '"বাচ্চার সঠিক বৃদ্ধির জন্য দেশীয় কী কী পুষ্টিকর খাবার খাব?"',
+                q3: '"আমার পরবর্তী আল্ট্রাসাউন্ড বা ডক্টর ভিজিট কবে?"',
+                q4: '"হঠাৎ মেজাজ পরিবর্তন ও সকালে ক্লান্তি কেন লাগছে?"',
+                q5: '"আজকের আয়রন ও ফলিক এসিডের ওষুধ কি খেয়েছি?"',
+                q6: '"দুপুরে বাচ্চার নড়াচড়া কেমন হওয়া উচিত?"',
+                problemResolution: "🌸 সখী আপনার মাতৃত্বের এই প্রতিটি ছোট-বড় বিষয়কে এক নিরাপদ ও স্নেহময় আশ্রয়ে সাজিয়ে রাখে।",
+
+                featBadge: "সম্পূর্ণ সেবা পরিকাঠামো",
+                featTitle: "আপনার যা কিছু প্রয়োজন।<br>একটি যত্নশীল আশ্রয়ে।",
+                featSub: "মাতৃত্বকালীন সুস্বাস্থ্য, মানসিক শান্তি ও গোছানো অভ্যাসের একটি সম্পূর্ণ ইকোসিস্টেম।",
+                feat1Title: "সখী এআই মাতৃত্ব সঙ্গী (AI Companion)",
+                feat1Desc: "যেকোনো সময় বাংলায় বা ইংরেজিতে সখীর সাথে কথা বলুন। একজন অভিজ্ঞ বড় আপুর মতো যিনি মনোযোগ দিয়ে শোনেন, দেশীয় খাবারের পুষ্টি পরামর্শ দেন এবং বিপদের লক্ষণ দেখলে শান্তভাবে হাসপাতালে যাওয়ার পরামর্শ দেন।",
+                feat1Tag1: "বাংলা ও ইংরেজি", feat1Tag2: "গর্ভকালীন সপ্তাহ সচেতন", feat1Tag3: "জরুরি বিপদ অ্যালার্ট", feat1Tag4: "সাবলীল অডিও ভয়েস",
+                feat2Title: "খাবার ও পুষ্টি ট্র্যাকার",
+                feat2Desc: "সকাল, দুপুর ও রাতের খাবার রেকর্ড করুন। গর্ভস্থ শিশুর বৃদ্ধির জন্য আয়রন, ফলিক এসিড, ক্যালসিয়াম ও প্রোটিনের সঠিক মাত্রা জানুন।",
+                feat2Tag1: "দেশীয় খাবারের তালিকা", feat2Tag2: "পুষ্টির হিসাব",
+                feat3Title: "মন ও শারীরিক উপসর্গের ডায়েরি",
+                feat3Desc: "বমি বমি ভাব, পিঠে ব্যথা, ক্লান্তি ও মানসিক অনুভূতিগুলো লিখে রাখুন এবং সময়ের সাথে সাথে নিজের স্বাস্থ্যের ধারা বুঝুন।",
+                feat3Tag1: "স্বাস্থ্য ধারা অ্যানালিটিক্স", feat3Tag2: "মানসিক স্বস্তি",
+                feat4Title: "শিশুর কিক কাউন্টার",
+                feat4Desc: "সহজ ১-ট্যাপে বাচ্চার নড়াচড়া গণনা করুন, টাইমার দিয়ে সেশন রেকর্ড রাখুন এবং বাচ্চার সুস্থতা নিশ্চিত করুন।",
+                feat4Tag1: "১-ট্যাপ কাউন্টার", feat4Tag2: "ছন্দ রেকর্ড",
+                feat5Title: "ডাক্তার ও আল্ট্রাসাউন্ড ভিজিট",
+                feat5Desc: "ডাক্তারের অ্যাপয়েন্টমেন্ট, হাসপাতালের তথ্য এবং রুটিন আল্ট্রাসাউন্ড স্ক্যানের সময়সূচি গুছিয়ে রাখুন।",
+                feat5Tag1: "ভিজিট শিডিউল", feat5Tag2: "ডাক্তারের নোটস",
+                feat6Title: "রক্তচাপ ও ওজনের হিসাব",
+                feat6Desc: "রক্তচাপ (BP), নাড়ির গতি এবং গর্ভাবস্থায় ওজন বৃদ্ধির ইতিহাস নিয়মিত সংরক্ষণ করুন।",
+                feat6Tag1: "রক্তচাপ লগ", feat6Tag2: "ওজন ট্র্যাকিং",
+                feat7Title: "দৈনিক অভ্যাস ও পানি পান",
+                feat7Desc: "দিনে ২.৫ লিটার পানি পান, গর্ভকালীন ভিটামিন গ্রহণ এবং সকালের হালকা হাঁটার স্বাস্থ্যকর অভ্যাস গড়ে তুলুন।",
+                feat7Tag1: "পানি পান ট্র্যাকার", feat7Tag2: "ওষুধ রিমাইন্ডার",
+                feat8Title: "সুন্দর শিশুর নামের তালিকা",
+                feat8Desc: "অর্থসহ সুন্দর ও অর্থবহ বাংলা এবং আরবি ছেলে ও মেয়েদের পছন্দের নাম সংরক্ষণ করে রাখুন।",
+                feat8Tag1: "অর্থসহ নাম", feat8Tag2: "পছন্দের তালিকা",
+
+                // Micro UI Elements Translation
+                m1_t: "Neural Female Voice TTS",
+                m1_s: "সাবলীল বাংলা ও ইংরেজি অডিও ইঞ্জিন",
+                m2_t: "দৈনিক আয়রন (Daily Iron)",
+                m2_s: "১০০% অর্জিত",
+                m3_b1: "😊 শান্ত ও সতেজ",
+                m3_b2: "😴 হালকা ক্লান্তি",
+                m4_t: "১০ কিক সম্পন্ন",
+                m4_s: "সেশন সময়: ২২ মিনিট",
+                m5_t: "ডা. সায়মা পারভীন (গাইনি)",
+                m5_s: "১০ সেপ্টেম্বর • সকাল ১০:৩০ টা",
+                m6_l1: "রক্তচাপ (BP)",
+                m6_v1: "১১৮ / ৭৬ mmHg",
+                m6_l2: "বর্তমান ওজন",
+                m6_v2: "৬০.৫ কেজি",
+                m7_t1: "২.৫ লিটার পানি পান সম্পন্ন",
+                m7_t2: "ফলিক এসিড ট্যাবলেট গ্রহণ",
+                m8_t: "আরিয়ান (Aaryan)",
+                m8_s: "অর্থ: মহান ও সম্মানিত",
+
+                tryInApp1: "অ্যাপে ব্যবহার করুন",
+                tryInApp2: "অ্যাপে ব্যবহার করুন",
+                tryInApp3: "অ্যাপে ব্যবহার করুন",
+                tryInApp4: "অ্যাপে ব্যবহার করুন",
+                tryInApp5: "অ্যাপে ব্যবহার করুন",
+                tryInApp6: "অ্যাপে ব্যবহার করুন",
+                tryInApp7: "অ্যাপে ব্যবহার করুন",
+                tryInApp8: "অ্যাপে ব্যবহার করুন",
+
+                showcaseBadge: "সরাসরি এআই অভিজ্ঞতা",
+                showcaseTitle: "সখীর সাথে কথা বলুন আপন মানুষের মতো।",
+                showcaseSub: "সখীর সহানুভূতিশীল, স্পষ্ট ও স্নেহভরা নির্দেশনার সৌন্দর্য নিজেই অনুভব করুন।",
+                demoTitle: "সখী (Shokhi AI)",
+                demoStatus: "● অনলাইন • মাতৃত্ব সহযোগী প্ল্যাটফর্ম",
+
+                timelineBadge: "ধারাবাহিক যত্ন",
+                timelineTitle: "আপনার যাত্রার প্রতিটি ধাপে সাথে আছে।",
+                timelineSub: "গর্ভধারণের প্রথম ত্রৈমাসিক থেকে শুরু করে প্রসব প্রস্তুতি ও প্রসবোত্তর নবজাতকের যত্ন।",
+                t1Badge: "১ – ১৩ সপ্তাহ", t1Title: "১ম ত্রৈমাসিক", t1Desc: "মর্নিং সিকনেস সামলানো, ফলিক এসিডের সতর্কতা, প্রাথমিক আল্ট্রাসাউন্ড ও খাবারের অভ্যাস।",
+                t2Badge: "১৪ – ২৭ সপ্তাহ", t2Title: "২য় ত্রৈমাসিক", t2Desc: "প্রথম কিক অনুভব করা, আয়রন সমৃদ্ধ খাদ্য তালিকা, অ্যানোমালি স্ক্যান ও হালকা ব্যায়াম।",
+                t3Badge: "২৮ – ৪০ সপ্তাহ", t3Title: "৩য় ত্রৈমাসিক", t3Desc: "কিক কাউন্ট মনিটরিং, ডেলিভারি ব্যাগ প্রস্তুতি, প্রসব পরিকল্পনা এবং জরুরি সংকেত অ্যালার্ট।",
+                t4Badge: "প্রসবোত্তর যত্ন", t4Title: "নবজাতক ও মায়ের যত্ন", t4Desc: "মায়ের শারীরিক সুস্থতা, বুকের দুধ খাওয়ানো, মানসিক প্রশান্তি এবং নবজাতকের যত্ন।",
+
+                biBadge: "১০০% দ্বিভাষিক",
+                biTitle: "মাতৃত্বের সেবায় ভাষার কোনো বাধা নেই।",
+                biSub: "সখী বাংলা ও ইংরেজি দুটো ভাষাই চমৎকার বোঝে—যাতে গর্ভবতী মায়েরা তাদের মনের ভাব প্রকাশ করতে পারেন একদম স্বাচ্ছন্দ্যে।",
+                biPoint1: "প্রমিত ও মিষ্টি বাংলা ভাষায় আন্তরিক কথোপকথন",
+                biPoint2: "মাতৃত্বকালীন মেডিকেল তথ্য ও সঠিক পুষ্টির ইংরেজি বিবরণ",
+                biPoint3: "উভয় ভাষাতেই রিয়েল-টাইম অডিও কণ্ঠের সহায়তা",
+
+                safeBadge: "গোপনীয়তা ও সুরক্ষা",
+                safeTitle: "আপনার মাতৃত্ব ব্যক্তিগত।<br>আপনার তথ্যও সুরক্ষিত।",
+                safeSub: "আমরা সর্বোচ্চ প্রযুক্তির সাথে মায়েদের তথ্যের নিরাপত্তা ও ব্যক্তিগত গোপনীয়তা রক্ষা করি।",
+                s1Title: "এনক্রিপ্টেড ব্যক্তিগত অ্যাকাউন্ট",
+                s1Desc: "এনক্রিপ্টেড জেডব্লিউটি সেশন ও কঠোর মাল্টি-টেন্যান্ট আইসোলেশন, যাতে একজন ব্যবহারকারীর ডেটা অন্য কেউ দেখতে না পারে।",
+                s2Title: "জরুরি বিপদের লক্ষণ শনাক্তকরণ",
+                s2Desc: "রক্তপাত, তীব্র ব্যথা বা খিঁচুনির মতো জরুরি উপসর্গ শনাক্ত হলে সাথে সাথে ৯৯৯ ও ১৬২৬৩ বা হাসপাতালে যাওয়ার সংকেত।",
+                s3Title: "পোস্টগ্রেএসকিউএল নির্ভরযোগ্যতা",
+                s3Desc: "সুপাবেস পোস্টগ্রেএসকিউএল ডেটাবেস দ্বারা সুরক্ষিত, যা ৯৯.৯% আপটাইম ও নির্ভরযোগ্য রেকর্ড নিশ্চিত করে।",
+                disclaimerText: "<strong>চিকিৎসা সতর্কতা:</strong> সখী এআই একটি তথ্যবহুল ও মানসিক সহযোগী প্ল্যাটফর্ম এবং এটি সরাসরি কোনো <strong>রেজিস্টার্ড চিকিৎসকের বিকল্প নয়</strong>। যেকোনো শারীরিক জটিলতায় বা জরুরি অবস্থায় নিকটস্থ হাসপাতাল বা গাইনি চিকিৎসকের পরামর্শ নিন।",
+
+                howBadge: "সহজ পদ্ধতি",
+                howTitle: "শুরু করা সহজ। ব্যবহারে প্রশান্তি।",
+                howSub: "মাত্র তিনটি সহজ ধাপে হাজারো গর্ভবতী মায়ের সাথে যুক্ত হোন।",
+                h1Title: "প্রোফাইল তৈরি করুন", h1Desc: "কয়েক সেকেন্ডে সাইন আপ করে আপনার গর্ভকালীন সপ্তাহ বা সম্ভাব্য প্রসবের তারিখ দিন।",
+                h2Title: "প্রশ্ন করুন ও ট্র্যাকিং করুন", h2Desc: "স্বাস্থ্য নিয়ে প্রশ্ন করুন, খাবার লগ করুন, কিক গুনুন এবং ডাক্তারের ভিজিট সাজিয়ে রাখুন।",
+                h3Title: "প্রতিদিনের নিশ্চিন্ত মাতৃত্ব", h3Desc: "সময়মতো রিমাইন্ডার, স্বাস্থ্যকর অভ্যাসের চেকলিস্ট ও প্রতিদিনের ভালোবাসার সঙ্গ পান।",
+
+                scenBadge: "বাস্তব জীবনের যত্ন",
+                scenTitle: "গর্ভবতী মায়ের বাস্তব প্রয়োজনকে কেন্দ্র করে তৈরি।",
+                scenSub: "সেই নীরব মুহূর্ত, আকস্মিক প্রশ্ন আর প্রতিদিনের গুরুত্বপূর্ণ অভ্যাসের জন্য।",
+                scen1Title: '"মাঝরাতে জেগে ওঠার আকস্মিক প্রশ্নের জন্য।"',
+                scen1Desc: "হঠাৎ কোনো দুশ্চিন্তা বা অচেনা লক্ষণ মনে ভয় ধরালে, সখী দেয় তাৎক্ষণিক শান্ত ও যুক্তিসঙ্গত ভরসা।",
+                scen1Tag: '<i class="fa-solid fa-moon"></i> ২৪/৭ ভরসা',
+                scen2Title: '"পুরো গর্ভাবস্থার হিসাব এক জায়গায় গুছিয়ে রাখার জন্য।"',
+                scen2Desc: "কাগজপত্র বা এলোমেলো নোট নয়—আল্ট্রাসাউন্ড, প্রেসক্রিপশন ও কিক কাউন্টের সব তথ্য এক নিরাপদ জায়গায়।",
+                scen2Tag: '<i class="fa-solid fa-clipboard-check"></i> সম্পূর্ণ গোছানো',
+                scen3Title: '"নিজের সবচেয়ে প্রিয় ভাষায় মনের কথা বলার জন্য।"',
+                scen3Desc: "বাংলায় বা ইংরেজিতে নিজের লক্ষণ খুলে বলুন এবং মিষ্টি কণ্ঠে অডিওতে উত্তর শুনুন।",
+                scen3Tag: '<i class="fa-solid fa-heart"></i> সাংস্কৃতিক আন্তরিকতা',
+
+                ctaBadge: "🌸 আজই বিনামূল্যে শুরু করুন",
+                ctaTitle: "আপনার মাতৃত্বের যাত্রা একটি সুন্দর সঙ্গী পাওয়ার যোগ্য।",
+                ctaSub: "আজই যুক্ত হোন সখী এআই-তে এবং উপভোগ করুন এক শান্ত, স্বাস্থ্যকর ও গোছানো মাতৃত্বের পথচলা।",
+                ctaPrimary: "বিনামূল্যে শুরু করুন (Get Started) →",
+                ctaSecondary: "পূর্ববর্তী ব্যবহারকারী? লগইন করুন",
+
+                footerDesc: "আপনার যত্নশীল এআই মাতৃত্ব সঙ্গী। গর্ভকালীন সপ্তাহের মাইলফলক, বাচ্চার নড়াচড়া ট্র্যাকিং এবং পুষ্টি নির্দেশিকা প্রদান করে বাংলায় ও ইংরেজিতে।",
+                footerFeat: "সুবিধাসমূহ (Features)",
+                f1: "এআই মাতৃত্ব চ্যাট", f2: "বাচ্চার কিক কাউন্টার", f3: "খাবার ও পুষ্টি ট্র্যাকার", f4: "লক্ষণ ও মুড ডায়েরি", f5: "ডাক্তার ও স্ক্যান শিডিউল",
+                footerTrust: "সুরক্ষা ও রিসোর্স",
+                f6: "নিরাপত্তা ও গোপনীয়তা", f7: "দ্বিভাষিক সহায়তা", f8: "কীভাবে কাজ করে", f9: "ক্লিনিক্যাল এডমিন পোর্টাল",
+                footerStart: "শুরু করুন",
+                f10: "নতুন একাউন্ট খুলুন", f11: "লগইন করুন", f12: "ওয়েব অ্যাপ চালু করুন",
+                footerCopy: "© ২০২৬ সখী এআই (Shokhi AI) — উন্নত মাতৃত্ব স্বাস্থ্য বুদ্ধিমত্তা। সর্বস্বত্ব সংরক্ষিত।",
+                footerDisclaimer: "*সখী এআই একটি তথ্যমূলক সহায়ক প্ল্যাটফর্ম এবং এটি সরাসরি কোনো পেশাদার চিকিৎসকের বিকল্প নয়।"
+            },
+            en: {
+                brandTagline: "Maternity Companion",
+                navFeatures: "Features",
+                navHowItWorks: "How It Works",
+                navBilingual: "Bilingual Care",
+                navSafety: "Privacy & Safety",
+                navLogin: '<i class="fa-solid fa-arrow-right-to-bracket"></i> Log In',
+                navGetStarted: "Get Started →",
+
+                heroBadge: '<i class="fa-solid fa-sparkles"></i> AI-Powered Maternal Companion',
+                heroHeadline: 'Your pregnancy journey,<br><span class="highlight-rose">with a little more care.</span>',
+                heroSubtext: "Shokhi AI is your caring, bilingual maternity companion — helping you track, understand, and navigate every stage of your pregnancy with empathetic guidance in Bengali or English.",
+                heroCtaPrimary: "Start Your Journey →",
+                heroCtaSecondary: "Explore Features",
+                heroTrust1: "Private & Encrypted",
+                heroTrust2: "100% Bengali & English",
+                heroTrust3: "Complementary Healthcare",
+                heroBadge1Title: "Week 24 • Trimester 2",
+                heroBadge1Sub: "Fetal movements active",
+                heroBadge2Title: "Baby Kick Count: 10 / 10",
+                heroBadge2Sub: "Healthy rhythm recorded",
+
+                phoneWeek: "● Week 24 • 2nd Trimester",
+                phoneUserMsg: '"I am having mild lower backache occasionally. Is this normal?"',
+                phoneBotMsg: '"Hello sister! Mild lower backache in week 24 is common due to uterus growth and posture changes. Rest on your left side and stay hydrated."',
+                phoneVoice: "Listen Voice (0:18)",
+                phonePlaceholder: "Type your question...",
+
+                trust1Title: "AI-Powered Empathy",
+                trust1Sub: "Trained for maternal comfort & nutrition guidance.",
+                trust2Title: "Gestational Stage Aware",
+                trust2Sub: "Personalized from Week 1 to Week 40+ milestones.",
+                trust3Title: "Natural Bilingual Voice",
+                trust3Sub: "Comfortable conversation in sweet Bangla & English.",
+                trust4Title: "Private & Multi-Tenant",
+                trust4Sub: "Zero cross-user data exposure with isolation.",
+
+                problemBadge: "Emotional Wellness",
+                problemTitle: "Pregnancy comes with a lot of questions.",
+                problemSub: "Every mother deserves immediate reassurance, organized tracking, and an empathetic voice whenever concerns arise.",
+                q1: '"Is this mild dizziness and backache normal at 24 weeks?"',
+                q2: '"What local nutritious foods should I eat for baby\'s growth?"',
+                q3: '"When is my next ultrasound anomaly scan scheduled?"',
+                q4: '"Why am I experiencing mood swings and morning tiredness?"',
+                q5: '"Did I take my iron and folic acid tablet today?"',
+                q6: '"How often should I feel my baby kick throughout the afternoon?"',
+                problemResolution: "🌸 Shokhi brings all these little pieces of your maternity journey into one calm, caring, and organized space.",
+
+                featBadge: "Comprehensive Suite",
+                featTitle: "Everything you need.<br>One caring companion.",
+                featSub: "A unified maternal health ecosystem crafted for clarity, peace of mind, and proactive care.",
+                feat1Title: "AI Maternity Companion (সখী এআই)",
+                feat1Desc: "Talk naturally with Shokhi anytime in Bengali or English. Designed like an elder sister who listens with empathy, provides healthy nutritional insights, and calmly flags medical emergencies when hospital care is required.",
+                feat1Tag1: "Bangla & English", feat1Tag2: "Gestational Stage Aware", feat1Tag3: "Emergency Triage Alerts", feat1Tag4: "Instant Neural Voice",
+                feat2Title: "Meal & Nutrition Tracker",
+                feat2Desc: "Log breakfast, lunch, and dinner. Track essential maternal nutrients like Iron, Folic Acid, Calcium, and Protein tailored for fetal growth.",
+                feat2Tag1: "Local Food Guidance", feat2Tag2: "Nutrient Awareness",
+                feat3Title: "Mood & Symptom Journal",
+                feat3Desc: "Log emotions and physical symptoms (mild nausea, backache, fatigue) with severity tracking to recognize wellness patterns over time.",
+                feat3Tag1: "Pattern Analytics", feat3Tag2: "Emotional Support",
+                feat4Title: "Baby Kick Counter",
+                feat4Desc: "Simple 1-tap fetal movement counter with active session timers and historical log tracking to monitor your baby's vitality.",
+                feat4Tag1: "1-Tap Counter", feat4Tag2: "Rhythm Tracker",
+                feat5Title: "Doctor & Ultrasound Visits",
+                feat5Desc: "Keep doctor appointments, hospital details, and upcoming anomaly scans organized with time reminders and visit notes.",
+                feat5Tag1: "Visit Schedule", feat5Tag2: "Doctor Notes",
+                feat6Title: "Vitals & Weight Tracking",
+                feat6Desc: "Record blood pressure (BP), pulse rate, and gestational weight changes with structured timelines for your doctor visits.",
+                feat6Tag1: "BP Log", feat6Tag2: "Weight Curve",
+                feat7Title: "Daily Routines & Hydration",
+                feat7Desc: "Build healthy habits with 1-click checklists: 2.5L water intake, prenatal vitamins, and gentle morning walking routines.",
+                feat7Tag1: "Hydration Log", feat7Tag2: "Vitamin Reminders",
+                feat8Title: "Curated Baby Names",
+                feat8Desc: "Discover and bookmark meaningful Bengali and Arabic baby names with genders, pronunciations, and beautiful meanings.",
+                feat8Tag1: "Meaningful Names", feat8Tag2: "Save Favorites",
+
+                // Micro UI Elements Translation
+                m1_t: "Neural Female Voice TTS",
+                m1_s: "Fluent Bengali & English Audio Engine",
+                m2_t: "Daily Iron Intake",
+                m2_s: "100% Achieved",
+                m3_b1: "😊 Calm & Fresh",
+                m3_b2: "😴 Mild Fatigue",
+                m4_t: "10 Kicks Logged",
+                m4_s: "Session Time: 22 Mins",
+                m5_t: "Dr. Sayeema Parveen (Ob-Gyn)",
+                m5_s: "Sept 10 • 10:30 AM",
+                m6_l1: "Blood Pressure (BP)",
+                m6_v1: "118 / 76 mmHg",
+                m6_l2: "Current Weight",
+                m6_v2: "60.5 kg",
+                m7_t1: "2.5L Water Intake Logged",
+                m7_t2: "Folic Acid Tablet Taken",
+                m8_t: "Aaryan (আরিয়ান)",
+                m8_s: "Meaning: Noble & Honorable",
+
+                tryInApp1: "Open in App",
+                tryInApp2: "Open in App",
+                tryInApp3: "Open in App",
+                tryInApp4: "Open in App",
+                tryInApp5: "Open in App",
+                tryInApp6: "Open in App",
+                tryInApp7: "Open in App",
+                tryInApp8: "Open in App",
+
+                showcaseBadge: "Live AI Experience",
+                showcaseTitle: "Talk to Shokhi like you're talking to someone who cares.",
+                showcaseSub: "Experience the empathy, clarity, and warmth of Shokhi's conversational guidance.",
+                demoTitle: "Shokhi AI (সখী)",
+                demoStatus: "● Online • Maternal Healthcare Companion",
+
+                timelineBadge: "Continuous Support",
+                timelineTitle: "Made to grow with your journey.",
+                timelineSub: "From early trimester questions to labor preparation and postpartum recovery.",
+                t1Badge: "Weeks 1 – 13", t1Title: "1st Trimester", t1Desc: "Managing morning sickness, folic acid reminders, first ultrasound guidance, and early dietary adaptations.",
+                t2Badge: "Weeks 14 – 27", t2Title: "2nd Trimester", t2Desc: "Tracking first baby kicks, iron-rich nutrition, anomaly scans, and gentle pregnancy routines.",
+                t3Badge: "Weeks 28 – 40", t3Title: "3rd Trimester", t3Desc: "Kick count tracking, hospital bag planning, birth preparation, and 24/7 emergency symptom triage.",
+                t4Badge: "4th Trimester", t4Title: "Postpartum Care", t4Desc: "Maternal recovery, newborn bonding, emotional well-being, and gentle postpartum nourishment.",
+
+                biBadge: "100% Bilingual",
+                biTitle: "Healthcare support should speak your language.",
+                biSub: "Shokhi understands both natural Bengali and fluent English, allowing expecting mothers to communicate freely without language barriers.",
+                biPoint1: "Empathetic conversation in sweet & natural Bengali",
+                biPoint2: "Fluent English maternal terminology & nutrition guidance",
+                biPoint3: "Real-time female voice read-aloud in both languages",
+
+                safeBadge: "Privacy & Clinical Safety",
+                safeTitle: "Your journey is personal.<br>Your data should be too.",
+                safeSub: "We treat maternal privacy and safety with the highest standard of technical care.",
+                s1Title: "Private User Accounts",
+                s1Desc: "Encrypted JWT sessions, protected authentication, and strict multi-tenant isolation ensuring zero cross-user data leakage.",
+                s2Title: "Emergency Red-Flag Triage",
+                s2Desc: "Intelligent symptom detection for critical warning signs (bleeding, acute pain, convulsions) with immediate 999/16263 hospital referral.",
+                s3Title: "PostgreSQL Reliability",
+                s3Desc: "Backed by Supabase PostgreSQL and automated failover architecture for 99.9% uptime and dependable maternal logging.",
+                disclaimerText: "<strong>Medical Notice:</strong> Shokhi AI provides informational and emotional companion support and is strictly <strong>not a replacement for professional clinical advice</strong>, obstetric diagnosis, or medical treatment. Always consult your registered obstetrician or visit an emergency maternity hospital for physical health complications.",
+
+                howBadge: "Simple Onboarding",
+                howTitle: "Simple to start. Calm to use.",
+                howSub: "Join thousands of expecting mothers getting daily reassurance in three effortless steps.",
+                h1Title: "Create your profile", h1Desc: "Sign up in seconds and enter your gestational week or estimated due date to personalize your timeline.",
+                h2Title: "Talk, track & organize", h2Desc: "Ask health questions, log meals, record kicks, note vitals, and keep all doctor visits neatly arranged.",
+                h3Title: "Grow with daily peace of mind", h3Desc: "Receive timely reminders, healthy habits checklists, and warm companionship throughout your pregnancy.",
+
+                scenBadge: "Real-Life Care",
+                scenTitle: "Designed around real pregnancy needs.",
+                scenSub: "Crafted for the quiet moments, unexpected questions, and everyday habits that matter to expecting mothers.",
+                scen1Title: '"For the questions that come up at 2 AM."',
+                scen1Desc: "When sudden concerns or mild symptoms keep you awake, Shokhi provides immediate, calm, and grounded medical reassurance.",
+                scen1Tag: '<i class="fa-solid fa-moon"></i> 24/7 Reassurance',
+                scen2Title: '"For keeping your entire pregnancy journey organized."',
+                scen2Desc: "No more scattered notes. From doctor appointments and ultrasound scans to daily kick counts, everything is in one private place.",
+                scen2Tag: '<i class="fa-solid fa-clipboard-check"></i> Complete Organization',
+                scen3Title: '"For communicating in the language that feels most natural."',
+                scen3Desc: "Express your symptoms freely in sweet, natural Bengali or fluent English with optional female voice read-aloud support.",
+                scen3Tag: '<i class="fa-solid fa-heart"></i> Cultural Warmth',
+
+                ctaBadge: "🌸 Start Free Today",
+                ctaTitle: "Your journey deserves a caring companion.",
+                ctaSub: "Join Shokhi AI today and experience a calmer, healthier, and more organized pregnancy journey in Bengali & English.",
+                ctaPrimary: "Get Started Free →",
+                ctaSecondary: "Existing User? Log In",
+
+                footerDesc: "Your caring AI maternity companion. Providing empathetic gestational support, fetal tracking, and nutritional awareness in Bengali and English.",
+                footerFeat: "Features",
+                f1: "AI Maternity Chat", f2: "Baby Kick Counter", f3: "Meal & Nutrition Tracker", f4: "Mood & Symptom Log", f5: "Doctor & Scan Schedule",
+                footerTrust: "Resources & Trust",
+                f6: "Safety & Privacy", f7: "Bilingual Support", f8: "How It Works", f9: "Clinical Admin Portal",
+                footerStart: "Get Started",
+                f10: "Create Free Account", f11: "Sign In", f12: "Launch Web App",
+                footerCopy: "© 2026 Shokhi AI (সখী AI) — Advanced Maternal Healthcare Intelligence. All rights reserved.",
+                footerDisclaimer: "*Shokhi AI is an informational AI companion and strictly does not replace professional medical diagnosis or clinical treatment."
+            }
+        };
+
+        let currentSiteLang = localStorage.getItem('shokhi_landing_lang') || 'bn';
+
+        function setSiteLanguage(lang) {
+            currentSiteLang = lang;
+            localStorage.setItem('shokhi_landing_lang', lang);
+
+            const btnBn = document.getElementById('btnLangBn');
+            const btnEn = document.getElementById('btnLangEn');
+            if (btnBn) btnBn.classList.toggle('active', lang === 'bn');
+            if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+
+            const t = landingTranslations[lang];
+            if (!t) return;
+
+            // Apply translations to all tagged elements
+            for (const key in t) {
+                const el = document.getElementById('t_' + key);
+                if (el) {
+                    el.innerHTML = t[key];
+                }
+            }
+
+            // Sync demo showcase language
+            switchDemoLang(lang);
+        }
+
+        // Navbar Scroll Blur Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNavbar');
+            if (window.scrollY > 30) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Interactive AI Chat Showcase Demo Switcher
+        const demoData = {
+            bn: {
+                user: '"আজকে আমার ২৪ সপ্তাহ চলছে। মাঝে মাঝে একটু পিঠে ব্যথা হচ্ছে। এটা কি স্বাভাবিক?"',
+                header: '<i class="fa-solid fa-sparkles"></i> সখী AI (Week 24 • ২য় ত্রৈমাসিক)',
+                bot: '"কেমন আছো আপু? ২৪ সপ্তাহে জরায়ুর আকার বৃদ্ধি এবং হরমোনের পরিবর্তনের কারণে হালকা পিঠে ব্যথা হওয়া বেশ স্বাভাবিক। আপনি ভারী কিছু তুলবেন না, বসার সময় পিঠের পেছনে নরম কুশন ব্যবহার করুন এবং ঘুমানোর সময় বাম কাত হয়ে দুই হাঁটুর মাঝে কোলবালিশ রাখুন। তবে ব্যথা যদি খুব তীব্র হয় বা তলপেটে ছড়িয়ে পড়ে, তবে দেরি না করে চিকিৎসকের সাথে যোগাযোগ করবেন।"',
+                voiceBtn: '<i class="fa-solid fa-volume-high"></i> শুনুন (Listen to Voice)'
+            },
+            en: {
+                user: '"I am in my 24th week and having mild lower backache occasionally. Is this normal?"',
+                header: '<i class="fa-solid fa-sparkles"></i> Shokhi AI (Week 24 • 2nd Trimester)',
+                bot: '"Hello sister! Mild lower backache around week 24 is very common due to your expanding uterus and shifting center of gravity. Avoid lifting heavy objects, use supportive pillows while resting on your left side, and maintain good posture. If the pain becomes severe, rhythmic, or accompanied by cramping, please consult your obstetrician promptly."',
+                voiceBtn: '<i class="fa-solid fa-volume-high"></i> Listen (English Voice)'
+            }
+        };
+
+        let currentDemoLang = 'bn';
+        let demoAudio = null;
+
+        function switchDemoLang(lang) {
+            currentDemoLang = lang;
+            const btnBn = document.getElementById('demoBnBtn');
+            const btnEn = document.getElementById('demoEnBtn');
+            if (btnBn) btnBn.classList.toggle('active', lang === 'bn');
+            if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+
+            const data = demoData[lang];
+            const uMsg = document.getElementById('demoUserMsg');
+            const bHead = document.getElementById('demoBotHeader');
+            const bTxt = document.getElementById('demoBotText');
+            const vBtn = document.getElementById('demoVoiceBtn');
+
+            if (uMsg) uMsg.innerText = data.user;
+            if (bHead) bHead.innerHTML = data.header;
+            if (bTxt) bTxt.innerText = data.bot.replace(/^"|"$/g, '');
+            if (vBtn) vBtn.innerHTML = data.voiceBtn;
+
+            if (demoAudio) {
+                demoAudio.pause();
+                demoAudio = null;
+            }
+        }
+
+        function playDemoVoice() {
+            const btn = document.getElementById('demoVoiceBtn');
+            if (demoAudio && !demoAudio.paused) {
+                demoAudio.pause();
+                demoAudio = null;
+                btn.innerHTML = demoData[currentDemoLang].voiceBtn;
+                return;
+            }
+
+            const cleanText = document.getElementById('demoBotText').innerText;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ' + (currentDemoLang === 'bn' ? 'বলছি...' : 'Speaking...');
+
+            const url = `/api/voice/tts?lang=${currentDemoLang}&text=${encodeURIComponent(cleanText)}`;
+            demoAudio = new Audio(url);
+
+            demoAudio.onended = () => {
+                btn.innerHTML = demoData[currentDemoLang].voiceBtn;
+                demoAudio = null;
+            };
+
+            demoAudio.onerror = () => {
+                btn.innerHTML = demoData[currentDemoLang].voiceBtn;
+                demoAudio = null;
+            };
+
+            demoAudio.play().catch(() => {
+                btn.innerHTML = demoData[currentDemoLang].voiceBtn;
+            });
+        }
+
+        function toggleMobileNav() {
+            const links = document.querySelector('.nav-links');
+            if (links.style.display === 'flex') {
+                links.style.display = 'none';
+            } else {
+                links.style.display = 'flex';
+                links.style.flexDirection = 'column';
+                links.style.position = 'absolute';
+                links.style.top = '100%';
+                links.style.left = '0';
+                links.style.width = '100%';
+                links.style.background = '#FFFFFF';
+                links.style.padding = '20px';
+                links.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+            }
+        }
+
+        // Initialize language from saved state on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            setSiteLanguage(currentSiteLang);
+        });
+    </script>
+</body>
+</html>

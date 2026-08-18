@@ -1,0 +1,22 @@
+{
+  "name": "shokhi-ai",
+  "version": "2.0.0",
+  "description": "Shokhi AI (সখী AI) — Context-Aware Generative AI Maternal Health Companion (Node.js & Vercel Serverless)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node server.js",
+    "test": "node test_node_e2e.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
