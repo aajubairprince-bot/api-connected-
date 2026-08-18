@@ -170,6 +170,33 @@
             font-weight: 700;
         }
 
+        .lang-toggle-pill {
+            display: inline-flex;
+            background: rgba(254, 226, 226, 0.65);
+            border: 1px solid rgba(251, 113, 133, 0.35);
+            padding: 3px;
+            border-radius: var(--radius-full);
+            gap: 2px;
+            align-items: center;
+        }
+        .h-lang-btn {
+            padding: 5px 13px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .h-lang-btn.active {
+            background: #ffffff;
+            color: var(--primary);
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(225, 29, 72, 0.2);
+        }
+
         .btn-start, .auth-btn {
             background: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%);
             color: #ffffff;

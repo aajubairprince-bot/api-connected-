@@ -315,6 +315,35 @@
             gap: 14px;
         }
 
+        .site-lang-toggle {
+            display: inline-flex;
+            background: #FDF0F3;
+            border: 1px solid var(--border-rose);
+            padding: 3px;
+            border-radius: var(--radius-pill);
+            gap: 2px;
+            align-items: center;
+        }
+
+        .site-lang-btn {
+            padding: 5px 12px;
+            border: none;
+            border-radius: var(--radius-pill);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .site-lang-btn.active {
+            background: #FFFFFF;
+            color: var(--primary);
+            font-weight: 700;
+            box-shadow: var(--shadow-subtle);
+        }
+
         .mobile-toggle {
             display: none;
             background: none;
@@ -2432,18 +2461,19 @@
             }
         };
 
-        let currentSiteLang = localStorage.getItem('shokhi_landing_lang') || 'bn';
+        let currentSiteLang = localStorage.getItem('shokhi_app_lang') || localStorage.getItem('shokhi_landing_lang') || 'bn';
 
         function setSiteLanguage(lang) {
-            currentSiteLang = lang;
-            localStorage.setItem('shokhi_landing_lang', lang);
+            currentSiteLang = lang || 'bn';
+            localStorage.setItem('shokhi_landing_lang', currentSiteLang);
+            localStorage.setItem('shokhi_app_lang', currentSiteLang);
 
             const btnBn = document.getElementById('btnLangBn');
             const btnEn = document.getElementById('btnLangEn');
-            if (btnBn) btnBn.classList.toggle('active', lang === 'bn');
-            if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+            if (btnBn) btnBn.classList.toggle('active', currentSiteLang === 'bn');
+            if (btnEn) btnEn.classList.toggle('active', currentSiteLang === 'en');
 
-            const t = landingTranslations[lang];
+            const t = landingTranslations[currentSiteLang] || landingTranslations.bn;
             if (!t) return;
 
             // Apply translations to all tagged elements
