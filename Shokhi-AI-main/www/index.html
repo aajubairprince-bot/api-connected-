@@ -2476,6 +2476,109 @@
             goToPage('page-main');
         }
 
+        /* 🔄 MULTI-PAGE SCREEN NAVIGATION & AUTH ROUTING */
+        function goToPage(pageId) {
+            const pWelcome = document.getElementById('page-welcome');
+            const pLogin = document.getElementById('page-login');
+            const pMain = document.getElementById('page-main');
+
+            if (pWelcome) pWelcome.style.display = 'none';
+            if (pLogin) pLogin.style.display = 'none';
+            if (pMain) pMain.style.display = 'none';
+
+            const target = document.getElementById(pageId);
+            if (target) {
+                if (pageId === 'page-main') {
+                    target.style.display = 'block';
+                    initApp();
+                } else {
+                    target.style.display = 'flex';
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function doLogout() {
+            stopAnySpeech();
+            closeProfileModal();
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('shokhi_auth_token');
+            localStorage.removeItem('shokhi_user');
+            if (supaClient?.auth) {
+                try { supaClient.auth.signOut(); } catch(_) {}
+            }
+            goToPage('page-welcome');
+        }
+
+        async function initApp() {
+            setAppLanguage(currentLang);
+            
+            // Sync user profile from backend
+            try {
+                if (authToken) {
+                    const pRes = await fetch('/api/profile', { headers: getApiHeaders() });
+                    const pData = await pRes.json();
+                    if (pData.success && pData.profile) {
+                        if (!currentUser) currentUser = {};
+                        currentUser.name = pData.profile.name || currentUser.name || 'নুসরাত জাহান';
+                        currentUser.email = pData.profile.email || currentUser.email || 'user@shokhi.ai';
+                        currentUser.pregnancy_week = pData.profile.pregnancy_week || currentUser.pregnancy_week || 24;
+                        currentUser.due_date = pData.profile.due_date || currentUser.due_date || null;
+                        localStorage.setItem('shokhi_user', JSON.stringify(currentUser));
+                    }
+                }
+            } catch(e) {}
+
+            updateProfileUI();
+
+            try { await refreshSidebar(); } catch (_) {}
+            try { await fetchNotifications(); } catch (_) {}
+            try { await fetchMaternityOverview(); } catch (_) {}
+            try { displayRandomAffirmation(); } catch (_) {}
+            try { renderDailyRoutine(); } catch (_) {}
+        }
+
+        function updateProfileUI() {
+            if (currentUser) {
+                const nameEl = document.getElementById('userDisplayName');
+                const avatarEl = document.getElementById('userAvatarText');
+                const weekEl = document.getElementById('userWeekBadge');
+                const w = parseInt(currentUser.pregnancy_week || 24, 10);
+                const trimester = getTrimesterName(w);
+
+                if (nameEl) nameEl.textContent = currentUser.name || 'নুসরাত জাহান';
+                if (avatarEl) avatarEl.textContent = (currentUser.name || 'নু').charAt(0).toUpperCase();
+                if (weekEl) weekEl.textContent = `${w} ${currentLang === 'en' ? 'Weeks • ' + trimester : 'সপ্তাহ • ' + trimester}`;
+
+                // Modal elements
+                const mName = document.getElementById('modalName');
+                const mAvatar = document.getElementById('modalAvatar');
+                const mWeek = document.getElementById('modalWeek');
+                const mEmail = document.getElementById('modalEmail');
+                if (mName) mName.textContent = currentUser.name || 'নুসরাত জাহান';
+                if (mAvatar) mAvatar.textContent = (currentUser.name || 'নু').charAt(0).toUpperCase();
+                if (mWeek) mWeek.textContent = `${w} ${currentLang === 'en' ? 'Weeks • ' + trimester : 'সপ্তাহ • ' + trimester}`;
+                if (mEmail) mEmail.textContent = currentUser.email || 'user@shokhi.ai';
+
+                updateGestationalHeroBar(w);
+            }
+        }
+
+        /* 4 TAB SWITCHING IN HEALTH HUB */
+        function switchHubTab(paneId) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.hub-tab-btn').forEach(b => b.classList.remove('active'));
+
+            const targetPane = document.getElementById(paneId);
+            if (targetPane) targetPane.classList.add('active');
+
+            if (paneId === 'paneTrackers') document.getElementById('tabTrackers')?.classList.add('active');
+            else if (paneId === 'paneDiet') document.getElementById('tabDiet')?.classList.add('active');
+            else if (paneId === 'paneClinical') document.getElementById('tabClinical')?.classList.add('active');
+            else if (paneId === 'paneWellness') document.getElementById('tabWellness')?.classList.add('active');
+        }
+
         /* 🎙️ LIVE VOICE ASSISTANT & SPEECH-TO-TEXT WITH AUDIO VISUALIZER */
         let isVoiceRecognizing = false;
         let activeVoiceLang = currentLang === 'en' ? 'en' : 'bn';
