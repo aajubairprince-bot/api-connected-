@@ -1955,10 +1955,28 @@
         /* 🔐 SUPABASE AUTHENTICATION */
         async function initSupabaseAuth() {
             try {
-                const res = await fetch('/api/config');
-                const config = await res.json();
-                if (config.supabase_configured && config.supabase_url && config.supabase_anon_key && window.supabase?.createClient) {
-                    supaClient = window.supabase.createClient(config.supabase_url, config.supabase_anon_key, {
+                let supaUrl = null;
+                let supaKey = null;
+
+                try {
+                    const res = await fetch('/api/config');
+                    const config = await res.json();
+                    if (config.supabase_configured && config.supabase_url && config.supabase_anon_key) {
+                        supaUrl = config.supabase_url;
+                        supaKey = config.supabase_anon_key;
+                    }
+                } catch(e) {
+                    console.warn('/api/config fetch warning:', e);
+                }
+
+                // Resilient fallback to active Supabase project
+                if (!supaUrl) {
+                    supaUrl = 'https://fqieqimgemyjunvslxrd.supabase.co';
+                    supaKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxaWVxaW1nZW15anVudnNseHJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwNTg0NjAsImV4cCI6MjEwMjYzNDQ2MH0.FmaGqkicJUfEEtPN_HyHFRjMGmFEhxPYuhGMgpVwmxs';
+                }
+
+                if (supaUrl && supaKey && window.supabase?.createClient) {
+                    supaClient = window.supabase.createClient(supaUrl, supaKey, {
                         auth: {
                             persistSession: true,
                             storageKey: 'shokhi_supabase_auth',
