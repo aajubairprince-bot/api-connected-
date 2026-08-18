@@ -1,243 +1,53 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
     },
     {
-      "src": "www/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/health",
-      "dest": "/api/health.js"
+      "source": "/api",
+      "destination": "/api/index.js"
     },
     {
-      "src": "/api/config",
-      "dest": "/api/config.js"
+      "source": "/docs",
+      "destination": "/www/docs.html"
     },
     {
-      "src": "/api/system/status",
-      "dest": "/api/system/status.js"
+      "source": "/docs.html",
+      "destination": "/www/docs.html"
     },
     {
-      "src": "/api/voice/config",
-      "dest": "/api/voice/config.js"
+      "source": "/admin",
+      "destination": "/www/admin.html"
     },
     {
-      "src": "/api/voice/tts",
-      "dest": "/api/voice/tts.js"
+      "source": "/admin.html",
+      "destination": "/www/admin.html"
     },
     {
-      "src": "/api/debug/test_500",
-      "dest": "/api/debug/test_500.js"
+      "source": "/app",
+      "destination": "/www/index.html"
     },
     {
-      "src": "/api/emergency/hospital_search",
-      "dest": "/api/emergency/hospital_search.js"
+      "source": "/app/(.*)",
+      "destination": "/www/index.html"
     },
     {
-      "src": "/api/emergency/helplines",
-      "dest": "/api/emergency/helplines.js"
+      "source": "/landing",
+      "destination": "/www/landing.html"
     },
     {
-      "src": "/api/emergency/log",
-      "dest": "/api/emergency/log.js"
+      "source": "/landing.html",
+      "destination": "/www/landing.html"
     },
     {
-      "src": "/api/auth/register",
-      "dest": "/api/auth/register.js"
+      "source": "/",
+      "destination": "/www/landing.html"
     },
     {
-      "src": "/api/auth/login",
-      "dest": "/api/auth/login.js"
-    },
-    {
-      "src": "/api/auth/google",
-      "dest": "/api/auth/google.js"
-    },
-    {
-      "src": "/api/auth/me",
-      "dest": "/api/auth/me.js"
-    },
-    {
-      "src": "/api/auth/sync_profile",
-      "dest": "/api/auth/sync_profile.js"
-    },
-    {
-      "src": "/api/profile",
-      "dest": "/api/profile/index.js"
-    },
-    {
-      "src": "/api/ask_prova_chat",
-      "dest": "/api/chat/index.js"
-    },
-    {
-      "src": "/api/chat",
-      "dest": "/api/chat/index.js"
-    },
-    {
-      "src": "/api/get_all_sessions",
-      "dest": "/api/chat/sessions.js"
-    },
-    {
-      "src": "/api/chat/sessions",
-      "dest": "/api/chat/sessions.js"
-    },
-    {
-      "src": "/api/get_chat_messages/(.*)",
-      "dest": "/api/chat/messages.js?chat_id=$1"
-    },
-    {
-      "src": "/api/delete_chat_session/(.*)",
-      "dest": "/api/chat/delete.js?chat_id=$1"
-    },
-    {
-      "src": "/api/maternity/overview",
-      "dest": "/api/maternity/overview.js"
-    },
-    {
-      "src": "/api/maternity/meals/(.*)",
-      "dest": "/api/maternity/meals.js?id=$1"
-    },
-    {
-      "src": "/api/maternity/meals",
-      "dest": "/api/maternity/meals.js"
-    },
-    {
-      "src": "/api/maternity/hydration",
-      "dest": "/api/maternity/hydration.js"
-    },
-    {
-      "src": "/api/maternity/mood/(.*)",
-      "dest": "/api/maternity/mood.js?id=$1"
-    },
-    {
-      "src": "/api/maternity/mood",
-      "dest": "/api/maternity/mood.js"
-    },
-    {
-      "src": "/api/maternity/appointments/(.*)",
-      "dest": "/api/maternity/appointments.js?id=$1"
-    },
-    {
-      "src": "/api/maternity/appointments",
-      "dest": "/api/maternity/appointments.js"
-    },
-    {
-      "src": "/api/maternity/vitals/(.*)",
-      "dest": "/api/maternity/vitals.js?id=$1"
-    },
-    {
-      "src": "/api/maternity/vitals",
-      "dest": "/api/maternity/vitals.js"
-    },
-    {
-      "src": "/api/maternity/routines/toggle",
-      "dest": "/api/maternity/routines/toggle.js"
-    },
-    {
-      "src": "/api/maternity/routines/reset",
-      "dest": "/api/maternity/routines/reset.js"
-    },
-    {
-      "src": "/api/maternity/kicks",
-      "dest": "/api/maternity/kicks.js"
-    },
-    {
-      "src": "/api/maternity/names/(.*)",
-      "dest": "/api/maternity/names.js?id=$1"
-    },
-    {
-      "src": "/api/maternity/names",
-      "dest": "/api/maternity/names.js"
-    },
-    {
-      "src": "/api/notifications/(.*)/read",
-      "dest": "/api/notifications/read.js?id=$1"
-    },
-    {
-      "src": "/api/notifications/(.*)/dismiss",
-      "dest": "/api/notifications/dismiss.js?id=$1"
-    },
-    {
-      "src": "/api/notifications/trigger_eval",
-      "dest": "/api/notifications/trigger_eval.js"
-    },
-    {
-      "src": "/api/notifications/history",
-      "dest": "/api/notifications/history.js"
-    },
-    {
-      "src": "/api/notifications",
-      "dest": "/api/notifications/index.js"
-    },
-    {
-      "src": "/api/admin/metrics",
-      "dest": "/api/admin/metrics.js"
-    },
-    {
-      "src": "/api/admin/assign_role",
-      "dest": "/api/admin/assign_role.js"
-    },
-    {
-      "src": "/api/admin/delete",
-      "dest": "/api/admin/delete.js"
-    },
-    {
-      "src": "/api/multimodal/upload",
-      "dest": "/api/multimodal/upload.js"
-    },
-    {
-      "src": "/api/speak",
-      "dest": "/api/speak.js"
-    },
-    {
-      "src": "/api/docs",
-      "dest": "/api/docs.js"
-    },
-    {
-      "src": "/docs",
-      "dest": "/www/docs.html"
-    },
-    {
-      "src": "/docs.html",
-      "dest": "/www/docs.html"
-    },
-    {
-      "src": "/admin",
-      "dest": "/www/admin.html"
-    },
-    {
-      "src": "/admin.html",
-      "dest": "/www/admin.html"
-    },
-    {
-      "src": "/app",
-      "dest": "/www/index.html"
-    },
-    {
-      "src": "/app/(.*)",
-      "dest": "/www/index.html"
-    },
-    {
-      "src": "/landing",
-      "dest": "/www/landing.html"
-    },
-    {
-      "src": "/landing.html",
-      "dest": "/www/landing.html"
-    },
-    {
-      "src": "/",
-      "dest": "/www/landing.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/www/$1"
+      "source": "/(.*)",
+      "destination": "/www/$1"
     }
   ],
   "crons": [

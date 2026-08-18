@@ -9,47 +9,8 @@ import url from 'url';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Import serverless endpoint handlers
-import healthHandler from './api/health.js';
-import configHandler from './api/config.js';
-import statusHandler from './api/system/status.js';
-import voiceConfigHandler from './api/voice/config.js';
-import voiceTtsHandler from './api/voice/tts.js';
-import test500Handler from './api/debug/test_500.js';
-import hospitalSearchHandler from './api/emergency/hospital_search.js';
-import helplinesHandler from './api/emergency/helplines.js';
-import emergencyLogHandler from './api/emergency/log.js';
-import registerHandler from './api/auth/register.js';
-import loginHandler from './api/auth/login.js';
-import googleAuthHandler from './api/auth/google.js';
-import meHandler from './api/auth/me.js';
-import syncProfileHandler from './api/auth/sync_profile.js';
-import profileHandler from './api/profile/index.js';
-import chatIndexHandler from './api/chat/index.js';
-import chatSessionsHandler from './api/chat/sessions.js';
-import chatMessagesHandler from './api/chat/messages.js';
-import chatDeleteHandler from './api/chat/delete.js';
-import maternityOverviewHandler from './api/maternity/overview.js';
-import maternityMealsHandler from './api/maternity/meals.js';
-import maternityMoodHandler from './api/maternity/mood.js';
-import maternityAppointmentsHandler from './api/maternity/appointments.js';
-import maternityVitalsHandler from './api/maternity/vitals.js';
-import maternityRoutinesHandler from './api/maternity/routines/toggle.js';
-import maternityRoutinesResetHandler from './api/maternity/routines/reset.js';
-import maternityKicksHandler from './api/maternity/kicks.js';
-import maternityHydrationHandler from './api/maternity/hydration.js';
-import maternityNamesHandler from './api/maternity/names.js';
-import notificationsIndexHandler from './api/notifications/index.js';
-import notificationsReadHandler from './api/notifications/read.js';
-import notificationsDismissHandler from './api/notifications/dismiss.js';
-import notificationsTriggerHandler from './api/notifications/trigger_eval.js';
-import notificationsHistoryHandler from './api/notifications/history.js';
-import adminMetricsHandler from './api/admin/metrics.js';
-import adminAssignRoleHandler from './api/admin/assign_role.js';
-import adminDeleteHandler from './api/admin/delete.js';
-import multimodalUploadHandler from './api/multimodal/upload.js';
-import speakHandler from './api/speak.js';
-import docsHandler from './api/docs.js';
+// Import Consolidated Vercel Serverless Master Router
+import apiMasterHandler from './api/index.js';
 
 const PORT = parseInt(process.env.NODE_PORT || process.env.PORT || 3000, 10);
 const WWW_DIR = path.resolve(process.cwd(), 'www');
@@ -88,7 +49,7 @@ async function parseBody(req) {
 function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-Device-Id');
 }
 
 export function createServerInstance() {
@@ -102,58 +63,14 @@ export function createServerInstance() {
     const reqUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const pathname = reqUrl.pathname;
     req.query = Object.fromEntries(reqUrl.searchParams.entries());
-    req.body = await parseBody(req);
 
     // -------------------------------------------------------------
-    // 🌐 API Routing Dispatcher
+    // 🌐 API Routing Dispatcher (Consolidated 1/12 Serverless Function)
     // -------------------------------------------------------------
     try {
-      if (pathname === '/api/health') return await healthHandler(req, res);
-      if (pathname === '/api/config') return await configHandler(req, res);
-      if (pathname === '/api/system/status') return await statusHandler(req, res);
-      if (pathname === '/api/voice/config') return await voiceConfigHandler(req, res);
-      if (pathname === '/api/voice/tts' || pathname === '/api/tts') return await voiceTtsHandler(req, res);
-      if (pathname === '/api/debug/test_500') return await test500Handler(req, res);
-      if (pathname === '/api/emergency/hospital_search') return await hospitalSearchHandler(req, res);
-      if (pathname === '/api/emergency/helplines') return await helplinesHandler(req, res);
-      if (pathname === '/api/emergency/log') return await emergencyLogHandler(req, res);
-      
-      if (pathname === '/api/auth/register') return await registerHandler(req, res);
-      if (pathname === '/api/auth/login') return await loginHandler(req, res);
-      if (pathname === '/api/auth/google') return await googleAuthHandler(req, res);
-      if (pathname === '/api/auth/me') return await meHandler(req, res);
-      if (pathname === '/api/auth/sync_profile') return await syncProfileHandler(req, res);
-
-      if (pathname === '/api/profile') return await profileHandler(req, res);
-
-      if (pathname === '/api/ask_prova_chat' || pathname === '/api/chat') return await chatIndexHandler(req, res);
-      if (pathname === '/api/get_all_sessions' || pathname === '/api/chat/sessions') return await chatSessionsHandler(req, res);
-      if (pathname.startsWith('/api/get_chat_messages/') || pathname === '/api/chat/messages') return await chatMessagesHandler(req, res);
-      if (pathname.startsWith('/api/delete_chat_session/') || pathname === '/api/chat/delete') return await chatDeleteHandler(req, res);
-
-      if (pathname === '/api/maternity/overview') return await maternityOverviewHandler(req, res);
-      if (pathname === '/api/maternity/meals' || pathname.startsWith('/api/maternity/meals/')) return await maternityMealsHandler(req, res);
-      if (pathname === '/api/maternity/mood' || pathname.startsWith('/api/maternity/mood/')) return await maternityMoodHandler(req, res);
-      if (pathname === '/api/maternity/appointments' || pathname.startsWith('/api/maternity/appointments/')) return await maternityAppointmentsHandler(req, res);
-      if (pathname === '/api/maternity/vitals' || pathname.startsWith('/api/maternity/vitals/')) return await maternityVitalsHandler(req, res);
-      if (pathname === '/api/maternity/routines/toggle') return await maternityRoutinesHandler(req, res);
-      if (pathname === '/api/maternity/routines/reset') return await maternityRoutinesResetHandler(req, res);
-      if (pathname === '/api/maternity/kicks') return await maternityKicksHandler(req, res);
-      if (pathname === '/api/maternity/hydration') return await maternityHydrationHandler(req, res);
-      if (pathname === '/api/maternity/names' || pathname.startsWith('/api/maternity/names/')) return await maternityNamesHandler(req, res);
-
-      if (pathname === '/api/notifications') return await notificationsIndexHandler(req, res);
-      if (pathname.endsWith('/read')) return await notificationsReadHandler(req, res);
-      if (pathname.endsWith('/dismiss')) return await notificationsDismissHandler(req, res);
-      if (pathname === '/api/notifications/trigger_eval') return await notificationsTriggerHandler(req, res);
-      if (pathname === '/api/notifications/history') return await notificationsHistoryHandler(req, res);
-
-      if (pathname === '/api/admin/metrics') return await adminMetricsHandler(req, res);
-      if (pathname === '/api/admin/assign_role' || pathname === '/api/admin/users/assign_admin' || pathname === '/api/admin/role') return await adminAssignRoleHandler(req, res);
-      if (pathname === '/api/admin/delete') return await adminDeleteHandler(req, res);
-      if (pathname === '/api/multimodal/upload') return await multimodalUploadHandler(req, res);
-      if (pathname === '/api/speak') return await speakHandler(req, res);
-      if (pathname === '/api/docs') return await docsHandler(req, res);
+      if (pathname.startsWith('/api')) {
+        return await apiMasterHandler(req, res);
+      }
 
       // -------------------------------------------------------------
       // 📁 Static File Serving (www/, docs/, and uploads/)
