@@ -1191,7 +1191,18 @@
 
     <!-- 2. AUTHENTICATION SCREEN (Supabase Email Login & Sign Up) -->
     <div id="page-login">
-        <div class="glass-card" style="max-width: 430px; padding: 28px 24px;">
+        <div class="glass-card" style="max-width: 430px; padding: 28px 24px; position:relative;">
+            <!-- Top Language Switcher on Login Screen -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                <a href="/" style="font-size:12px; font-weight:700; color:var(--primary); text-decoration:none; display:flex; align-items:center; gap:4px;">
+                    <i class="fa-solid fa-arrow-left"></i> <span id="loginBackHomeTxt">হোম</span>
+                </a>
+                <div class="lang-toggle-pill" style="margin:0;">
+                    <button class="h-lang-btn active" id="loginLangBnBtn" onclick="setAppLanguage('bn')">বাংলা</button>
+                    <button class="h-lang-btn" id="loginLangEnBtn" onclick="setAppLanguage('en')">English</button>
+                </div>
+            </div>
+
             <div class="app-logo-badge" style="width: 68px; height: 68px; margin-bottom: 12px;">
                 <i class="fa-solid fa-heart-pulse" style="font-size: 30px;"></i>
             </div>
@@ -1213,11 +1224,11 @@
             <!-- FORM 1: LOGIN -->
             <form id="formLogin" onsubmit="event.preventDefault(); handleEmailLogin();" style="display:block;">
                 <div style="text-align:left; margin-bottom:12px;">
-                    <label style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">ইমেইল এড্রেস (Email)</label>
+                    <label id="loginEmailLabel" style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">ইমেইল এড্রেস (Email)</label>
                     <input type="email" id="loginEmail" required placeholder="example@gmail.com" autocomplete="email" style="width:100%; padding:11px 14px; border:1.5px solid #fbcfe8; border-radius:10px; font-size:13.5px; outline:none; background:#ffffff; box-sizing:border-box;">
                 </div>
                 <div style="text-align:left; margin-bottom:16px;">
-                    <label style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">পাসওয়ার্ড (Password)</label>
+                    <label id="loginPassLabel" style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">পাসওয়ার্ড (Password)</label>
                     <input type="password" id="loginPassword" required placeholder="••••••••" autocomplete="current-password" style="width:100%; padding:11px 14px; border:1.5px solid #fbcfe8; border-radius:10px; font-size:13.5px; outline:none; background:#ffffff; box-sizing:border-box;">
                 </div>
                 <button type="submit" id="submitLoginBtn" class="btn-start" style="width:100%; padding:12px; border-radius:10px; justify-content:center; font-size:14px; box-shadow:0 4px 14px rgba(225, 29, 72, 0.3);">
@@ -1229,19 +1240,19 @@
             <!-- FORM 2: SIGN UP -->
             <form id="formSignup" onsubmit="event.preventDefault(); handleEmailSignUp();" style="display:none;">
                 <div style="text-align:left; margin-bottom:11px;">
-                    <label style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">আপনার পুরো নাম (Full Name)</label>
+                    <label id="signupNameLabel" style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">আপনার পুরো নাম (Full Name)</label>
                     <input type="text" id="signupName" required placeholder="যেমন: নুসরাত জাহান" autocomplete="name" style="width:100%; padding:11px 14px; border:1.5px solid #fbcfe8; border-radius:10px; font-size:13.5px; outline:none; background:#ffffff; box-sizing:border-box;">
                 </div>
                 <div style="text-align:left; margin-bottom:11px;">
-                    <label style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">ইমেইল এড্রেস (Email)</label>
+                    <label id="signupEmailLabel" style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">ইমেইল এড্রেস (Email)</label>
                     <input type="email" id="signupEmail" required placeholder="example@gmail.com" autocomplete="email" style="width:100%; padding:11px 14px; border:1.5px solid #fbcfe8; border-radius:10px; font-size:13.5px; outline:none; background:#ffffff; box-sizing:border-box;">
                 </div>
                 <div style="text-align:left; margin-bottom:11px;">
-                    <label style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">পাসওয়ার্ড (Password - min 6 chars)</label>
+                    <label id="signupPassLabel" style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">পাসওয়ার্ড (Password - min 6 chars)</label>
                     <input type="password" id="signupPassword" required minlength="6" placeholder="কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড" autocomplete="new-password" style="width:100%; padding:11px 14px; border:1.5px solid #fbcfe8; border-radius:10px; font-size:13.5px; outline:none; background:#ffffff; box-sizing:border-box;">
                 </div>
                 <div style="text-align:left; margin-bottom:16px;">
-                    <label style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">গর্ভাবস্থার বর্তমান সপ্তাহ (Pregnancy Week)</label>
+                    <label id="signupWeekLabel" style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">গর্ভাবস্থার বর্তমান সপ্তাহ (Pregnancy Week)</label>
                     <select id="signupWeek" style="width:100%; padding:11px 14px; border:1.5px solid #fbcfe8; border-radius:10px; font-size:13.5px; outline:none; background:#ffffff; box-sizing:border-box;">
                         <option value="1">১ সপ্তাহ (1st Week • ১ম ত্রৈমাসিক)</option>
                         <option value="4">৪ সপ্তাহ (4th Week • ১ম ত্রৈমাসিক)</option>
@@ -1887,6 +1898,16 @@
                 delModalMsg: "আপনি কি নিশ্চিত যে এই চ্যাট হিস্টোরি স্থায়ীভাবে মুছে ফেলতে চান?",
                 delCancelBtn: "বাতিল করুন",
                 delConfirmBtn: "হ্যাঁ, মুছুন",
+                tabLoginTxt: "লগইন (Sign In)",
+                tabSignupTxt: "নতুন একাউন্ট (Sign Up)",
+                submitLoginBtnTxt: "লগইন করুন (Sign In)",
+                submitSignupBtnTxt: "একাউন্ট তৈরি করুন (Create Account)",
+                loginEmailLabel: "ইমেইল এড্রেস (Email)",
+                loginPassLabel: "পাসওয়ার্ড (Password)",
+                signupNameLabel: "আপনার পুরো নাম (Full Name)",
+                signupEmailLabel: "ইমেইল এড্রেস (Email)",
+                signupPassLabel: "পাসওয়ার্ড (Password - min 6 chars)",
+                signupWeekLabel: "গর্ভাবস্থার বর্তমান সপ্তাহ (Pregnancy Week)",
                 profileModalTitle: "মাতৃত্বকালীন প্রোফাইল ও সেটিংস",
                 modalLogoutBtn: "লগআউট করুন (Logout)",
                 profLangLabel: "ভাষা (Language)",
@@ -1899,6 +1920,16 @@
                 startBtnText: "Get Started",
                 loginTitle: "Welcome to Shokhi AI",
                 loginSub: "Access your secure and personalized maternity care",
+                tabLoginTxt: "Sign In",
+                tabSignupTxt: "Sign Up",
+                submitLoginBtnTxt: "Sign In",
+                submitSignupBtnTxt: "Create Account",
+                loginEmailLabel: "Email Address",
+                loginPassLabel: "Password",
+                signupNameLabel: "Full Name",
+                signupEmailLabel: "Email Address",
+                signupPassLabel: "Password (min 6 chars)",
+                signupWeekLabel: "Current Pregnancy Week",
                 googleBtnText: "Continue with Google",
                 authSecNotice: "Private & Encrypted Google Secure Authentication",
                 homeLinkTxt: "Homepage",
@@ -1990,44 +2021,94 @@
             }
         };
 
+        function getTrimesterName(week) {
+            const w = parseInt(week || 24, 10);
+            if (w <= 12) return currentLang === 'en' ? '1st Trimester' : '১ম ত্রৈমাসিক';
+            if (w <= 26) return currentLang === 'en' ? '2nd Trimester' : '২য় ত্রৈমাসিক';
+            return currentLang === 'en' ? '3rd Trimester' : '৩য় ত্রৈমাসিক';
+        }
+
+        function updateGestationalHeroBar(w) {
+            const week = parseInt(w || 24, 10);
+            const trimester = getTrimesterName(week);
+            const weekEl = document.getElementById('userWeekBadge');
+            if (weekEl) weekEl.textContent = `${week} ${currentLang === 'en' ? 'Weeks • ' + trimester : 'সপ্তাহ • ' + trimester}`;
+
+            const fruitEl = document.getElementById('fruitDescText');
+            if (fruitEl) {
+                const info = gestationalFruits[week] || gestationalFruits[24];
+                if (info) {
+                    const fruit = currentLang === 'en' ? info.fruit_en : info.fruit_bn;
+                    const weight = currentLang === 'en' ? info.weight_en : info.weight_bn;
+                    fruitEl.textContent = `${info.icon} ${fruit} (${weight}) • ${week} ${currentLang === 'en' ? 'Weeks' : 'সপ্তাহ'}`;
+                }
+            }
+
+            const daysRemainEl = document.getElementById('daysRemainText');
+            if (daysRemainEl) {
+                const daysLeft = Math.max(0, (40 - week) * 7);
+                daysRemainEl.textContent = currentLang === 'en' ? `${daysLeft} Days Left` : `${daysLeft} দিন বাকি`;
+            }
+        }
+
         function setAppLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('shokhi_app_lang', lang);
-            const t = translations[lang];
+            currentLang = lang || 'bn';
+            localStorage.setItem('shokhi_app_lang', currentLang);
+            const t = translations[currentLang] || translations.bn;
 
-            ['langBnBtn', 'hLangBnBtn', 'mProfLangBn'].forEach(id => {
+            // 1. Toggle active buttons on all language switchers across the whole app
+            ['langBnBtn', 'loginLangBnBtn', 'hLangBnBtn', 'mProfLangBn', 'vLangBn'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.classList.toggle('active', lang === 'bn');
+                if (el) el.classList.toggle('active', currentLang === 'bn');
             });
-            ['langEnBtn', 'hLangEnBtn', 'mProfLangEn'].forEach(id => {
+            ['langEnBtn', 'loginLangEnBtn', 'hLangEnBtn', 'mProfLangEn', 'vLangEn'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.classList.toggle('active', lang === 'en');
+                if (el) el.classList.toggle('active', currentLang === 'en');
             });
 
-            // Update text elements safely
-            const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-            const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
-            const setAttr = (id, attr, val) => { const el = document.getElementById(id); if (el) el.setAttribute(attr, val); };
+            // Update html tag lang attribute
+            document.documentElement.lang = currentLang;
 
+            // Safe DOM Text helpers
+            const setTxt = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.textContent = val; };
+            const setHtml = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.innerHTML = val; };
+            const setAttr = (id, attr, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.setAttribute(attr, val); };
+
+            // 2. Welcome & Onboarding Screen
             setTxt('welcomeTitle', t.welcomeTitle);
             setTxt('welcomeDesc', t.welcomeDesc);
             setTxt('selectLangTxt', t.selectLangTxt);
             setHtml('startBtnText', `<span>${t.startBtnText}</span> <i class="fa-solid fa-arrow-right"></i>`);
 
+            // 3. Login & Sign Up Screen
             setTxt('loginTitle', t.loginTitle);
             setTxt('loginSub', t.loginSub);
-            setTxt('googleBtnText', t.googleBtnText);
-            setTxt('authSecNotice', t.authSecNotice);
+            setTxt('loginBackHomeTxt', currentLang === 'en' ? 'Home' : 'হোম');
+            setTxt('tabLoginTxt', t.tabLoginTxt);
+            setTxt('tabSignupTxt', t.tabSignupTxt);
+            setTxt('submitLoginBtnTxt', t.submitLoginBtnTxt);
+            setTxt('submitSignupBtnTxt', t.submitSignupBtnTxt);
+            setTxt('loginEmailLabel', t.loginEmailLabel);
+            setTxt('loginPassLabel', t.loginPassLabel);
+            setTxt('signupNameLabel', t.signupNameLabel);
+            setTxt('signupEmailLabel', t.signupEmailLabel);
+            setTxt('signupPassLabel', t.signupPassLabel);
+            setTxt('signupWeekLabel', t.signupWeekLabel);
             setTxt('homeLinkTxt', t.homeLinkTxt);
 
+            // 4. Main App & Sidebar
             setTxt('sidebarBrandTxt', t.sidebarBrandTxt);
             setTxt('newChatBtnTxt', t.newChatBtnTxt);
 
-            updateGestationalHeroBar(currentUser?.pregnancy_week || 24);
+            try {
+                updateGestationalHeroBar(currentUser?.pregnancy_week || 24);
+            } catch (_) {}
+
             setHtml('notifHeaderTxt', t.notifHeaderTxt);
             setTxt('notifRefreshTxt', t.notifRefreshTxt);
             setTxt('noNotifTxt', t.noNotifTxt);
 
+            // 5. Chat area
             setTxt('welcomeMsg', t.welcomeMsg);
             setTxt('chip1', t.chip1);
             setTxt('chip2', t.chip2);
@@ -2036,11 +2117,13 @@
             setAttr('userInput', 'placeholder', t.userInputPlaceholder);
             setTxt('aiDisclaimerTxt', t.aiDisclaimerTxt);
 
+            // 6. 4 Hub Tabs
             setTxt('tab1Title', t.tab1Title);
             setTxt('tab2Title', t.tab2Title);
             setTxt('tab3Title', t.tab3Title);
             setTxt('tab4Title', t.tab4Title);
 
+            // 7. Trackers & Tools
             setTxt('kickHeaderTxt', t.kickHeaderTxt);
             setTxt('kickTargetTxt', t.kickTargetTxt);
             setTxt('addKickTxt', t.addKickTxt);
@@ -2070,13 +2153,15 @@
 
             setTxt('mealHeaderTxt', t.mealHeaderTxt);
             const mealSel = document.getElementById('mealTypeSelect');
-            if (mealSel) {
+            if (mealSel && t.mealOptions) {
+                const currentVal = mealSel.value;
                 mealSel.innerHTML = '';
                 t.mealOptions.forEach(opt => {
                     const o = document.createElement('option');
                     o.value = opt; o.textContent = opt;
                     mealSel.appendChild(o);
                 });
+                if (currentVal) mealSel.value = currentVal;
             }
             setAttr('mealDescInput', 'placeholder', t.mealDescPlaceholder);
             setTxt('saveMealBtn', t.saveMealBtn);
@@ -2092,7 +2177,7 @@
             setHtml('hospitalBtnTxt', t.hospitalBtnTxt);
             setTxt('redFlagHeaderTxt', t.redFlagHeaderTxt);
             const redList = document.getElementById('redFlagList');
-            if (redList) {
+            if (redList && t.redFlags) {
                 redList.innerHTML = t.redFlags.map(f => `<li>${f}</li>`).join('');
             }
 
@@ -2104,13 +2189,15 @@
             setTxt('namesHeaderTxt', t.namesHeaderTxt);
             setAttr('babyNameInput', 'placeholder', t.babyNamePlaceholder);
             const genderSel = document.getElementById('babyGenderSelect');
-            if (genderSel) {
+            if (genderSel && t.genderOptions) {
+                const curGen = genderSel.value;
                 genderSel.innerHTML = '';
                 t.genderOptions.forEach(g => {
                     const o = document.createElement('option');
                     o.value = g.val; o.textContent = g.text;
                     genderSel.appendChild(o);
                 });
+                if (curGen) genderSel.value = curGen;
             }
             setTxt('saveNameBtn', t.saveNameBtn);
 
@@ -2124,10 +2211,11 @@
             setTxt('profLangLabel', t.profLangLabel);
             setTxt('profSecLabel', t.profSecLabel);
 
-            updateKickUI();
-            renderWaterGlasses();
-            switchDietGuideTab(activeDietTab);
-            renderDailyRoutine();
+            // Safe sub-renders
+            try { updateKickUI(); } catch (_) {}
+            try { renderWaterGlasses(); } catch (_) {}
+            try { switchDietGuideTab(activeDietTab); } catch (_) {}
+            try { renderDailyRoutine(); } catch (_) {}
         }
 
         let clientDeviceId = localStorage.getItem('shokhi_device_id');
@@ -2671,138 +2759,6 @@
         });
 
         /* Delete Confirmation Dialog */
-        let isVoiceRecognizing = false;
-
-        async function startVoiceRecognition() {
-            const btn = document.getElementById('voiceBtn');
-            const input = document.getElementById('userInput');
-            
-            // Check if already recording -> Toggle Stop
-            if (isVoiceRecognizing && recognition) {
-                try {
-                    recognition.stop();
-                } catch (_) {}
-                return;
-            }
-
-            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRec) {
-                const msg = currentLang === 'en'
-                    ? 'Voice typing is not supported on this browser. Please use Google Chrome or Microsoft Edge.'
-                    : 'আপনার ব্রাউজারে ভয়েস টাইপিং সাপোর্ট করে না। দয়া করে Google Chrome বা Microsoft Edge ব্যবহার করুন।';
-                alert(msg);
-                return;
-            }
-
-            // Proactively request mic permissions via getUserMedia if needed
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    // Release tracks immediately
-                    stream.getTracks().forEach(track => track.stop());
-                } catch (permErr) {
-                    console.warn('Microphone permission check:', permErr);
-                    if (permErr.name === 'NotAllowedError' || permErr.name === 'PermissionDeniedError') {
-                        const msg = currentLang === 'en'
-                            ? 'Microphone access is blocked. Please click the camera/mic icon in your browser address bar to allow microphone access.'
-                            : 'মাইক্রোফোন পারমিশন বন্ধ আছে। দয়া করে ব্রাউজারের অ্যাড্রেস বার থেকে মাইক্রোফোন Allow করুন।';
-                        alert(msg);
-                        return;
-                    }
-                }
-            }
-
-            try {
-                if (recognition) {
-                    try { recognition.abort(); } catch (_) {}
-                    recognition = null;
-                }
-
-                recognition = new SpeechRec();
-                // Set language based on active app language (Bengali or English)
-                recognition.lang = currentLang === 'en' ? 'en-US' : 'bn-BD';
-                recognition.continuous = false;
-                recognition.interimResults = true;
-                recognition.maxAlternatives = 1;
-
-                const originalPlaceholder = input ? (input.placeholder || translations[currentLang].userInputPlaceholder) : '';
-
-                recognition.onstart = () => {
-                    isVoiceRecognizing = true;
-                    if (btn) {
-                        btn.classList.add('recording');
-                        btn.innerHTML = '<i class="fa-solid fa-microphone-lines fa-fade"></i>';
-                        btn.title = currentLang === 'en' ? 'Listening... Click to stop' : 'শুনছি... থামাতে ক্লিক করুন';
-                    }
-                    if (input) {
-                        input.placeholder = currentLang === 'en' ? '🎙️ Listening... Speak now' : '🎙️ শুনছি আপু, আপনার প্রশ্নটি বলুন...';
-                    }
-                };
-
-                recognition.onresult = (e) => {
-                    let interimTranscript = '';
-                    let finalTranscript = '';
-
-                    for (let i = e.resultIndex; i < e.results.length; ++i) {
-                        if (e.results[i].isFinal) {
-                            finalTranscript += e.results[i][0].transcript;
-                        } else {
-                            interimTranscript += e.results[i][0].transcript;
-                        }
-                    }
-
-                    const capturedText = finalTranscript || interimTranscript;
-                    if (input && capturedText) {
-                        input.value = capturedText;
-                    }
-                };
-
-                recognition.onerror = (e) => {
-                    console.warn('Speech recognition event:', e.error);
-                    if (e.error === 'not-allowed') {
-                        const msg = currentLang === 'en'
-                            ? 'Microphone access blocked. Please allow microphone permission in browser settings.'
-                            : 'মাইক্রোফোন পারমিশন বন্ধ। দয়া করে ব্রাউজারে মাইক্রোফোন ব্যবহারের অনুমতি দিন।';
-                        alert(msg);
-                    } else if (e.error === 'no-speech') {
-                        // User didn't say anything, soft silent recovery
-                    } else if (e.error === 'network') {
-                        console.warn('Speech network notice');
-                    }
-                    resetVoiceUI();
-                };
-
-                recognition.onend = () => {
-                    resetVoiceUI();
-                    if (input && input.value.trim()) {
-                        input.focus();
-                    }
-                };
-
-                function resetVoiceUI() {
-                    isVoiceRecognizing = false;
-                    if (btn) {
-                        btn.classList.remove('recording');
-                        btn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
-                        btn.title = currentLang === 'en' ? 'Speak' : 'কথা বলুন';
-                    }
-                    if (input) {
-                        input.placeholder = originalPlaceholder || (translations[currentLang] ? translations[currentLang].userInputPlaceholder : 'আপনার প্রশ্নটি এখানে লিখুন...');
-                    }
-                    recognition = null;
-                }
-
-                recognition.start();
-            } catch (err) {
-                console.error('Failed to start voice recognition:', err);
-                isVoiceRecognizing = false;
-                if (btn) {
-                    btn.classList.remove('recording');
-                    btn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
-                }
-            }
-        }
-
         function promptDeleteSelectedSession() {
             hideContextMenu();
             if (!pendingDeleteChatId) return;
@@ -3621,6 +3577,7 @@
 
         /* 🚀 STRICT APPLICATION FLOW & ROUTE AUTH BOUNDARY */
         window.addEventListener('DOMContentLoaded', async () => {
+            setAppLanguage(currentLang);
             initSupabaseAuth().catch(e => console.warn('Supabase auth init:', e));
 
             const urlParams = new URLSearchParams(window.location.search);
