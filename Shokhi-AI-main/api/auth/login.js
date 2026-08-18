@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   const config = getSupabaseConfig();
   let authenticatedUser = null;
 
-  // 1. Attempt Supabase Auth login
+  // 1. Attempt Supabase Auth login & fetch/ensure profile in profiles table
   if (config.is_configured) {
     try {
       const supabase = getSupabaseClient();
@@ -33,19 +33,38 @@ export default async function handler(req, res) {
         const supabaseAdmin = getSupabaseAdminClient();
         
         // Fetch user profile from Supabase profiles table
-        const { data: profile } = await supabaseAdmin
+        let { data: profile } = await supabaseAdmin
           .from('profiles')
           .select('*')
           .eq('id', supaUser.id)
           .maybeSingle();
 
         const isAdmin = Boolean(profile?.is_admin) || email === 'admin@shokhi.ai' || email === 'ptasnia95@gmail.com';
+        const userName = profile?.full_name || supaUser.user_metadata?.full_name || supaUser.user_metadata?.name || email.split('@')[0];
+        const userWeek = profile?.pregnancy_week || supaUser.user_metadata?.pregnancy_week || 24;
+
+        // If profile was missing in profiles table, create it now
+        if (!profile) {
+          const { data: createdProf } = await supabaseAdmin
+            .from('profiles')
+            .upsert({
+              id: supaUser.id,
+              full_name: userName,
+              pregnancy_week: userWeek,
+              is_admin: isAdmin,
+              preferred_language: 'bn',
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'id' })
+            .select()
+            .single();
+          profile = createdProf;
+        }
 
         authenticatedUser = {
           id: supaUser.id,
           email: supaUser.email,
-          name: profile?.full_name || supaUser.user_metadata?.full_name || supaUser.user_metadata?.name || email.split('@')[0],
-          pregnancy_week: profile?.pregnancy_week || supaUser.user_metadata?.pregnancy_week || 24,
+          name: userName,
+          pregnancy_week: userWeek,
           is_admin: isAdmin
         };
       } else if (authError) {
@@ -64,7 +83,6 @@ export default async function handler(req, res) {
       if (localUser.password_hash) {
         passwordMatches = bcrypt.compareSync(password, localUser.password_hash);
       } else {
-        // demo / mock users without password hash
         passwordMatches = true;
       }
 

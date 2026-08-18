@@ -24,56 +24,69 @@ export default async function handler(req, res) {
     return sendJsonError(res, 400, 'Password must be at least 6 characters long.');
   }
 
+  const validWeek = isNaN(pregnancyWeek) ? 24 : pregnancyWeek;
   const config = getSupabaseConfig();
   let supabaseUserId = null;
 
-  // 1. Register with Supabase Auth (Auto-confirmed with email_confirm: true)
+  // 1. Register with Supabase Auth & PostgreSQL Profiles Table
   if (config.is_configured) {
     try {
       const supabaseAdmin = getSupabaseAdminClient();
       
+      // Step A: Create user in Supabase Auth with auto email confirmation
       const { data: createdAuth, error: authError } = await supabaseAdmin.auth.admin.createUser({
         email: email,
         password: password,
-        email_confirm: true, // No verification email needed! Instantly confirmed.
+        email_confirm: true, // Auto confirmed without email verification barrier!
         user_metadata: {
           full_name: name,
-          name: name,
-          pregnancy_week: isNaN(pregnancyWeek) ? 24 : pregnancyWeek
+          pregnancy_week: validWeek
         }
       });
 
       if (authError) {
         if (authError.message?.toLowerCase().includes('already') || authError.status === 422) {
-          return sendJsonError(res, 409, 'An account with this email already exists. Please log in.');
+          return sendJsonError(res, 409, 'An account with this email already exists in Supabase. Please log in.');
         }
         console.warn('[Supabase Auth createUser warning]:', authError.message);
       } else if (createdAuth?.user) {
         supabaseUserId = createdAuth.user.id;
       }
 
-      // Upsert profile in Supabase profiles table
-      const finalId = supabaseUserId || `usr_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-      await supabaseAdmin
-        .from('profiles')
-        .upsert({
-          id: finalId,
-          email: email,
-          full_name: name,
-          pregnancy_week: isNaN(pregnancyWeek) ? 24 : pregnancyWeek,
-          is_admin: isAdmin,
-          preferred_language: 'bn',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' });
+      // If user exists, find their ID
+      if (!supabaseUserId) {
+        const { data: userList } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+        const existing = userList?.users?.find(u => u.email?.toLowerCase() === email);
+        if (existing) supabaseUserId = existing.id;
+      }
 
-      supabaseUserId = finalId;
+      // Step B: Upsert into Supabase public.profiles table
+      if (supabaseUserId) {
+        const { data: savedProfile, error: profileErr } = await supabaseAdmin
+          .from('profiles')
+          .upsert({
+            id: supabaseUserId,
+            full_name: name,
+            pregnancy_week: validWeek,
+            is_admin: isAdmin,
+            preferred_language: 'bn',
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'id' })
+          .select()
+          .single();
+
+        if (profileErr) {
+          console.warn('[Supabase profiles upsert error]:', profileErr.message);
+        } else {
+          console.log('✅ Successfully saved to Supabase profiles table:', savedProfile);
+        }
+      }
     } catch (err) {
       console.warn('[Register Supabase error]:', err.message);
     }
   }
 
-  // 2. Save in local memory store fallback
+  // 2. Save in local store fallback
   const salt = bcrypt.genSaltSync(10);
   const passwordHash = bcrypt.hashSync(password, salt);
   const localUserId = supabaseUserId || `usr_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
@@ -84,7 +97,7 @@ export default async function handler(req, res) {
     name,
     full_name: name,
     password_hash: passwordHash,
-    pregnancy_week: isNaN(pregnancyWeek) ? 24 : pregnancyWeek,
+    pregnancy_week: validWeek,
     due_date: null,
     blood_group: null,
     emergency_contact_name: null,
@@ -97,7 +110,6 @@ export default async function handler(req, res) {
     updated_at: new Date().toISOString()
   };
 
-  // Remove duplicate in local store if any
   localDb.users = localDb.users.filter(u => u.email !== email);
   localDb.users.unshift(newUser);
 
@@ -111,7 +123,7 @@ export default async function handler(req, res) {
 
   return sendJsonResponse(res, 201, {
     success: true,
-    message: 'Account created successfully in Supabase! You can now log in anytime.',
+    message: 'Account created and saved to Supabase profiles table!',
     token,
     user: {
       id: newUser.id,
