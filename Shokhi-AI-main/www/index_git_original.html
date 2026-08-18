@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সখী AI - আপনার মাতৃত্ব ও গর্ভকালীন সঙ্গী</title>
+    
+    <!-- Modern Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #db2777;
+            --primary-light: #f472b6;
+            --primary-dark: #be185d;
+            --primary-deep: #831843;
+            --accent: #ec4899;
+            --bg-gradient: radial-gradient(at 0% 0%, #fdf2f8 0px, transparent 50%), radial-gradient(at 100% 0%, #fce7f3 0px, transparent 50%), radial-gradient(at 50% 100%, #fed7aa 0px, transparent 50%), #fdf4ff;
+            --glass-bg: rgba(255, 255, 255, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --glass-shadow: 0 10px 30px -5px rgba(219, 39, 119, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+            --text-main: #3b0764;
+            --text-muted: #701a75;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --radius-full: 9999px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            font-family: 'Hind Siliguri', 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient floating light shapes */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: orbFloat 20s infinite alternate ease-in-out;
+        }
+        .bg-orb-1 { width: 400px; height: 400px; background: rgba(244, 114, 182, 0.3); top: -100px; left: -100px; }
+        .bg-orb-2 { width: 500px; height: 500px; background: rgba(251, 146, 60, 0.2); bottom: -150px; right: -100px; animation-delay: -5s; }
+        .bg-orb-3 { width: 350px; height: 350px; background: rgba(192, 132, 252, 0.25); top: 40%; left: 30%; animation-delay: -10s; }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.1); }
+        }
+
+        /* Screen containers */
+        #page-welcome, #page-login {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        #page-login, #page-main { display: none; }
+
+        /* Modern Glass Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+            padding: 40px 32px;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        /* Logo Badge */
+        .app-logo {
+            width: 88px;
+            height: 88px;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            border: 2px solid #fbcfe8;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 12px 24px rgba(219, 39, 119, 0.15);
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+        .app-logo i {
+            font-size: 42px;
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 8px 20px rgba(219, 39, 119, 0.15); transform: translateY(0); }
+            50% { box-shadow: 0 16px 30px rgba(219, 39, 119, 0.25); transform: translateY(-3px); }
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-deep);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .welcome-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* Language Toggle Switch Pill */
+        .lang-switch-box {
+            background: rgba(251, 207, 232, 0.4);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            padding: 5px;
+            border-radius: var(--radius-full);
+            display: flex;
+            margin: 0 auto 28px auto;
+            width: 240px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+        .lang-btn {
+            flex: 1;
+            padding: 8px 18px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .lang-btn.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(219, 39, 119, 0.15);
+            font-weight: 700;
+        }
+
+        /* Primary Action Buttons */
+        .btn-start, .auth-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 50%, #be185d 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px 40px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(219, 39, 119, 0.3);
+            transition: var(--transition);
+        }
+        .btn-start:hover, .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(219, 39, 119, 0.4);
+            opacity: 0.96;
+        }
+
+        /* Auth Form Card */
+        .auth-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--glass-shadow);
+        }
+        .auth-card h2 {
+            color: var(--primary-deep);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .auth-input-group {
+            position: relative;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 13px 18px;
+            border: 1.5px solid #fbcfe8;
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            outline: none;
+            font-size: 14px;
+            color: var(--primary-deep);
+            transition: var(--transition);
+        }
+        .auth-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(219, 39, 119, 0.15);
+        }
+
+        /* =========================================================
+           MAIN 3-COLUMN DASHBOARD
+           ========================================================= */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 1. LEFT SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-deep);
+        }
+        .sidebar-brand i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+        .logout-btn {
+            background: #fdf2f8;
+            border: 1px solid #fbcfe8;
+            color: var(--primary);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .logout-btn:hover {
+            background: #fee2e2;
+            color: #ef4444;
+            border-color: #fca5a5;
+            transform: scale(1.05);
+        }
+
+        .new-chat-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(219, 39, 119, 0.25);
+            transition: var(--transition);
+        }
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(219, 39, 119, 0.35);
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-right: 4px;
+        }
+        .history-item {
+            padding: 11px 14px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(251, 207, 232, 0.5);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+        .history-item:hover {
+            background: #ffffff;
+            color: var(--primary);
+            border-color: #f472b6;
+            transform: translateX(3px);
+        }
+        .history-item.active {
+            background: #ffffff;
+            color: var(--primary-deep);
+            font-weight: 700;
+            border-color: var(--primary);
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 3px 10px rgba(219, 39, 119, 0.1);
+        }
+
+        /* Context Menu for Right Click Delete */
+        .context-menu {
+            position: fixed;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid #fbcfe8;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(219, 39, 119, 0.18), 0 2px 8px rgba(0, 0, 0, 0.04);
+            padding: 6px;
+            min-width: 160px;
+            display: none;
+            animation: menuFadeIn 0.15s ease-out;
+        }
+
+        @keyframes menuFadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .context-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ef4444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .context-menu-item:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            transform: translateX(2px);
+        }
+
+        /* 2. CENTER CHAT SECTION */
+        .chat-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.4);
+            position: relative;
+        }
+        .chat-header {
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            z-index: 10;
+        }
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .bot-avatar-badge {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+            border: 1.5px solid #fbcfe8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 16px;
+        }
+        .bot-title-text strong {
+            font-size: 16px;
+            color: var(--primary-deep);
+            display: block;
+        }
+        .online-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: #10b981;
+            font-weight: 600;
+        }
+        .online-dot {
+            width: 7px;
+            height: 7px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulseDot 2s infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .lang-toggle-header {
+            display: flex;
+            gap: 3px;
+            background: rgba(251, 207, 232, 0.45);
+            padding: 3px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+        }
+        .header-lang-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .header-lang-btn.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(219, 39, 119, 0.15);
+            font-weight: 700;
+        }
+
+        /* Chat Message Area */
+        .chat-box {
+            flex: 1;
+            padding: 24px 28px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* User Message */
+        .user-msg {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 22px 22px 4px 22px;
+            max-width: 72%;
+            font-size: 14.5px;
+            line-height: 1.55;
+            box-shadow: 0 4px 14px rgba(219, 39, 119, 0.2);
+            word-wrap: break-word;
+            animation: messagePop 0.25s ease-out;
+        }
+
+        /* Assistant Message */
+        .bot-msg-box {
+            align-self: flex-start;
+            max-width: 78%;
+            animation: messagePop 0.25s ease-out;
+        }
+        .bot-msg {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--primary-deep);
+            padding: 16px 22px;
+            border-radius: 22px 22px 22px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            font-size: 14.5px;
+            line-height: 1.65;
+            box-shadow: 0 4px 16px rgba(219, 39, 119, 0.07);
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .tts-btn {
+            background: #ffffff;
+            color: var(--primary);
+            border: 1px solid #fbcfe8;
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            transition: var(--transition);
+        }
+        .tts-btn:hover {
+            background: #fdf2f8;
+            border-color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        /* Animated Thinking Indicator */
+        .loading-msg {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary);
+            border: 1px solid #fbcfe8;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            align-self: flex-start;
+            animation: messagePop 0.25s ease-out;
+        }
+
+        @keyframes messagePop {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating Capsule Chat Input Bar */
+        .chat-input-wrapper {
+            padding: 12px 28px 16px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: transparent;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            width: 100%;
+            background: #ffffff;
+            padding: 6px 8px 6px 16px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid #fbcfe8;
+            box-shadow: 0 8px 24px rgba(219, 39, 119, 0.1);
+            transition: var(--transition);
+        }
+        .chat-input-area:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 8px 28px rgba(219, 39, 119, 0.2);
+        }
+        .chat-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            outline: none;
+            font-size: 14.5px;
+            color: var(--primary-deep);
+            background: transparent;
+            font-family: inherit;
+        }
+        .chat-input::placeholder {
+            color: #a855f7;
+            opacity: 0.6;
+        }
+        .icon-btn {
+            background: #fdf2f8;
+            color: var(--primary);
+            border: 1px solid #fbcfe8;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .icon-btn:hover {
+            background: #fce7f3;
+            color: var(--primary-dark);
+            transform: scale(1.06);
+        }
+        .send-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(219, 39, 119, 0.3);
+        }
+        .send-btn:hover {
+            background: linear-gradient(135deg, #db2777 0%, #be185d 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(219, 39, 119, 0.4);
+            transform: scale(1.06);
+        }
+
+        .ai-disclaimer {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* 3. RIGHT TOOLS SECTION */
+        .tools-section {
+            width: 360px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            padding: 20px 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .tool-card {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid #fce7f3;
+            box-shadow: 0 3px 12px rgba(219, 39, 119, 0.05);
+            transition: var(--transition);
+        }
+        .tool-card:hover {
+            border-color: #fbcfe8;
+            box-shadow: 0 6px 18px rgba(219, 39, 119, 0.09);
+        }
+        .tool-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-deep);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tool-card h3 i {
+            color: var(--primary);
+            font-size: 15px;
+        }
+
+        /* Routine Checklist */
+        .checklist-container label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 6px;
+            background: #fdf2f8;
+            transition: var(--transition);
+        }
+        .checklist-container label:hover {
+            background: #fce7f3;
+        }
+        .checklist-container input[type="checkbox"] {
+            accent-color: var(--primary);
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+        }
+
+        /* Trimester Diet Tabs */
+        .diet-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .diet-tab-btn {
+            flex: 1;
+            padding: 6px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #fbcfe8;
+            background: #fdf2f8;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .diet-tab-btn.active {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(219, 39, 119, 0.2);
+        }
+        .diet-content {
+            font-size: 12.5px;
+            color: var(--text-main);
+            line-height: 1.5;
+            background: #fdf4ff;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #f5d0fe;
+        }
+
+        /* Shared Tool Form Elements */
+        .small-input {
+            width: 100%;
+            padding: 9px 12px;
+            font-size: 12.5px;
+            color: var(--primary-deep);
+            background: #ffffff;
+            border: 1px solid #fbcfe8;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            outline: none;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .small-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.12);
+        }
+        .small-btn {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(219, 39, 119, 0.2);
+            transition: var(--transition);
+        }
+        .small-btn:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .log-box {
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 11.5px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .log-item {
+            background: #fdf2f8;
+            padding: 8px 10px;
+            border-left: 3.5px solid var(--primary);
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-deep);
+        }
+        .chat-img {
+            max-width: 200px;
+            border-radius: 12px;
+            margin-top: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Custom Modern Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(244, 114, 182, 0.4);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(219, 39, 119, 0.6);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .tools-section { width: 300px; }
+            .sidebar { width: 240px; }
+        }
+        @media (max-width: 860px) {
+            .tools-section { display: none; }
+            .sidebar { width: 220px; }
+        }
+        @media (max-width: 640px) {
+            .sidebar { display: none; }
+            .chat-section { width: 100vw; }
+            .chat-box { padding: 16px; }
+            .chat-input-wrapper { padding: 8px 14px 12px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glowing Orbs Background -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+
+    <!-- Custom Right Click Context Menu -->
+    <div id="chatContextMenu" class="context-menu">
+        <div class="context-menu-item" onclick="deleteTargetChat()">
+            <i class="fa-solid fa-trash-can"></i>
+            <span id="ctxDeleteText">Delete Chat</span>
+        </div>
+    </div>
+
+    <!-- 1. WELCOME SCREEN -->
+    <div id="page-welcome">
+        <div class="glass-card">
+            <div class="app-logo">
+                <i class="fa-solid fa-dove"></i>
+            </div>
+            <h1 class="welcome-title" id="welcomeTitle">স্বাগতম</h1>
+            <p class="welcome-desc" id="welcomeDesc">আপনার মাতৃত্ব ও গর্ভাবস্থার যত্নশীল সঙ্গী</p>
+            
+            <p style="font-size: 13px; font-weight: 600; color: var(--primary-deep); margin-bottom: 8px;" id="selectLangTxt">ভাষা নির্বাচন করুন</p>
+            <div class="lang-switch-box">
+                <button class="lang-btn active" id="langBnBtn" onclick="setAppLanguage('bn')">বাংলা</button>
+                <button class="lang-btn" id="langEnBtn" onclick="setAppLanguage('en')">English</button>
+            </div>
+
+            <button class="btn-start" id="startBtnText" onclick="goToPage('page-login')">
+                <span>শুরু করুন</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. LOGIN SCREEN -->
+    <div id="page-login">
+        <div class="auth-card">
+            <div class="app-logo" style="width: 68px; height: 68px; margin-bottom: 14px;">
+                <i class="fa-solid fa-heart-pulse" style="font-size: 32px;"></i>
+            </div>
+            <h2 id="loginTitle">স্বাগতম</h2>
+            <p id="loginSub" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">আপনার অ্যাকাউন্টে প্রবেশ করুন</p>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="auth-input-group">
+                    <input type="email" class="auth-input" id="emailPlaceholder" placeholder="ইমেইল অ্যাড্রেস" required>
+                </div>
+                <div class="auth-input-group">
+                    <input type="password" class="auth-input" id="passPlaceholder" placeholder="পাসওয়ার্ড" required>
+                </div>
+                <button type="submit" class="auth-btn" id="loginBtnText">লগইন করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MAIN DASHBOARD -->
+    <div id="page-main">
+        <div class="app-container">
+            
+            <!-- LEFT SIDEBAR: SESSIONS -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-brand">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        <span id="sideTitle">সখী AI</span>
+                    </div>
+                    <button class="logout-btn" onclick="goToPage('page-welcome')" title="লগআউট">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+                
+                <button class="new-chat-btn" onclick="createNewChat()">
+                    <i class="fa-solid fa-plus"></i>
+                    <span id="newChatBtnTxt">New Chat</span>
+                </button>
+                
+                <div class="history-list" id="historyList"></div>
+            </div>
+
+            <!-- CENTER: CHAT INTERFACE -->
+            <div class="chat-section">
+                
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="header-title-box">
+                        <div class="bot-avatar-badge">
+                            <i class="fa-solid fa-dove"></i>
+                        </div>
+                        <div class="bot-title-text">
+                            <strong id="assistantTitle">সখী সহকারী</strong>
+                            <div class="online-status">
+                                <span class="online-dot"></span>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lang-toggle-header">
+                        <button class="header-lang-btn active" id="hLangBnBtn" onclick="setAppLanguage('bn')">বাংলা</button>
+                        <button class="header-lang-btn" id="hLangEnBtn" onclick="setAppLanguage('en')">English</button>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="chat-box" id="chatBox">
+                    <div class="bot-msg-box">
+                        <div class="bot-msg" id="welcomeMsg">হ্যালো আপু! আমি সখী। আপনার গর্ভাবস্থা সংক্রান্ত যেকোনো প্রশ্ন আমাকে করতে পারেন।</div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-wrapper">
+                    <div class="chat-input-area">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="previewAndSendImage()">
+                        <button class="icon-btn" onclick="document.getElementById('imageInput').click()" title="ছবি আপলোড">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </button>
+                        
+                        <input type="text" class="chat-input" id="userInput" placeholder="আপনার প্রশ্নটি লিখুন..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                        
+                        <button class="icon-btn" id="voiceBtn" onclick="startVoiceRecognition()" title="কথা বলুন">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                        
+                        <button class="icon-btn send-btn" onclick="sendChatMessage()" title="পাঠান">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="ai-disclaimer">Shokhi is AI and can make mistakes.</div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDEBAR: HEALTH & MATERNITY TOOLS -->
+            <div class="tools-section">
+                
+                <!-- Today's Inspiration -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-quote-left"></i> <span id="t_inspiration">আজকের প্রেরণা</span></h3>
+                    <p id="quoteText" style="font-size: 12.5px; font-style: italic; color: var(--text-muted); line-height: 1.5;"></p>
+                </div>
+
+                <!-- Routine Checklist -->
+                <div class="tool-card" id="routineBox"></div>
+
+                <!-- Due Date Calculator -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-calculator"></i> <span id="t_edd">প্রসবের তারিখ হিসাব</span></h3>
+                    <input type="date" id="lmpDate" class="small-input">
+                    <button class="small-btn" id="t_calcBtn" onclick="calculatePregnancy()">হিসাব করুন</button>
+                    <div id="calcResult" style="font-size: 12px; margin-top: 10px; line-height: 1.5; color: var(--primary-deep);"></div>
+                </div>
+
+                <!-- Trimester Diet Plan -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-utensils"></i> <span id="t_diet">ট্রাইমেস্টার ডায়েট প্ল্যান</span></h3>
+                    <div class="diet-tabs">
+                        <button class="diet-tab-btn" id="tab1" onclick="switchDietTab(1)">১ম</button>
+                        <button class="diet-tab-btn" id="tab2" onclick="switchDietTab(2)">২য়</button>
+                        <button class="diet-tab-btn" id="tab3" onclick="switchDietTab(3)">৩য়</button>
+                    </div>
+                    <div class="diet-content" id="dietContentBox"></div>
+                </div>
+
+                <!-- Daily Meal Logger -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-bowl-food"></i> <span id="t_meal">খাবার লগ</span></h3>
+                    <select id="mealTypeSelect" class="small-input"></select>
+                    <input type="text" id="mealDescInput" class="small-input">
+                    <button class="small-btn" id="t_addLogBtn" onclick="logDailyMeal()">লগ যুক্ত করুন</button>
+                    <div class="log-box" id="dietLogBox"></div>
+                </div>
+
+                <!-- Mood & Symptom Tracker -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-face-smile"></i> <span id="t_mood">মূড ট্র্যাকার</span></h3>
+                    <div style="display:flex; gap:6px; margin-bottom:8px;">
+                        <button class="small-btn" style="background: linear-gradient(135deg, #f472b6, #ec4899);" id="m_good" onclick="logMood('Good / ভালো')">😊 Good</button>
+                        <button class="small-btn" style="background: linear-gradient(135deg, #818cf8, #6366f1);" id="m_tired" onclick="logMood('Tired / ক্লান্ত')">😴 Tired</button>
+                    </div>
+                    <button class="small-btn" style="background: linear-gradient(135deg, #fb7185, #e11d48);" id="symptom_nausea" onclick="toggleSymptom('বমি ভাব / Nausea', 'symptom_nausea')">🤮 Nausea</button>
+                    <div class="log-box" id="moodLogBox"></div>
+                </div>
+
+                <!-- Doctor Appointments -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-user-doctor"></i> <span id="t_doc">ডাক্তার অ্যাপয়েন্টমেন্ট</span></h3>
+                    <input type="text" id="docNameInput" class="small-input">
+                    <input type="datetime-local" id="appTimeInput" class="small-input">
+                    <button class="small-btn" id="t_saveDocBtn" onclick="saveAppointment()">সেভ করুন</button>
+                    <div class="log-box" id="appLogBox"></div>
+                </div>
+
+                <!-- Blood Pressure & Weight Tracker -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-heart-pulse"></i> <span id="t_vitals">বিপি ও ওজন</span></h3>
+                    <input type="text" id="bpInput" class="small-input" placeholder="BP (e.g. 120/80)">
+                    <input type="number" id="weightInput" class="small-input" placeholder="Weight (kg)">
+                    <button class="small-btn" id="t_saveVitalBtn" onclick="logVitals()">সেভ করুন</button>
+                    <div class="log-box" id="vitalsLogBox"></div>
+                </div>
+
+                <!-- Reminders & Baby Kick Counter -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-clock"></i> <span id="t_reminder">রিমাইন্ডার</span></h3>
+                    <div style="margin-bottom: 12px;">
+                        <small id="t_waterTxt" style="font-weight: 600; color: var(--primary-deep); display: block; margin-bottom: 4px;">💧 পানি খাওয়ার রিমাইন্ডার:</small>
+                        <button class="small-btn" id="waterBtn" style="background: linear-gradient(135deg, #38bdf8, #0ea5e9);" onclick="toggleWaterReminder()">Start (1 Hour)</button>
+                        <div id="waterTimerStatus" style="font-size: 11px; margin-top: 4px; font-weight: 500;"></div>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <small id="t_kickTxt" style="font-weight: 600; color: var(--primary-deep); display: block; margin-bottom: 4px;">👶 বেবি কিক কাউন্টার:</small>
+                        <div style="display:flex; gap:6px; margin-bottom: 4px;">
+                            <button class="small-btn" style="background: linear-gradient(135deg, #34d399, #10b981);" onclick="countKick()">+ Kick</button>
+                            <button class="small-btn" style="background: linear-gradient(135deg, #94a3b8, #64748b);" onclick="resetKick()">Reset</button>
+                        </div>
+                        <div id="kickDisplay" style="font-weight: 700; font-size: 13px; color: var(--primary-deep);">0 Kicks</div>
+                    </div>
+                    <button class="small-btn" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);" id="t_hospBtn" onclick="findNearbyHospitals()">
+                        <i class="fa-solid fa-hospital"></i> কাছের হাসপাতাল খুঁজুন
+                    </button>
+                </div>
+
+                <!-- Baby Name Shortlist -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-baby"></i> <span id="t_babyName">পছন্দের বাচ্চার নাম</span></h3>
+                    <input type="text" id="babyNameInput" class="small-input">
+                    <button class="small-btn" id="t_addNameBtn" onclick="addBabyName()">যোগ করুন</button>
+                    <div class="log-box" id="nameListBox"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        let currentLang = 'bn';
+        let currentChatId = null;
+        let targetContextMenuChatId = null;
+        
+        let recognition = null;
+        let speechSynth = window.speechSynthesis;
+        let speechUtterance = null;
+        let activeTtsButton = null;
+        let availableVoices = [];
+
+        function loadVoices() {
+            if (speechSynth) {
+                availableVoices = speechSynth.getVoices();
+            }
+        }
+        if (speechSynth) {
+            loadVoices();
+            if (speechSynth.onvoiceschanged !== undefined) {
+                speechSynth.onvoiceschanged = loadVoices;
+            }
+        }
+
+        const translations = {
+            bn: {
+                welcomeTitle: "স্বাগতম", welcomeDesc: "আপনার মাতৃত্ব ও গর্ভাবস্থার যত্নশীল সঙ্গী", selectLangTxt: "ভাষা নির্বাচন করুন", startBtnText: "শুরু করুন",
+                loginTitle: "স্বাগতম", loginSub: "আপনার অ্যাকাউন্টে প্রবেশ করুন", emailPlaceholder: "ইমেইল অ্যাড্রেস", passPlaceholder: "পাসওয়ার্ড",
+                loginBtnText: "লগইন করুন", userInput: "আপনার প্রশ্নটি লিখুন...", assistantTitle: "সখী সহকারী",
+                welcomeMsg: "হ্যালো আপু! আমি সখী। আপনার গর্ভাবস্থা সংক্রান্ত যেকোনো প্রশ্ন আমাকে করতে পারেন।",
+                sideTitle: "সখী AI", newChatBtnTxt: "New Chat", t_inspiration: "আজকের প্রেরণা", t_edd: "প্রসবের তারিখ হিসাব", t_calcBtn: "হিসাব করুন",
+                t_diet: "ট্রাইমেস্টার ডায়েট প্ল্যান", tab1: "১ম", tab2: "২য়", tab3: "৩য়", t_meal: "খাবার লগ",
+                mealOptions: ["সকালের নাস্তা", "দুপুরের খাবার", "রাতের খাবার", "স্ন্যাকস / ফলমূল"], mealDescInput: "কী খেয়েছেন লিখুন...", t_addLogBtn: "লগ যুক্ত করুন",
+                t_mood: "মূড ট্র্যাকার", m_good: "😊 Good", m_tired: "😴 Tired", symptom_nausea: "🤮 Nausea", t_doc: "ডাক্তার অ্যাপয়েন্টমেন্ট",
+                docNameInput: "ডাক্তারের নাম", t_saveDocBtn: "সেভ করুন", t_vitals: "বিপি ও ওজন", t_saveVitalBtn: "সেভ করুন", t_reminder: "রিমাইন্ডার",
+                t_waterTxt: "💧 পানি খাওয়ার রিমাইন্ডার:", t_kickTxt: "👶 বেবি কিক কাউন্টার:", t_hospBtn: "কাছের হাসপাতাল খুঁজুন", t_babyName: "পছন্দের বাচ্চার নাম",
+                babyNameInput: "নাম লিখুন...", t_addNameBtn: "যোগ করুন", deleteChat: "চ্যাট মুছুন"
+            },
+            en: {
+                welcomeTitle: "Welcome", welcomeDesc: "Your loving pregnancy & maternity companion", selectLangTxt: "Select Language", startBtnText: "Start Now",
+                loginTitle: "Welcome", loginSub: "Login to your account", emailPlaceholder: "Email Address", passPlaceholder: "Password",
+                loginBtnText: "Login", userInput: "Type your question here...", assistantTitle: "Shokhi Assistant",
+                welcomeMsg: "Hello! I am Shokhi. Feel free to ask me any pregnancy-related questions.",
+                sideTitle: "Shokhi AI", newChatBtnTxt: "New Chat", t_inspiration: "Today's Inspiration", t_edd: "Due Date Calculator", t_calcBtn: "Calculate",
+                t_diet: "Trimester Diet Plan", tab1: "1st", tab2: "2nd", tab3: "3rd", t_meal: "Meal Log",
+                mealOptions: ["Breakfast", "Lunch", "Dinner", "Snack"], mealDescInput: "What did you eat...", t_addLogBtn: "Add Log",
+                t_mood: "Mood Tracker", m_good: "😊 Good", m_tired: "😴 Tired", symptom_nausea: "🤮 Nausea", t_doc: "Doctor Appointment",
+                docNameInput: "Doctor's Name", t_saveDocBtn: "Save", t_vitals: "BP & Weight", t_saveVitalBtn: "Save", t_reminder: "Reminders",
+                t_waterTxt: "💧 Water Intake Reminder:", t_kickTxt: "👶 Baby Kick Counter:", t_hospBtn: "Find Nearby Hospitals", t_babyName: "Favorite Baby Names",
+                babyNameInput: "Type name...", t_addNameBtn: "Add Name", deleteChat: "Delete Chat"
+            }
+        };
+
+        function setAppLanguage(lang) {
+            currentLang = lang;
+
+            let langBnBtn = document.getElementById('langBnBtn');
+            let langEnBtn = document.getElementById('langEnBtn');
+            if (langBnBtn) langBnBtn.classList.toggle('active', lang === 'bn');
+            if (langEnBtn) langEnBtn.classList.toggle('active', lang === 'en');
+
+            let hLangBnBtn = document.getElementById('hLangBnBtn');
+            let hLangEnBtn = document.getElementById('hLangEnBtn');
+            if (hLangBnBtn) hLangBnBtn.classList.toggle('active', lang === 'bn');
+            if (hLangEnBtn) hLangEnBtn.classList.toggle('active', lang === 'en');
+
+            const t = translations[lang];
+
+            let welcomeTitle = document.getElementById('welcomeTitle');
+            if (welcomeTitle) welcomeTitle.innerText = t.welcomeTitle;
+            let welcomeDesc = document.getElementById('welcomeDesc');
+            if (welcomeDesc) welcomeDesc.innerText = t.welcomeDesc;
+            let selectLangTxt = document.getElementById('selectLangTxt');
+            if (selectLangTxt) selectLangTxt.innerText = t.selectLangTxt;
+            let startBtnText = document.getElementById('startBtnText');
+            if (startBtnText) startBtnText.innerHTML = `<span>${t.startBtnText}</span> <i class="fa-solid fa-arrow-right"></i>`;
+            let loginTitle = document.getElementById('loginTitle');
+            if (loginTitle) loginTitle.innerText = t.loginTitle;
+            let loginSub = document.getElementById('loginSub');
+            if (loginSub) loginSub.innerText = t.loginSub;
+            let emailPlaceholder = document.getElementById('emailPlaceholder');
+            if (emailPlaceholder) emailPlaceholder.placeholder = t.emailPlaceholder;
+            let passPlaceholder = document.getElementById('passPlaceholder');
+            if (passPlaceholder) passPlaceholder.placeholder = t.passPlaceholder;
+            let loginBtnText = document.getElementById('loginBtnText');
+            if (loginBtnText) loginBtnText.innerText = t.loginBtnText;
+            let userInput = document.getElementById('userInput');
+            if (userInput) userInput.placeholder = t.userInput;
+            let assistantTitle = document.getElementById('assistantTitle');
+            if (assistantTitle) assistantTitle.innerText = t.assistantTitle;
+            let welcomeMsg = document.getElementById('welcomeMsg');
+            if (welcomeMsg) welcomeMsg.innerText = t.welcomeMsg;
+            let sideTitle = document.getElementById('sideTitle');
+            if (sideTitle) sideTitle.innerText = t.sideTitle;
+            let newChatBtnTxt = document.getElementById('newChatBtnTxt');
+            if (newChatBtnTxt) newChatBtnTxt.innerText = t.newChatBtnTxt;
+
+            let ctxDeleteText = document.getElementById('ctxDeleteText');
+            if (ctxDeleteText) ctxDeleteText.innerText = t.deleteChat;
+
+            let t_inspiration = document.getElementById('t_inspiration');
+            if (t_inspiration) t_inspiration.innerText = t.t_inspiration;
+            let t_edd = document.getElementById('t_edd');
+            if (t_edd) t_edd.innerText = t.t_edd;
+            let t_calcBtn = document.getElementById('t_calcBtn');
+            if (t_calcBtn) t_calcBtn.innerText = t.t_calcBtn;
+            let t_diet = document.getElementById('t_diet');
+            if (t_diet) t_diet.innerText = t.t_diet;
+            let tab1 = document.getElementById('tab1');
+            if (tab1) tab1.innerText = t.tab1;
+            let tab2 = document.getElementById('tab2');
+            if (tab2) tab2.innerText = t.tab2;
+            let tab3 = document.getElementById('tab3');
+            if (tab3) tab3.innerText = t.tab3;
+            let t_meal = document.getElementById('t_meal');
+            if (t_meal) t_meal.innerText = t.t_meal;
+            
+            let select = document.getElementById('mealTypeSelect');
+            if (select) {
+                select.innerHTML = '';
+                t.mealOptions.forEach(opt => {
+                    let o = document.createElement('option');
+                    o.value = opt; o.innerText = opt;
+                    select.appendChild(o);
+                });
+            }
+
+            let mealDescInput = document.getElementById('mealDescInput');
+            if (mealDescInput) mealDescInput.placeholder = t.mealDescInput;
+            let t_addLogBtn = document.getElementById('t_addLogBtn');
+            if (t_addLogBtn) t_addLogBtn.innerText = t.t_addLogBtn;
+            let t_mood = document.getElementById('t_mood');
+            if (t_mood) t_mood.innerText = t.t_mood;
+            let m_good = document.getElementById('m_good');
+            if (m_good) m_good.innerText = t.m_good;
+            let m_tired = document.getElementById('m_tired');
+            if (m_tired) m_tired.innerText = t.m_tired;
+            let symptom_nausea = document.getElementById('symptom_nausea');
+            if (symptom_nausea) symptom_nausea.innerText = t.symptom_nausea;
+            let t_doc = document.getElementById('t_doc');
+            if (t_doc) t_doc.innerText = t.t_doc;
+            let docNameInput = document.getElementById('docNameInput');
+            if (docNameInput) docNameInput.placeholder = t.docNameInput;
+            let t_saveDocBtn = document.getElementById('t_saveDocBtn');
+            if (t_saveDocBtn) t_saveDocBtn.innerText = t.t_saveDocBtn;
+            let t_vitals = document.getElementById('t_vitals');
+            if (t_vitals) t_vitals.innerText = t.t_vitals;
+            let t_saveVitalBtn = document.getElementById('t_saveVitalBtn');
+            if (t_saveVitalBtn) t_saveVitalBtn.innerText = t.t_saveVitalBtn;
+            let t_reminder = document.getElementById('t_reminder');
+            if (t_reminder) t_reminder.innerText = t.t_reminder;
+            let t_waterTxt = document.getElementById('t_waterTxt');
+            if (t_waterTxt) t_waterTxt.innerText = t.t_waterTxt;
+            let t_kickTxt = document.getElementById('t_kickTxt');
+            if (t_kickTxt) t_kickTxt.innerText = t.t_kickTxt;
+            let t_hospBtn = document.getElementById('t_hospBtn');
+            if (t_hospBtn) t_hospBtn.innerHTML = `<i class="fa-solid fa-hospital"></i> ${t.t_hospBtn}`;
+            let t_babyName = document.getElementById('t_babyName');
+            if (t_babyName) t_babyName.innerText = t.t_babyName;
+            let babyNameInput = document.getElementById('babyNameInput');
+            if (babyNameInput) babyNameInput.placeholder = t.babyNameInput;
+            let t_addNameBtn = document.getElementById('t_addNameBtn');
+            if (t_addNameBtn) t_addNameBtn.innerText = t.t_addNameBtn;
+
+            displayRandomAffirmation();
+            switchDietTab(1);
+            renderDailyRoutine();
+        }
+
+        function goToPage(pageId) {
+            document.getElementById('page-welcome').style.display = 'none';
+            document.getElementById('page-login').style.display = 'none';
+            document.getElementById('page-main').style.display = 'none';
+
+            if (pageId === 'page-main') {
+                document.getElementById(pageId).style.display = 'block';
+                initApp();
+            } else {
+                document.getElementById(pageId).style.display = 'flex';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            goToPage('page-main');
+        }
+
+        async function initApp() {
+            setAppLanguage(currentLang);
+            await refreshSidebar();
+            
+            let firstItem = document.querySelector('.history-item');
+            if (firstItem) {
+                firstItem.click();
+            } else {
+                createNewChat();
+            }
+        }
+
+        /* Context Menu Handlers */
+        function showContextMenu(e, chatId) {
+            e.preventDefault();
+            e.stopPropagation();
+            targetContextMenuChatId = chatId;
+            let menu = document.getElementById("chatContextMenu");
+            let deleteText = document.getElementById("ctxDeleteText");
+            if (deleteText) {
+                deleteText.innerText = currentLang === 'en' ? "Delete Chat" : "চ্যাট মুছুন";
+            }
+            
+            let x = e.clientX;
+            let y = e.clientY;
+            let menuWidth = 170;
+            let menuHeight = 50;
+            if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 10;
+            if (y + menuHeight > window.innerHeight) y = window.innerHeight - menuHeight - 10;
+            
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+            menu.style.display = 'block';
+        }
+
+        function hideContextMenu() {
+            let menu = document.getElementById("chatContextMenu");
+            if (menu) menu.style.display = 'none';
+        }
+
+        window.addEventListener('click', hideContextMenu);
+        window.addEventListener('contextmenu', (e) => {
+            if (!e.target.closest('.history-item')) {
+                hideContextMenu();
+            }
+        });
+
+        async function deleteTargetChat() {
+            if (!targetContextMenuChatId) return;
+            let chatIdToDelete = targetContextMenuChatId;
+            hideContextMenu();
+            
+            try {
+                await fetch(`/api/delete_chat_session/${chatIdToDelete}`, { method: 'DELETE' });
+                
+                if (currentChatId === chatIdToDelete) {
+                    currentChatId = null;
+                    await refreshSidebar();
+                    let firstItem = document.querySelector('.history-item');
+                    if (firstItem) {
+                        firstItem.click();
+                    } else {
+                        createNewChat();
+                    }
+                } else {
+                    await refreshSidebar();
+                }
+            } catch (err) {
+                console.error("Error deleting chat:", err);
+            }
+        }
+
+        /* FULL FIXED TTS SPEECH FUNCTION */
+        function readAloud(rawText, buttonElement) {
+            if (speechSynth.speaking && activeTtsButton === buttonElement) {
+                speechSynth.cancel();
+                resetTtsButton(buttonElement);
+                return;
+            }
+
+            if (speechSynth.speaking) {
+                speechSynth.cancel();
+                if (activeTtsButton) resetTtsButton(activeTtsButton);
+            }
+
+            activeTtsButton = buttonElement;
+            buttonElement.innerHTML = "<i class='fa-solid fa-square'></i> Stop";
+            buttonElement.style.backgroundColor = "#fee2e2";
+            buttonElement.style.color = "#ef4444";
+            buttonElement.style.borderColor = "#fca5a5";
+
+            let cleanText = rawText
+                .replace(/<[^>]*>?/gm, '')
+                .replace(/\*/g, '')
+                .replace(/•/g, '')
+                .replace(/\n/g, ' ')
+                .trim();
+
+            if (!cleanText) {
+                resetTtsButton(buttonElement);
+                return;
+            }
+
+            speechUtterance = new SpeechSynthesisUtterance(cleanText);
+
+            let isBangla = /[\u0980-\u09FF]/.test(cleanText) || currentLang === 'bn';
+            let targetLang = isBangla ? 'bn' : 'en';
+
+            speechUtterance.lang = isBangla ? 'bn-BD' : 'en-US';
+
+            loadVoices();
+            let selectedVoice = availableVoices.find(v => 
+                v.lang.toLowerCase().startsWith(targetLang) || 
+                v.lang.toLowerCase().includes(isBangla ? 'bn' : 'en')
+            );
+
+            if (selectedVoice) {
+                speechUtterance.voice = selectedVoice;
+            }
+
+            speechUtterance.pitch = 1.1; 
+            speechUtterance.rate = 0.95;
+
+            speechUtterance.onend = function() { resetTtsButton(buttonElement); };
+            speechUtterance.onerror = function(e) { 
+                console.error("TTS Error:", e);
+                resetTtsButton(buttonElement); 
+            };
+
+            speechSynth.speak(speechUtterance);
+        }
+
+        function resetTtsButton(btn) {
+            if(btn) {
+                btn.innerHTML = "<i class='fa-solid fa-volume-high'></i> Speak";
+                btn.style.backgroundColor = "#ffffff";
+                btn.style.color = "var(--primary)";
+                btn.style.borderColor = "#fbcfe8";
+            }
+            if (activeTtsButton === btn) activeTtsButton = null;
+        }
+
+        async function startVoiceRecognition() {
+            let voiceBtn = document.getElementById("voiceBtn");
+            let inputField = document.getElementById("userInput");
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert(currentLang === 'en' ? "Voice recognition not supported in this browser." : "ভয়েস টাইপিং সাপোর্ট করে না।");
+                return;
+            }
+
+            if (recognition) { recognition.stop(); return; }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = currentLang === 'en' ? 'en-US' : 'bn-BD'; 
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                if(voiceBtn) {
+                    voiceBtn.style.color = "#ef4444";
+                    voiceBtn.style.backgroundColor = "#fee2e2";
+                    voiceBtn.style.borderColor = "#fca5a5";
+                }
+                if(inputField) inputField.placeholder = currentLang === 'en' ? "Listening..." : "শুনছি আপু, বলুন...";
+            };
+
+            recognition.onresult = function(event) {
+                const speechToText = event.results[0][0].transcript;
+                if(speechToText.trim() !== "" && inputField) {
+                    inputField.value = speechToText;
+                    sendChatMessage(); 
+                }
+            };
+
+            recognition.onend = function() {
+                if(voiceBtn) {
+                    voiceBtn.style.color = "var(--primary)";
+                    voiceBtn.style.backgroundColor = "#fdf2f8";
+                    voiceBtn.style.borderColor = "#fbcfe8";
+                }
+                if(inputField) inputField.placeholder = translations[currentLang].userInput;
+                recognition = null;
+            };
+
+            recognition.start();
+        }
+
+        const routineItems = {
+            bn: [
+                "সকালের ভিটামিন / ফলিক অ্যাসিড",
+                "হালকা ব্যায়াম / হাঁটা (১৫-২০ মিনিট)",
+                "কমপক্ষে ৩ লিটার পানি পান",
+                "দুপুরের বিশ্রাম / হালকা ঘুম",
+                "বাচ্চার কিক গণনাকরণ",
+                "সান্ধ্যকালীন ওষুধ / ক্যালসিয়াম ও আয়রন"
+            ],
+            en: [
+                "Morning Vitamin / Folic Acid",
+                "Light Stretching / Walk (15-20 min)",
+                "Drink at least 3 Liters of Water",
+                "Afternoon Rest / Short Nap",
+                "Count Baby Kicks",
+                "Evening Medicine / Calcium & Iron"
+            ]
+        };
+
+        function renderDailyRoutine() {
+            let routineBox = document.getElementById("routineBox");
+            if (!routineBox) return;
+
+            let title = currentLang === 'en' ? "Daily Routine Tracker" : "দৈনন্দিন রুটিন ট্র্যাকার";
+
+            routineBox.innerHTML = `
+                <h3><i class="fa-solid fa-square-check"></i> ${title}</h3>
+                <div class="checklist-container" id="routineChecklistContainer"></div>
+            `;
+
+            let container = document.getElementById("routineChecklistContainer");
+            routineItems[currentLang].forEach((item, index) => {
+                let label = document.createElement("label");
+                label.className = "check-item";
+                label.innerHTML = `<input type="checkbox" id="routine_item_${index}"> <span>${item}</span>`;
+                container.appendChild(label);
+            });
+        }
+
+        function logDailyMeal() {
+            let mealTypeSelect = document.getElementById("mealTypeSelect");
+            let mealDescInput = document.getElementById("mealDescInput");
+            let logBox = document.getElementById("dietLogBox");
+
+            if (!mealTypeSelect || !mealDescInput || !logBox) return;
+
+            let mealType = mealTypeSelect.value;
+            let mealDesc = mealDescInput.value.trim();
+
+            if (mealDesc === "") return;
+
+            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#10b981";
+            logItem.innerHTML = `<span><strong>${mealType}:</strong> ${mealDesc} <small style="opacity:0.7">(${timeStr})</small></span>`;
+            
+            logBox.insertBefore(logItem, logBox.firstChild);
+            mealDescInput.value = "";
+        }
+
+        function logMood(moodText) {
+            let logBox = document.getElementById("moodLogBox");
+            if (!logBox) return;
+            let timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#ec4899";
+            logItem.innerHTML = `<span>${moodText} <small style="opacity:0.7">(${timeStr})</small></span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+        }
+
+        function toggleSymptom(symptomName, id) {
+            let logBox = document.getElementById("moodLogBox");
+            if (!logBox) return;
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#e11d48";
+            logItem.innerHTML = `<span>Logged: ${symptomName}</span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+        }
+
+        function saveAppointment() {
+            let docNameInput = document.getElementById("docNameInput");
+            let appTimeInput = document.getElementById("appTimeInput");
+            let logBox = document.getElementById("appLogBox");
+
+            if (!docNameInput || !appTimeInput || !logBox) return;
+
+            let docName = docNameInput.value.trim();
+            let appTime = appTimeInput.value;
+
+            if(!docName || !appTime) return;
+
+            let dateObj = new Date(appTime);
+            let formattedDate = dateObj.toLocaleDateString([], {month: 'short', day: 'numeric'}) + " - " + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.style.borderLeftColor = "#8b5cf6";
+            logItem.innerHTML = `<span>🩺 ${docName} <small style="opacity:0.7">(${formattedDate})</small></span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+
+            docNameInput.value = ""; appTimeInput.value = "";
+        }
+
+        function addBabyName() {
+            let nameField = document.getElementById("babyNameInput");
+            let nameListBox = document.getElementById("nameListBox");
+
+            if (!nameField || !nameListBox) return;
+            let nameText = nameField.value.trim();
+
+            if(nameText === "") return;
+
+            let item = document.createElement("div");
+            item.className = "log-item";
+            item.innerHTML = `<span>👶 <strong>${nameText}</strong></span> <i class="fa-solid fa-trash" style="color: #ef4444; cursor: pointer;" onclick="this.parentElement.remove()"></i>`;
+            nameListBox.appendChild(item);
+            nameField.value = "";
+        }
+
+        const affirmations = {
+            bn: [
+                "আপু, আপনার শরীরের ভেতরে একটি চমৎকার নতুন প্রাণের সৃষ্টি হচ্ছে। আপনি অসাধারণ!",
+                "প্রতিটি নতুন দিন আপনাকে আপনার সোনামণির আরও কাছে নিয়ে আসছে। নিজের যত্ন নিন।",
+                "আপনার শরীর শক্তিশালী এবং এটি একটি সুন্দর অলৌকিক ঘটনা ঘটাতে পুরোপুরি সক্ষম।",
+                "সব চিন্তা দূরে রাখুন, আপনার ছোট্ট সোনাটি আপনার গর্ভে একদম নিরাপদ ও শান্তিতে আছে।"
+            ],
+            en: [
+                "Dear sister, a wonderful new life is blooming inside you. You are amazing!",
+                "Every single day brings you closer to holding your little bundle of joy. Take care of yourself.",
+                "Your body is strong and perfectly capable of performing this incredible miracle.",
+                "Rest your mind; your little baby is safe, warm, and peaceful inside you."
+            ]
+        };
+
+        function displayRandomAffirmation() {
+            let textElement = document.getElementById("quoteText");
+            if (textElement) {
+                let list = affirmations[currentLang];
+                let randomIndex = Math.floor(Math.random() * list.length);
+                textElement.innerText = list[randomIndex];
+            }
+        }
+
+        const dietData = {
+            bn: {
+                1: "🟢 <strong>১ম ট্রাইমেস্টার:</strong><br>• ফলিক অ্যাসিড সমৃদ্ধ খাবার (সবুজ শাকসবজি, ডাল) খান।<br>• আদা চা বা শুকনো মুড়ি খেতে পারেন।<br>• প্রচুর পানি পান করুন।",
+                2: "🟡 <strong>২য় ট্রাইমেস্টার:</strong><br>• ক্যালসিয়াম ও আয়রন (দুধ, ডিম, ছোট মাছ) বাড়ান।<br>• প্রোটিন (চিকেন, ডাল) বেশি খান।<br>• কাঁচা পেঁপে এড়িয়ে চলুন।",
+                3: "🔵 <strong>৩য় ট্রাইমেস্টার:</strong><br>• আঁশযুক্ত খাবার (ওটস, ফল) খান।<br>• এনার্জির জন্য বারবার পুষ্টিকর খাবার খান।<br>• অতিরিক্ত তেল বাদ দিন।"
+            },
+            en: {
+                1: "🟢 <strong>1st Trimester:</strong><br>• Eat folic acid-rich foods (green leafy veggies, lentils).<br>• Drink ginger tea or dry puffed rice for morning sickness.<br>• Stay hydrated with water.",
+                2: "🟡 <strong>2nd Trimester:</strong><br>• Increase calcium and iron intake (milk, eggs, small fish).<br>• Eat protein-rich foods (chicken, beans).<br>• Avoid raw papaya.",
+                3: "🔵 <strong>3rd Trimester:</strong><br>• Eat fiber-rich foods (oats, fresh fruits).<br>• Have small, frequent nutritious meals for energy.<br>• Avoid oily foods."
+            }
+        };
+
+        function switchDietTab(tabNum) {
+            document.querySelectorAll('.diet-tab-btn').forEach(btn => btn.classList.remove('active'));
+            let activeBtn = document.getElementById("tab" + tabNum);
+            if (activeBtn) activeBtn.classList.add('active');
+            let contentBox = document.getElementById("dietContentBox");
+            if (contentBox) contentBox.innerHTML = dietData[currentLang][tabNum];
+        }
+
+        async function refreshSidebar() {
+            let historyList = document.getElementById("historyList");
+            if (!historyList) return;
+            historyList.innerHTML = "";
+            try {
+                let response = await fetch('/api/get_all_sessions');
+                let sessions = await response.json();
+                
+                sessions.forEach(session => {
+                    let item = document.createElement("div");
+                    item.className = "history-item";
+                    if (session.chat_id === currentChatId) item.className += " active";
+                    item.innerHTML = `<i class="fa-regular fa-message" style="font-size: 11px; opacity: 0.7;"></i> <span>${session.title}</span>`;
+                    item.setAttribute("data-id", session.chat_id);
+                    
+                    item.onclick = async function() {
+                        document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+                        item.classList.add('active');
+                        currentChatId = session.chat_id;
+                        await loadChatMessages(currentChatId);
+                    };
+
+                    item.oncontextmenu = function(e) {
+                        showContextMenu(e, session.chat_id);
+                    };
+
+                    historyList.appendChild(item);
+                });
+            } catch (e) { console.error("Error fetching sessions:", e); }
+        }
+
+        async function loadChatMessages(chatId) {
+            let chatBox = document.getElementById("chatBox");
+            if (!chatBox) return;
+            chatBox.innerHTML = "";
+            try {
+                let response = await fetch(`/api/get_chat_messages/${chatId}`);
+                let messages = await response.json();
+                
+                if (!messages || messages.length === 0) {
+                    let welcomeText = translations[currentLang].welcomeMsg;
+                    chatBox.innerHTML = `<div class="bot-msg-box"><div class="bot-msg">${welcomeText}</div></div>`;
+                    return;
+                }
+                messages.forEach(msg => {
+                    if (msg.role === 'user') {
+                        appendUserMessageToUI(msg.content);
+                    } else if (msg.role === 'assistant') {
+                        appendBotMessageToUI(formatCleanText(msg.content));
+                    }
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (e) { console.error("Error loading chat messages:", e); }
+        }
+
+        function createNewChat() {
+            currentChatId = 'chat_' + Math.random().toString(36).substr(2, 9);
+            let chatBox = document.getElementById("chatBox");
+            if (chatBox) {
+                chatBox.innerHTML = `<div class="bot-msg-box"><div class="bot-msg">${translations[currentLang].welcomeMsg}</div></div>`;
+            }
+            
+            let historyList = document.getElementById("historyList");
+            let item = document.createElement("div");
+            item.className = "history-item active";
+            item.innerHTML = `<i class="fa-regular fa-message" style="font-size: 11px; opacity: 0.7;"></i> <span>${currentLang === 'en' ? "New Chat..." : "নতুন চ্যাট..."}</span>`;
+            item.setAttribute("data-id", currentChatId);
+            
+            document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+            item.onclick = function() {
+                document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                currentChatId = item.getAttribute("data-id");
+                loadChatMessages(currentChatId);
+            };
+
+            item.oncontextmenu = function(e) {
+                showContextMenu(e, currentChatId);
+            };
+
+            if (historyList) historyList.insertBefore(item, historyList.firstChild);
+        }
+
+        async function sendChatMessage() {
+            let inputField = document.getElementById("userInput");
+            if (!inputField) return;
+            let userText = inputField.value.trim();
+            if (userText === "") return;
+            
+            if (!currentChatId) {
+                currentChatId = 'chat_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            appendUserMessageToUI(userText);
+            inputField.value = "";
+            
+            let activeHistory = document.querySelector('.history-item.active span');
+            if (activeHistory && (activeHistory.innerText.includes("নতুন চ্যাট") || activeHistory.innerText.includes("New Chat") || activeHistory.innerText.includes("..."))) {
+                activeHistory.innerText = userText.length > 18 ? userText.substring(0, 18) + "..." : userText;
+            }
+            await getBotResponse(userText);
+        }
+
+        function previewAndSendImage() {
+            let fileInput = document.getElementById("imageInput");
+            let chatBox = document.getElementById("chatBox");
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = async function(e) {
+                    let userDiv = document.createElement("div");
+                    userDiv.className = "user-msg";
+                    let img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.className = "chat-img";
+                    userDiv.appendChild(document.createTextNode(currentLang === 'en' ? "Uploaded an image:" : "একটি ছবি আপলোড করেছেন:"));
+                    userDiv.appendChild(document.createElement("br"));
+                    userDiv.appendChild(img);
+                    if(chatBox) {
+                        chatBox.appendChild(userDiv);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }
+                    let prompt = currentLang === 'en' ? "I uploaded an image related to my health. Please advise in English." : "আমি আমার গর্ভাবস্থার স্বাস্থ্য সংক্রান্ত একটি ছবি আপলোড করেছি। আমাকে বাংলাতে পরামর্শ দিন।";
+                    await getBotResponse(prompt);
+                }
+                reader.readAsDataURL(fileInput.files[0]);
+                fileInput.value = "";
+            }
+        }
+
+        function formatCleanText(text) {
+            if (!text) return "";
+            let cleaned = text.replace(/\*\*(.*?)\*\*/g, "$1");
+            cleaned = cleaned.replace(/^\s*\*\s*/gm, "• ");
+            return cleaned;
+        }
+
+        function appendUserMessageToUI(text) {
+            let chatBox = document.getElementById("chatBox");
+            if(!chatBox) return;
+            let userDiv = document.createElement("div");
+            userDiv.className = "user-msg";
+            userDiv.innerText = text;
+            chatBox.appendChild(userDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function appendBotMessageToUI(cleanText) {
+            let chatBox = document.getElementById("chatBox");
+            if(!chatBox) return;
+            let box = document.createElement("div");
+            box.className = "bot-msg-box";
+            let msgDiv = document.createElement("div");
+            msgDiv.className = "bot-msg";
+            msgDiv.innerText = cleanText;
+            let ttsBtn = document.createElement("button");
+            ttsBtn.className = "tts-btn";
+            ttsBtn.innerHTML = "<i class='fa-solid fa-volume-high'></i> Speak";
+            
+            ttsBtn.onclick = function() { readAloud(cleanText, ttsBtn); };
+            
+            box.appendChild(msgDiv);
+            box.appendChild(ttsBtn);
+            chatBox.appendChild(box);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function getBotResponse(promptText) {
+            let chatBox = document.getElementById("chatBox");
+            if (!chatBox) return;
+            
+            if (!currentChatId) {
+                currentChatId = 'chat_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            let loadingDiv = document.createElement("div");
+            loadingDiv.className = "loading-msg";
+            loadingDiv.id = "prova-loading";
+            loadingDiv.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>${currentLang === 'en' ? 'Shokhi is thinking...' : 'সখী ভাবছে...'}</span>`;
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            try {
+                let response = await fetch('/api/ask_prova_chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: currentChatId,
+                        prompt_text: promptText,
+                        language: currentLang
+                    })
+                });
+
+                let data = await response.json();
+                let loading = document.getElementById("prova-loading");
+                if (loading) loading.remove();
+
+                if (data && data.reply) {
+                    appendBotMessageToUI(formatCleanText(data.reply));
+                } else {
+                    appendBotMessageToUI(currentLang === 'en' ? "I am here with you. How can I help?" : "আমি আপনার সাথেই আছি আপু। বলুন কীভাবে সাহায্য করতে পারি?");
+                }
+                await refreshSidebar();
+            } catch (error) {
+                console.error("API Fetch Error:", error);
+                let loading = document.getElementById("prova-loading");
+                if (loading) loading.remove();
+                appendBotMessageToUI(currentLang === 'en' ? "Sorry, having trouble connecting to the server." : "দুঃখিত আপু, সার্ভারের সাথে সংযোগে সমস্যা হচ্ছে।");
+            }
+        }
+
+        function calculatePregnancy() {
+            let lmpInput = document.getElementById("lmpDate");
+            if (!lmpInput || !lmpInput.value) return;
+            let lmp = new Date(lmpInput.value);
+            let today = new Date();
+            if (lmp > today) {
+                let calcResult = document.getElementById("calcResult");
+                if(calcResult) calcResult.innerHTML = `<span style="color: #ef4444; font-weight: 600;">⚠️ ${currentLang === 'en' ? 'Select valid date' : 'সঠিক তারিখ নির্বাচন করুন'}</span>`;
+                return;
+            }
+            let dueDate = new Date(lmp.getTime() + (280 * 24 * 60 * 60 * 1000));
+            let diffDays = Math.ceil(Math.abs(today - lmp) / (1000 * 60 * 60 * 24));
+            let weeks = Math.floor(diffDays / 7);
+            let days = diffDays % 7;
+            
+            let trimester = weeks <= 12 ? (currentLang === 'en' ? "1st Trimester (১ম ট্রাইমেস্টার)" : "১ম ট্রাইমেস্টার") : weeks <= 26 ? (currentLang === 'en' ? "2nd Trimester (২য় ট্রাইমেস্টার)" : "২য় ট্রাইমেস্টার") : (currentLang === 'en' ? "3rd Trimester (৩য় ট্রাইমেস্টার)" : "৩য় ট্রাইমেস্টার");
+            let calcResult = document.getElementById("calcResult");
+            if(calcResult) {
+                calcResult.innerHTML = `
+                    <div style="background: #fdf2f8; padding: 10px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                        <div><strong>${currentLang==='en'?'Expected Due Date':'সম্ভাব্য প্রসবের তারিখ'}:</strong> ${dueDate.toLocaleDateString([], {month: 'long', day: 'numeric', year: 'numeric'})}</div>
+                        <div><strong>${currentLang==='en'?'Current Stage':'বর্তমান অগ্রগতি'}:</strong> ${weeks} ${currentLang==='en'?'weeks':'সপ্তাহ'}, ${days} ${currentLang==='en'?'days':'দিন'}</div>
+                        <div style="color: var(--primary); font-weight: 700; margin-top: 2px;">${trimester}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function logVitals() {
+            let bpInput = document.getElementById("bpInput");
+            let weightInput = document.getElementById("weightInput");
+            let logBox = document.getElementById("vitalsLogBox");
+
+            if(!bpInput || !weightInput || !logBox) return;
+
+            let bp = bpInput.value.trim();
+            let weight = weightInput.value.trim();
+            
+            if (!bp && !weight) return;
+            let dateStr = new Date().toLocaleDateString([], { month: 'short', day: 'numeric' });
+            let logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.innerHTML = `<span><strong>${dateStr}</strong> — BP: ${bp||'N/A'} | ${weight||'N/A'} kg</span>`;
+            logBox.insertBefore(logItem, logBox.firstChild);
+            bpInput.value = ""; weightInput.value = "";
+        }
+
+        let waterIntervalId = null;
+        function toggleWaterReminder() {
+            let btn = document.getElementById("waterBtn");
+            let status = document.getElementById("waterTimerStatus");
+
+            if (waterIntervalId === null) {
+                waterIntervalId = setInterval(() => { alert(currentLang === 'en' ? "🥤 Time to drink water!" : "🥤 আপু, পানি খাওয়ার সময় হয়েছে!"); }, 3600000);
+                btn.innerText = currentLang === 'en' ? "Stop Reminder" : "রিমাইন্ডার বন্ধ করুন"; 
+                btn.style.background = "linear-gradient(135deg, #fb7185, #ef4444)";
+                status.innerText = currentLang === 'en' ? "● Active (Hourly alert)" : "● চালু আছে (প্রতি ঘন্টায়)"; 
+                status.style.color = "#10b981";
+            } else {
+                clearInterval(waterIntervalId); waterIntervalId = null;
+                btn.innerText = "Start (1 Hour)"; 
+                btn.style.background = "linear-gradient(135deg, #38bdf8, #0ea5e9)";
+                status.innerText = currentLang === 'en' ? "○ Inactive" : "○ বন্ধ আছে"; 
+                status.style.color = "var(--text-muted)";
+            }
+        }
+
+        let kickCount = 0;
+        function countKick() { 
+            kickCount++; 
+            let display = document.getElementById("kickDisplay");
+            if(display) display.innerText = kickCount + " Kicks"; 
+        }
+        function resetKick() { 
+            kickCount = 0; 
+            let display = document.getElementById("kickDisplay");
+            if(display) display.innerText = "0 Kicks"; 
+        }
+
+        function findNearbyHospitals() { window.open("https://www.google.com/maps/search/hospitals+near+me/", "_blank"); }
+    </script>
+</body>
+</html>

@@ -24,8 +24,8 @@ export default async function handler(req, res) {
   }
 
   const body = req.body || {};
-  const chatId = body.chat_id || `chat_${Date.now()}`;
-  const promptText = (body.prompt_text || '').trim();
+  const chatId = body.chat_id || body.session_id || `chat_${Date.now()}`;
+  const promptText = (body.prompt_text || body.message || body.prompt || '').trim();
   const language = body.language === 'en' ? 'en' : 'bn';
   const imageUrl = body.image_url || null;
 

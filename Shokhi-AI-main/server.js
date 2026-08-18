@@ -161,7 +161,7 @@ export function createServerInstance() {
       let targetFile = null;
       if (pathname === '/' || pathname === '/landing' || pathname === '/landing.html') {
         targetFile = 'landing.html';
-      } else if (pathname === '/app' || pathname === '/login' || pathname === '/register' || pathname === '/chat' || pathname === '/dashboard' || pathname === '/index.html') {
+      } else if (pathname === '/app' || pathname === '/index.html' || pathname === '/chat' || pathname === '/dashboard' || pathname === '/login' || pathname === '/register') {
         targetFile = 'index.html';
       } else if (pathname === '/admin' || pathname === '/admin.html') {
         targetFile = 'admin.html';
@@ -186,10 +186,10 @@ export function createServerInstance() {
       }
 
       // Fallback for single page app routing
-      const fallbackPath = path.join(WWW_DIR, 'landing.html');
+      const fallbackPath = path.join(WWW_DIR, 'index.html');
       if (fs.existsSync(fallbackPath)) {
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
         res.statusCode = 200;

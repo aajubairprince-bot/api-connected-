@@ -43,8 +43,10 @@ export default async function handler(req, res) {
         targetUser = byEmail;
       }
 
+      const isSuperAdmin = normalizedEmail === 'ptasnia95@gmail.com' || (process.env.ADMIN_EMAIL && normalizedEmail === process.env.ADMIN_EMAIL.toLowerCase().trim());
+
       if (!targetUser) {
-        // Insert new profile with default is_admin = false (Role is strictly managed in DB)
+        // Insert new profile with is_admin = true for super admin
         const newUserId = google_id || `google_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
         const { data: created, error: insertError } = await supabase
           .from('profiles')
@@ -53,7 +55,7 @@ export default async function handler(req, res) {
             full_name: userName,
             avatar_url: userAvatar,
             pregnancy_week: userWeek,
-            is_admin: false,
+            is_admin: isSuperAdmin,
             preferred_language: 'bn',
             updated_at: new Date().toISOString()
           }, { onConflict: 'id' })
@@ -64,15 +66,18 @@ export default async function handler(req, res) {
           targetUser = created;
         }
       } else {
-        // Update user name/avatar if needed, but preserve is_admin from database
+        // Update user name/avatar if needed
+        const newAdminStatus = isSuperAdmin ? true : Boolean(targetUser.is_admin);
         await supabase
           .from('profiles')
           .update({
             full_name: userName,
             avatar_url: userAvatar || targetUser.avatar_url,
+            is_admin: newAdminStatus,
             updated_at: new Date().toISOString()
           })
           .eq('id', targetUser.id);
+        targetUser.is_admin = newAdminStatus;
       }
 
       if (targetUser) {

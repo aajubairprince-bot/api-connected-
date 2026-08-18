@@ -28,6 +28,10 @@
       "dest": "/api/voice/config.js"
     },
     {
+      "src": "/api/voice/tts",
+      "dest": "/api/voice/tts.js"
+    },
+    {
       "src": "/api/debug/test_500",
       "dest": "/api/debug/test_500.js"
     },
@@ -50,6 +54,10 @@
     {
       "src": "/api/auth/login",
       "dest": "/api/auth/login.js"
+    },
+    {
+      "src": "/api/auth/google",
+      "dest": "/api/auth/google.js"
     },
     {
       "src": "/api/auth/me",
@@ -100,6 +108,10 @@
       "dest": "/api/maternity/meals.js"
     },
     {
+      "src": "/api/maternity/hydration",
+      "dest": "/api/maternity/hydration.js"
+    },
+    {
       "src": "/api/maternity/mood/(.*)",
       "dest": "/api/maternity/mood.js?id=$1"
     },
@@ -126,6 +138,10 @@
     {
       "src": "/api/maternity/routines/toggle",
       "dest": "/api/maternity/routines/toggle.js"
+    },
+    {
+      "src": "/api/maternity/routines/reset",
+      "dest": "/api/maternity/routines/reset.js"
     },
     {
       "src": "/api/maternity/kicks",
@@ -172,14 +188,6 @@
       "dest": "/api/admin/delete.js"
     },
     {
-      "src": "/api/maternity/hydration",
-      "dest": "/api/maternity/hydration.js"
-    },
-    {
-      "src": "/api/maternity/routines/reset",
-      "dest": "/api/maternity/routines/reset.js"
-    },
-    {
       "src": "/api/multimodal/upload",
       "dest": "/api/multimodal/upload.js"
     },
@@ -194,6 +202,38 @@
     {
       "src": "/docs",
       "dest": "/www/docs.html"
+    },
+    {
+      "src": "/docs.html",
+      "dest": "/www/docs.html"
+    },
+    {
+      "src": "/admin",
+      "dest": "/www/admin.html"
+    },
+    {
+      "src": "/admin.html",
+      "dest": "/www/admin.html"
+    },
+    {
+      "src": "/app",
+      "dest": "/www/index.html"
+    },
+    {
+      "src": "/app/(.*)",
+      "dest": "/www/index.html"
+    },
+    {
+      "src": "/landing",
+      "dest": "/www/landing.html"
+    },
+    {
+      "src": "/landing.html",
+      "dest": "/www/landing.html"
+    },
+    {
+      "src": "/",
+      "dest": "/www/landing.html"
     },
     {
       "src": "/(.*)",
