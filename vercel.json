@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/Shokhi-AI-main/api/$1" },
+    { "source": "/app", "destination": "/Shokhi-AI-main/www/index.html" },
+    { "source": "/app/(.*)", "destination": "/Shokhi-AI-main/www/index.html" },
+    { "source": "/admin", "destination": "/Shokhi-AI-main/www/admin.html" },
+    { "source": "/admin.html", "destination": "/Shokhi-AI-main/www/admin.html" },
+    { "source": "/landing", "destination": "/Shokhi-AI-main/www/landing.html" },
+    { "source": "/landing.html", "destination": "/Shokhi-AI-main/www/landing.html" },
+    { "source": "/docs", "destination": "/Shokhi-AI-main/www/docs.html" },
+    { "source": "/docs.html", "destination": "/Shokhi-AI-main/www/docs.html" },
+    { "source": "/", "destination": "/Shokhi-AI-main/www/landing.html" },
+    { "source": "/(.*)", "destination": "/Shokhi-AI-main/www/$1" }
+  ]
+}
