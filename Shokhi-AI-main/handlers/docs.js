@@ -1,13 +1,13 @@
 /**
  * Shokhi AI — Documentation API Endpoint
- * Lists available markdown docs and serves raw markdown content
+ * Lists available markdown docs and serves markdown content
+ * 100% Serverless-compatible with compiled in-memory catalog
  */
 
 import fs from 'fs';
 import path from 'path';
 import { sendJsonResponse, sendJsonError } from '../lib/errors.js';
-
-const DOCS_DIR = path.resolve(process.cwd(), 'docs');
+import { DOCS_CATALOG } from './docs_catalog.js';
 
 const CATEGORIES = {
   'Overview & Architecture': [
@@ -67,6 +67,24 @@ const CATEGORIES = {
   ]
 };
 
+function getCategoryForFile(filename) {
+  for (const [catName, catFiles] of Object.entries(CATEGORIES)) {
+    if (catFiles.includes(filename)) {
+      return catName;
+    }
+  }
+  return 'General';
+}
+
+function getTitleForFile(filename) {
+  return filename
+    .replace(/\.md$/, '')
+    .replace(/_/g, ' ')
+    .split(' ')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(' ');
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return sendJsonError(res, 405, 'Method Not Allowed');
@@ -74,69 +92,94 @@ export default async function handler(req, res) {
 
   const requestedFile = req.query?.file || req.query?.doc;
 
-  // Single document retrieval
+  // 1. Single document retrieval
   if (requestedFile) {
-    // Prevent directory traversal
     const safeFileName = path.basename(requestedFile);
-    const targetPath = path.join(DOCS_DIR, safeFileName);
-
-    if (!fs.existsSync(targetPath) || !targetPath.endsWith('.md')) {
-      return sendJsonError(res, 404, `Document '${safeFileName}' not found`);
-    }
-
-    try {
-      const content = fs.readFileSync(targetPath, 'utf8');
-      const stat = fs.statSync(targetPath);
+    
+    // Check in-memory compiled catalog first (100% serverless proof)
+    if (DOCS_CATALOG && DOCS_CATALOG[safeFileName]) {
+      const content = DOCS_CATALOG[safeFileName];
       return sendJsonResponse(res, 200, {
         filename: safeFileName,
         content,
-        sizeBytes: stat.size,
-        updatedAt: stat.mtime
+        sizeBytes: Buffer.byteLength(content, 'utf8'),
+        updatedAt: new Date().toISOString()
       });
-    } catch (err) {
-      return sendJsonError(res, 500, `Failed to read document: ${err.message}`);
+    }
+
+    // Try filesystem candidate locations
+    const candidateDirs = [
+      path.resolve(process.cwd(), 'docs'),
+      path.resolve(process.cwd(), 'Shokhi-AI-main', 'docs'),
+      path.resolve(process.cwd(), 'www', 'docs')
+    ];
+
+    for (const dir of candidateDirs) {
+      const targetPath = path.join(dir, safeFileName);
+      if (fs.existsSync(targetPath) && targetPath.endsWith('.md')) {
+        try {
+          const content = fs.readFileSync(targetPath, 'utf8');
+          const stat = fs.statSync(targetPath);
+          return sendJsonResponse(res, 200, {
+            filename: safeFileName,
+            content,
+            sizeBytes: stat.size,
+            updatedAt: stat.mtime
+          });
+        } catch (_) {}
+      }
+    }
+
+    return sendJsonError(res, 404, `Document '${safeFileName}' not found`);
+  }
+
+  // 2. Listing all documents with categories and metadata
+  const docList = [];
+  const filenames = Object.keys(DOCS_CATALOG || {});
+
+  // If catalog is available, use it
+  if (filenames.length > 0) {
+    filenames.forEach(file => {
+      const content = DOCS_CATALOG[file];
+      docList.push({
+        filename: file,
+        title: getTitleForFile(file),
+        category: getCategoryForFile(file),
+        sizeBytes: Buffer.byteLength(content, 'utf8'),
+        updatedAt: new Date().toISOString()
+      });
+    });
+  } else {
+    // Fallback to disk scan
+    const candidateDirs = [
+      path.resolve(process.cwd(), 'docs'),
+      path.resolve(process.cwd(), 'Shokhi-AI-main', 'docs'),
+      path.resolve(process.cwd(), 'www', 'docs')
+    ];
+
+    for (const dir of candidateDirs) {
+      if (fs.existsSync(dir)) {
+        const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
+        files.forEach(file => {
+          if (!docList.find(d => d.filename === file)) {
+            const filePath = path.join(dir, file);
+            const stat = fs.statSync(filePath);
+            docList.push({
+              filename: file,
+              title: getTitleForFile(file),
+              category: getCategoryForFile(file),
+              sizeBytes: stat.size,
+              updatedAt: stat.mtime
+            });
+          }
+        });
+      }
     }
   }
 
-  // Listing all documents with categories and metadata
-  try {
-    const files = fs.readdirSync(DOCS_DIR).filter(f => f.endsWith('.md'));
-    const docList = files.map(file => {
-      const filePath = path.join(DOCS_DIR, file);
-      const stat = fs.statSync(filePath);
-      
-      // Find category
-      let category = 'General';
-      for (const [catName, catFiles] of Object.entries(CATEGORIES)) {
-        if (catFiles.includes(file)) {
-          category = catName;
-          break;
-        }
-      }
-
-      // Generate human-friendly title
-      const title = file
-        .replace(/\.md$/, '')
-        .replace(/_/g, ' ')
-        .split(' ')
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-        .join(' ');
-
-      return {
-        filename: file,
-        title,
-        category,
-        sizeBytes: stat.size,
-        updatedAt: stat.mtime
-      };
-    });
-
-    return sendJsonResponse(res, 200, {
-      total: docList.length,
-      categories: Object.keys(CATEGORIES),
-      docs: docList
-    });
-  } catch (err) {
-    return sendJsonError(res, 500, `Failed to list documents: ${err.message}`);
-  }
+  return sendJsonResponse(res, 200, {
+    total: docList.length,
+    categories: Object.keys(CATEGORIES),
+    docs: docList
+  });
 }

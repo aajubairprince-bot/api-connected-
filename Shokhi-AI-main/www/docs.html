@@ -672,7 +672,11 @@
         const targetDoc = hash || 'API_REFERENCE.md';
         loadDocument(targetDoc);
       } catch (err) {
-        docNavList.innerHTML = `<div style="padding: 1rem; color: #ef4444; font-size: 0.85rem;">Failed to load documentation index: ${err.message}</div>`;
+        console.warn('API docs index notice:', err);
+        // Fallback default doc
+        const hash = window.location.hash.replace(/^#/, '');
+        const targetDoc = hash || 'API_REFERENCE.md';
+        loadDocument(targetDoc);
       }
     }
 
@@ -758,20 +762,30 @@
       `;
 
       try {
+        let content = '';
         const res = await fetch(`/api/docs?file=${encodeURIComponent(filename)}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        if (res.ok) {
+          const data = await res.json();
+          content = data.content;
+        } else {
+          const staticRes = await fetch(`/docs/${encodeURIComponent(filename)}`);
+          if (staticRes.ok) {
+            content = await staticRes.text();
+          } else {
+            throw new Error(`HTTP ${res.status}`);
+          }
+        }
         
-        rawContent = data.content;
+        rawContent = content;
         isRawView = false;
         rawBtn.innerHTML = '<i class="fa-solid fa-code"></i> View Raw';
 
         // Update header
         const matched = allDocs.find(d => d.filename === filename);
-        docTitle.textContent = matched ? matched.title : filename;
+        docTitle.textContent = matched ? matched.title : filename.replace(/\.md$/, '').replace(/_/g, ' ');
         breadcrumbCategory.textContent = matched ? matched.category : 'Documentation';
 
-        renderMarkdownContent(data.content);
+        renderMarkdownContent(content);
       } catch (err) {
         markdownBody.innerHTML = `
           <div style="padding: 2rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; color: #be123c;">
