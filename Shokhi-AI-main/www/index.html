@@ -63,7 +63,8 @@
             font-family: 'Hind Siliguri', 'Outfit', 'Plus Jakarta Sans', sans-serif;
             color: var(--text-main);
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         /* Ambient floating light shapes (static, no continuous jitter) */
@@ -86,11 +87,42 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            padding: 24px;
+            padding: 24px 16px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            width: 100%;
+        }
+        #page-welcome .glass-card, #page-login .glass-card {
+            margin: auto 0;
         }
         #page-login, #page-main { display: none; }
+
+        /* Responsive compact styles for laptops & small height viewports */
+        @media (max-height: 760px) {
+            #page-welcome, #page-login {
+                padding: 16px 12px;
+            }
+            #page-login .glass-card {
+                padding: 20px 20px !important;
+            }
+            #page-login .app-logo-badge {
+                width: 54px !important;
+                height: 54px !important;
+                margin-bottom: 8px !important;
+            }
+            #page-login .app-logo-badge i {
+                font-size: 24px !important;
+            }
+            #page-login h2 {
+                font-size: 19px !important;
+                margin-bottom: 2px !important;
+            }
+            #page-login p {
+                font-size: 12px !important;
+                margin-bottom: 12px !important;
+            }
+        }
 
         /* Modern Glass Card */
         .glass-card {
@@ -444,6 +476,8 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
         }
         .modal-card {
             background: #ffffff;
@@ -451,9 +485,12 @@
             padding: 28px 24px;
             width: 100%;
             max-width: 420px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
             box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18);
             border: 1.5px solid #fecdd3;
             position: relative;
+            margin: auto;
         }
         .modal-header {
             display: flex;
@@ -1181,9 +1218,198 @@
         }
         .helpline-pill:hover { background: #fecaca; transform: scale(1.03); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
 
+        /* Mobile Hamburger, Close & Tools Toggle Buttons */
+        .mobile-menu-btn, .mobile-sidebar-close, .tools-toggle-btn {
+            display: none;
+            background: #fff1f2;
+            border: 1.5px solid #fecdd3;
+            color: var(--primary);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(225, 29, 72, 0.08);
+            flex-shrink: 0;
+        }
+        .mobile-menu-btn:hover, .mobile-sidebar-close:hover, .tools-toggle-btn:hover {
+            background: #ffe4e6;
+            transform: scale(1.05);
+        }
+        .mobile-sidebar-close {
+            width: 30px;
+            height: 30px;
+            font-size: 13px;
+        }
+
+        /* Mobile Sidebar Backdrop Overlay */
+        .sidebar-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 99990;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-backdrop.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* -------------------------------------------------------------
+           📱 RESPONSIVE BREAKPOINTS FOR ALL DEVICE ASPECT RATIOS
+           ------------------------------------------------------------- */
+        
+        /* Ultra-Wide Displays (> 1440px) */
+        @media (min-width: 1441px) {
+            .app-container {
+                max-width: 1600px;
+                margin: 0 auto;
+                border-left: 1.5px solid var(--glass-border);
+                border-right: 1.5px solid var(--glass-border);
+            }
+        }
+
+        /* Large Tablets & Medium Laptops (1025px - 1280px) */
+        @media (max-width: 1280px) {
+            .sidebar { width: 260px; }
+            .tools-section { width: 310px; }
+        }
+
+        /* Tablets & Small Laptops (769px - 1024px) */
         @media (max-width: 1024px) {
-            .tools-section { display: none; }
-            .sidebar { width: 250px; }
+            .sidebar { width: 240px; }
+            .tools-section {
+                position: fixed;
+                right: 0;
+                top: 0;
+                height: 100vh;
+                width: 320px;
+                z-index: 99995;
+                background: #ffffff;
+                box-shadow: -8px 0 28px rgba(0, 0, 0, 0.12);
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                display: flex !important;
+            }
+            .tools-section.active {
+                transform: translateX(0);
+            }
+            .tools-toggle-btn {
+                display: flex;
+            }
+        }
+
+        /* Mobile Screens (Portrait & Landscape <= 768px) */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: flex; }
+            .mobile-sidebar-close { display: flex; }
+            .tools-toggle-btn { display: flex; }
+
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 285px;
+                z-index: 100000;
+                background: #ffffff;
+                box-shadow: 8px 0 32px rgba(0, 0, 0, 0.15);
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .chat-top-header {
+                padding: 10px 14px;
+                gap: 8px;
+            }
+            .gestational-hero-bar {
+                padding: 5px 10px;
+                gap: 8px;
+                max-width: 100%;
+                overflow: hidden;
+            }
+            .gestational-fruit-badge {
+                font-size: 11.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .gestational-progress-track {
+                width: 45px;
+            }
+            #daysRemainText {
+                display: none;
+            }
+
+            .chat-box {
+                padding: 16px 14px;
+            }
+            .user-msg {
+                max-width: 88%;
+                font-size: 13.5px;
+                padding: 11px 16px;
+            }
+            .bot-msg-box {
+                max-width: 94%;
+            }
+            .bot-msg {
+                font-size: 13.5px;
+                padding: 14px 16px;
+            }
+
+            .chat-input-wrapper {
+                padding: 6px 12px 12px 12px;
+            }
+            .chat-input-area {
+                padding: 5px 8px 5px 12px;
+            }
+            .chat-input {
+                font-size: 13.5px;
+            }
+            .icon-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 13px;
+            }
+
+            .quick-chips-wrapper {
+                padding: 4px 12px 6px 12px;
+            }
+            .prompt-chip {
+                font-size: 11.5px;
+                padding: 5px 11px;
+            }
+        }
+
+        /* Compact Mobile Screens (<= 420px) */
+        @media (max-width: 420px) {
+            .gestational-progress-track {
+                display: none;
+            }
+            .lang-toggle-pill .h-lang-btn {
+                padding: 4px 9px;
+                font-size: 11px;
+            }
+            .notif-panel {
+                width: 290px;
+                right: -10px;
+            }
         }
     </style>
 </head>
@@ -1315,6 +1541,7 @@
 
     <!-- 3. AUTHENTICATED MATERNAL APPLICATION -->
     <div id="page-main">
+        <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleMobileSidebar(false); toggleToolsHub(false);"></div>
         <div class="app-container">
             
             <!-- LEFT SIDEBAR: PROFILE & SAVED CHAT SESSIONS -->
@@ -1324,6 +1551,9 @@
                         <i class="fa-solid fa-heart-pulse"></i>
                         <span id="sidebarBrandTxt">সখী AI</span>
                     </div>
+                    <button class="mobile-sidebar-close" onclick="toggleMobileSidebar(false)" title="বন্ধ করুন">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
 
                 <!-- Maternal Profile Card (Click to open Profile Modal) -->
@@ -1350,6 +1580,10 @@
                 
                 <!-- Chat Top Header: Gestational Hero Bar, Notifications, Language Toggle -->
                 <div class="chat-top-header">
+                    <button class="mobile-menu-btn" onclick="toggleMobileSidebar(true)" title="মেনু">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+
                     <!-- Gestational Stage Ribbon -->
                     <div class="gestational-hero-bar">
                         <div class="gestational-fruit-badge">
@@ -1363,6 +1597,11 @@
                     </div>
                     
                     <div class="header-actions">
+                        <!-- Tools Hub Toggle Button for Mobile / Tablet -->
+                        <button class="tools-toggle-btn" id="toolsToggleBtn" onclick="toggleToolsHub()" title="ট্র্যাকার ও টুলস">
+                            <i class="fa-solid fa-sliders"></i>
+                        </button>
+
                         <!-- Notification Bell with Live Unread Badge -->
                         <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifPanel()" title="বিজ্ঞপ্তি">
                             <i class="fa-solid fa-bell"></i>
@@ -2498,9 +2737,39 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function toggleMobileSidebar(force) {
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (!sidebar) return;
+            const shouldOpen = force !== undefined ? force : !sidebar.classList.contains('mobile-open');
+            if (shouldOpen) {
+                sidebar.classList.add('mobile-open');
+                if (backdrop) backdrop.classList.add('active');
+            } else {
+                sidebar.classList.remove('mobile-open');
+                if (backdrop) backdrop.classList.remove('active');
+            }
+        }
+
+        function toggleToolsHub(force) {
+            const tools = document.querySelector('.tools-section');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (!tools) return;
+            const shouldOpen = force !== undefined ? force : !tools.classList.contains('active');
+            if (shouldOpen) {
+                tools.classList.add('active');
+                if (backdrop) backdrop.classList.add('active');
+            } else {
+                tools.classList.remove('active');
+                if (backdrop) backdrop.classList.remove('active');
+            }
+        }
+
         function doLogout() {
             stopAnySpeech();
             closeProfileModal();
+            toggleMobileSidebar(false);
+            toggleToolsHub(false);
             authToken = null;
             currentUser = null;
             localStorage.removeItem('shokhi_auth_token');
@@ -2931,6 +3200,8 @@
 
         function createNewChat() {
             stopAnySpeech();
+            toggleMobileSidebar(false);
+            toggleToolsHub(false);
             currentChatId = 'sess_' + Date.now();
             const box = document.getElementById('chatBox');
             if (box) {
@@ -2945,6 +3216,8 @@
 
         async function loadChatSession(sessionId) {
             stopAnySpeech();
+            toggleMobileSidebar(false);
+            toggleToolsHub(false);
             currentChatId = sessionId;
             try {
                 const res = await fetch(`/api/get_chat_messages/${sessionId}`, { headers: getApiHeaders() });

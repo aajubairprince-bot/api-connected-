@@ -1262,7 +1262,8 @@
         }
 
         @media (max-width: 768px) {
-            .nav-links, .nav-actions .btn-secondary { display: none; }
+            .nav-links { display: none; }
+            .nav-actions .btn-secondary { display: none; }
             .mobile-toggle { display: block; }
             .question-cards-grid { grid-template-columns: 1fr; }
             .features-grid { grid-template-columns: 1fr; }
@@ -1272,6 +1273,10 @@
             .privacy-grid { grid-template-columns: 1fr; }
             .scenarios-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; }
+            .trust-strip-grid { grid-template-columns: 1fr !important; }
+            .phone-mockup-wrapper { max-width: 310px; margin: 0 auto; }
+            .phone-device { transform: scale(0.94); transform-origin: top center; }
+            .hero-section { padding-top: 100px; }
         }
     </style>
 </head>

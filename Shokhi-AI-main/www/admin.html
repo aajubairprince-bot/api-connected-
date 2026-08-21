@@ -218,6 +218,22 @@
     /* realtime flash */
     @keyframes flashRow { 0%{background:rgba(5,150,105,.1)} 100%{background:transparent} }
     .row-flash { animation:flashRow 1.5s ease; }
+
+    /* 📱 Responsive rules for mobile and tablet admin access */
+    @media (max-width: 768px) {
+      header { padding: .75rem 1rem; flex-wrap: wrap; }
+      .container { padding: 1rem 1rem; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+      .specs-bar { grid-template-columns: 1fr 1fr; gap: .75rem; padding: .85rem 1rem; }
+      .role-inputs { width: 100%; }
+      .role-inputs input { flex: 1; width: 100%; }
+      .toolbar { padding: .75rem 1rem; }
+      .search-input { width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+      .specs-bar { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
